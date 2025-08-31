@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title id="pagetitle">文字內容</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    #output { white-space: pre-wrap; word-wrap: break-word; }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <a href="index.html" class="btn btn-secondary mb-3">← 返回清單</a>
+
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-2">
+      <h3 id="title" class="mb-0">文字檔內容</h3>
+      <!-- 朗讀控制列 -->
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <select id="voiceSelect" class="form-select form-select-sm" style="min-width:220px">
+          <option value="">（載入可用音色中…）</option>
+        </select>
+        <label class="form-label mb-0 small">
+          速率
+          <input id="rate" type="range" min="0.5" max="2" step="0.1" value="1" class="form-range" style="width:110px">
+        </label>
+        <label class="form-label mb-0 small">
+          音調
+          <input id="pitch" type="range" min="0.5" max="2" step="0.1" value="1" class="form-range" style="width:110px">
+        </label>
+        <div class="btn-group">
+          <button id="playBtn"  class="btn btn-primary btn-sm">播放</button>
+          <button id="pauseBtn" class="btn btn-outline-secondary btn-sm">暫停</button>
+          <button id="resumeBtn" class="btn btn-outline-secondary btn-sm">繼續</button>
+          <button id="stopBtn" class="btn btn-outline-danger btn-sm">停止</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="output" class="border rounded p-3 bg-white">載入中...</div>
+  </div>
+
+  <script>
+    // ====== 讀檔（與原本相同） ======
+    const params = new URLSearchParams(location.search);
+    const file = params.get("file") || "text1.txt";
+    const outEl = document.getElementById("output");
+    const titleEl = document.getElementById("title");
+    titleEl.textContent = file.includes("ans") ? "解答內容" : "題目內容";
+
+    fetch("content/" + encodeURIComponent(file))
+      .then(res => { if (!res.ok) throw new Error("HTTP " + res.status); return res.text(); })
+      .then(txt => { outEl.textContent = txt; })
+      .catch(err => { outEl.textContent = "讀取失敗：" + err.message; });
+
+    // ====== 朗讀（Web Speech API） ======
+    const synth = window.speechSynthesis;
+    const voiceSelect = document.getElementById("voiceSelect");
+    const rateEl = document.getElementById("rate");
+    const pitchEl = document.getElementById("pitch");
+    const playBtn = document.getElementById("playBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const resumeBtn = document.getElementById("resumeBtn");
+    const stopBtn = document.getElementById("stopBtn");
+
+    // 狀態
+    let chunks = [];          // 文字切段
+    let queue = [];           // Utterance 佇列
+    let idx = 0;              // 目前段落索引
+    let speaking = false;
+
+    // 載入可用音色
+    function populateVoices() {
+      const voices = synth.getVoices();
+      const zhPrefer = ["zh-TW", "zh_HANT_TW", "zh-HK", "zh-CN", "zh"]; // 優先中文
+      voiceSelect.innerHTML = "";
+      voices.forEach((v, i) => {
+        const opt = document.createElement("option");
+        opt.value = v.name;
+        opt.textContent = `${v.name} — ${v.lang}`;
+        // 預設選擇：上次使用的 / 或第一個中文 / 否則第一個
+        voiceSelect.appendChild(opt);
+      });
+
+      const saved = localStorage.getItem("tts_voice");
+      if (saved && voices.find(v => v.name === saved)) {
+        voiceSelect.value = saved;
+      } else {
+        const zh = voices.find(v => zhPrefer.some(tag => v.lang.toLowerCase().includes(tag.toLowerCase())));
+        voiceSelect.value = zh ? zh.name : (voices[0]?.name || "");
+      }
+    }
+    populateVoices();
+    if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = populateVoices;
+    }
+
+    // 切段：以空行或句號/問號/驚嘆號後的換行或空白切
+    function splitText(text) {
+      const trimmed = text.replace(/\r/g, "").trim();
+      if (!trimmed) return [];
+      // 先以空行切
+      let parts = trimmed.split(/\n{2,}/);
+      // 再把每一大段以句子標點再細切
+      parts = parts.flatMap(p => p
+        .split(/(?<=[。！？!?\.])\s+/)  // 保留標點後切
+        .map(s => s.trim())
+        .filter(Boolean)
+      );
+      // 長段落再保險切塊（避免有瀏覽器內部長度限制）
+      const MAX_LEN = 180; // 可自行調整
+      const final = [];
+      for (const s of parts) {
+        if (s.length <= MAX_LEN) { final.push(s); continue; }
+        // 按空白切塊
+        let buf = "";
+        for (const w of s.split(/\s+/)) {
+          if ((buf + " " + w).trim().length > MAX_LEN) { final.push(buf.trim()); buf = w; }
+          else { buf = (buf ? buf + " " : "") + w; }
+        }
+        if (buf) final.push(buf.trim());
+      }
+      return final;
+    }
+
+    function buildQueue(text) {
+      chunks = splitText(text);
+      queue = chunks.map(seg => {
+        const u = new SpeechSynthesisUtterance(seg);
+        const v = synth.getVoices().find(v => v.name === voiceSelect.value);
+        if (v) u.voice = v;
+        u.rate = parseFloat(rateEl.value) || 1;
+        u.pitch = parseFloat(pitchEl.value) || 1;
+        u.lang = u.voice?.lang || "zh-TW";
+        u.onend = () => {
+          idx++;
+          if (idx < queue.length && speaking) synth.speak(queue[idx]);
+          else speaking = false;
+        };
+        return u;
+      });
+      idx = 0;
+    }
+
+    function startSpeak() {
+      const text = outEl.textContent || "";
+      if (!text.trim()) return;
+      // 停掉舊的
+      synth.cancel();
+      speaking = true;
+      buildQueue(text);
+      if (queue.length) synth.speak(queue[0]);
+    }
+
+    // 控制按鈕
+    playBtn.addEventListener("click", () => {
+      if (synth.paused && speaking) { synth.resume(); return; }
+      startSpeak();
+    });
+    pauseBtn.addEventListener("click", () => { if (synth.speaking) synth.pause(); });
+    resumeBtn.addEventListener("click", () => { if (synth.paused) synth.resume(); });
+    stopBtn.addEventListener("click", () => { speaking = false; synth.cancel(); });
+
+    // 參數調整立即生效（若正在播，重新開始）
+    [rateEl, pitchEl, voiceSelect].forEach(el => {
+      el.addEventListener("input", () => {
+        localStorage.setItem("tts_voice", voiceSelect.value || "");
+        if (speaking || synth.speaking || synth.paused) {
+          speaking = true; // 保持播放狀態
+          startSpeak();
+        }
+      });
+    });
+
+    // 當檔案載入後，自動把游標移到開頭，避免捲動影響
+    fetch("content/" + encodeURIComponent(file))
+      .then(res => res.ok ? res.text() : Promise.reject(new Error("HTTP " + res.status)))
+      .then(txt => { outEl.textContent = txt; window.scrollTo({ top: 0, behavior: "instant" }); })
+      .catch(() => {});
+  </script>
+</body>
+</html>

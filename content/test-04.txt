@@ -1,0 +1,37 @@
+Anna is in class.
+She sees twenty students.
+Eleven boys sit on the left.
+Nine girls sit on the right.
+The teacher stands in front.
+Anna looks at the teacher’s face.
+The teacher has two eyes, one nose, one mouth, and two ears.
+The teacher’s hair is short.
+All the students have two hands, two arms, two legs, and two feet.
+They sit in thirty chairs.
+
+Questions
+
+How many students does Anna see?
+    a) ten
+    b) twenty
+    c) thirty
+
+How many boys sit on the left?
+    a) eleven
+    b) nine
+    c) seven
+
+What does Anna look at?
+    a) the teacher’s face
+    b) the teacher’s hand
+    c) the teacher’s leg
+
+How many chairs are in the class?
+    a) twenty
+    b) thirty
+    c) forty
+
+Each student has two _______.
+    a) heads
+    b) hands
+    c) noses

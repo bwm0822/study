@@ -1,0 +1,35 @@
+Tom has one head.
+He has two eyes, one nose, and one mouth.
+He has two ears and many teeth.
+His hair is black.
+Tom has two hands and two arms.
+He has two legs and two feet.
+He can walk and jump.
+Tom is happy.
+
+Questions
+
+How many heads does Tom have?
+    a) two
+    b) one
+    c) three
+
+What color is Tom’s hair?
+    a) black
+    b) red
+    c) yellow
+
+How many eyes does Tom have?
+    a) two
+    b) one
+    c) four
+
+Which part helps Tom to eat?
+    a) nose
+    b) mouth
+    c) foot
+
+Tom has two _______.
+    a) heads
+    b) mouths
+    c) feet
