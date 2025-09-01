@@ -1,0 +1,37 @@
+閱讀文章
+
+Tom has some money. He buys a book with ten dollars. The book is about colors.
+He sees a black cat and a white dog in the book. He also sees a red car, an orange ball, and a yellow hat.
+Tom likes green trees in the park. He is happy because the book is free after he uses his dollars.
+
+問題
+
+1. What does Tom buy with ten dollars?
+    A. A hat
+    B. A book
+    C. A ball
+    D. A tree
+
+2. What animals does Tom see in the book?
+    A. A black cat and a white dog
+    B. A red car and a yellow hat
+    C. An orange ball and a green tree
+    D. A bird and a fish
+
+3. What color is the ball in the book?
+    A. Green
+    B. Orange
+    C. Black
+    D. White
+
+4. Where does Tom like green trees?
+    A. At home
+    B. In the park
+    C. In the book
+    D. In the shop
+
+5. Why is Tom happy?
+    A. The dog is white
+    B. The book is free after he uses his dollars
+    C. The cat is black
+    D. The car is red
