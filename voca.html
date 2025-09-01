@@ -1,44 +1,69 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-bs-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Vocabulary TTS</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body{background:#fff}
-    .table thead th{position:sticky;top:0;background:#f8f9fa;z-index:1}
-    td[data-say]{cursor:pointer}
-    td[data-say].speaking{outline:2px solid var(--bs-primary);box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.15)}
+    /* 全站暗色 */
+    body{background:#212529;color:#f8f9fa}
     .container-narrow{max-width:980px}
+
+    /* 導覽列 */
+    .navbar{border-bottom:1px solid rgba(255,255,255,.15)}
+
+    /* 表格（暗色＋sticky 表頭） */
+    .table thead th{
+      position:sticky; top:0; z-index:1;
+      background:#1b1f22; /* 深色表頭，與內容有層次 */
+    }
     tr.group-start td{border-top-width:2px !important}
+
+    /* 欄寬 */
     th.col-word{width:220px}
     th.col-ex{width:auto}
     th.col-idx{width:72px}
-    td.small-muted{color:#6c757d;font-size:.9rem}
+
+    /* 次要文字（暗色系的 muted） */
+    td.small-muted{color:#adb5bd;font-size:.9rem}
+
+    /* 直接輸入頁碼錯誤樣式在暗色下仍清楚 */
     .input-group .form-control.is-invalid{border-color:#dc3545}
+
+    /* 可點發音的 cell：游標、hover、播放中、彈跳動畫 */
+    td[data-say]{cursor:pointer;transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease}
+    td[data-say]:hover{background-color:rgba(255,255,255,.06)}
+    td[data-say]:active{transform:scale(1.03)}
+    @media (prefers-reduced-motion: reduce){
+      td[data-say]{transition:none}
+    }
+    td[data-say].speaking{
+      outline:2px solid var(--bs-primary);
+      box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)
+    }
   </style>
 </head>
 <body>
-  <!-- 導覽列 -->
-  <nav class="navbar navbar-light bg-light border-bottom">
+  <!-- 導覽列（暗色） -->
+  <nav class="navbar navbar-dark bg-dark">
     <div class="container container-narrow d-flex justify-content-start">
-      <button id="backBtn" class="btn btn-outline-secondary btn-sm">返回</button>
+      <button id="backBtn" class="btn btn-outline-light btn-sm">返回</button>
       <span class="navbar-brand ms-3 mb-0 h1">國小必學 500 單字</span>
     </div>
   </nav>
 
   <main class="container container-narrow my-3">
-    <!-- 語音控制列 -->
-    <div class="card mb-3">
+    <!-- 語音控制列（暗色卡片） -->
+    <div class="card mb-3 bg-dark text-light border-secondary">
       <div class="card-body row gy-2 gx-3 align-items-center">
         <div class="col-12 col-md-4">
           <label class="form-label mb-1">英文語音</label>
-          <select id="selEn" class="form-select form-select-sm"></select>
+          <select id="selEn" class="form-select form-select-sm bg-dark text-light border-secondary"></select>
         </div>
         <div class="col-12 col-md-4">
           <label class="form-label mb-1">中文語音</label>
-          <select id="selZh" class="form-select form-select-sm"></select>
+          <select id="selZh" class="form-select form-select-sm bg-dark text-light border-secondary"></select>
         </div>
         <div class="col-12 col-md-4">
           <label for="rate" class="form-label mb-1">語速：<span id="rateVal">1.00</span></label>
@@ -51,14 +76,14 @@
     <nav class="mb-2 d-flex justify-content-center align-items-center gap-2 flex-wrap">
       <ul id="pagination" class="pagination mb-0"></ul>
       <div class="input-group input-group-sm" style="width:170px">
-        <input id="pageJump" type="number" class="form-control" min="1" placeholder="直接輸入頁碼">
-        <button id="pageGo" class="btn btn-outline-secondary">Go</button>
+        <input id="pageJump" type="number" class="form-control bg-dark text-light border-secondary" min="1" placeholder="直接輸入頁碼">
+        <button id="pageGo" class="btn btn-outline-light">Go</button>
       </div>
     </nav>
 
     <!-- 單字表格（三列一組） -->
     <div class="table-responsive">
-      <table id="voca" class="table table-hover align-middle mb-3">
+      <table id="voca" class="table table-dark table-hover align-middle mb-3">
         <thead>
           <tr>
             <th class="col-idx">#</th>
@@ -203,7 +228,7 @@
         tr1.className='group-start';
         const tdIdx=document.createElement('td');
         tdIdx.rowSpan=3;
-        tdIdx.className='text-muted small text-center align-middle';
+        tdIdx.className='text-secondary small text-center align-middle';
         tdIdx.textContent=idx;
 
         const tdEn=document.createElement('td');
@@ -328,7 +353,7 @@
 
       const makeBtn = (label, handler, disabled=false, primary=false) => {
         const btn = document.createElement('button');
-        btn.className = `btn btn-sm ${primary?'btn-primary':'btn-outline-secondary'}`;
+        btn.className = `btn btn-sm ${primary?'btn-primary':'btn-outline-light'}`;
         btn.textContent = label;
         btn.disabled = !!disabled;
         if (handler) btn.addEventListener('click', handler);
@@ -403,6 +428,7 @@
   </script>
 </body>
 </html>
+
 
 
 
