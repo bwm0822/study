@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>單字測驗</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{background:#212529;color:#f8f9fa}
+    .navbar{border-bottom:1px solid rgba(255,255,255,.15)}
+    .card{background:#1b1f22;border:1px solid rgba(255,255,255,.12)}
+    .q-item{background:#2a2f33;border:1px solid rgba(255,255,255,.12)}
+    .q-item + .q-item{margin-top:.5rem}
+    .answer-input{min-width:180px}
+    .btn, .answer-input{transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease}
+    .btn:hover{filter:brightness(1.08)}
+    .btn:active{transform:scale(1.03)}
+    .answer-input:focus{box-shadow:0 0 0 .25rem rgba(var(--bs-primary-rgb), .25)}
+    .badge-answer{background:#fff;color:#000}
+    .is-correct{border-color:#3ddc97 !important}
+    .is-wrong{border-color:#ff6b6b !important;color:#ff6b6b !important}
+    .hint{color:#adb5bd}
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container d-flex justify-content-start">
+      <button id="backBtn" class="btn btn-outline-light btn-sm">返回</button>
+      <span class="navbar-brand ms-3 mb-0 h1">單字測驗</span>
+    </div>
+  </nav>
+
+  <main class="container py-3">
+    <!-- 控制列 -->
+    <div class="card mb-3">
+      <div class="card-body row gy-3 gx-3 align-items-end">
+        <!-- 起始值 -->
+        <div class="col-12 col-md-4">
+          <label class="form-label mb-1">起始編號</label>
+          <div class="input-group input-group-sm">
+            <button class="btn btn-outline-light" id="startMinus">−</button>
+            <input id="startIdx" type="number" class="form-control text-center" min="1" value="1" step="1">
+            <button class="btn btn-outline-light" id="startPlus">＋</button>
+          </div>
+        </div>
+
+        <!-- 結束值 -->
+        <div class="col-12 col-md-4">
+          <label class="form-label mb-1">結束編號</label>
+          <div class="input-group input-group-sm">
+            <button class="btn btn-outline-light" id="endMinus">−</button>
+            <input id="endIdx" type="number" class="form-control text-center" min="1" value="25" step="1">
+            <button class="btn btn-outline-light" id="endPlus">＋</button>
+          </div>
+        </div>
+
+        <!-- 測驗字數 -->
+        <div class="col-12 col-md-4">
+          <label class="form-label mb-1">測驗字數</label>
+          <div class="input-group input-group-sm">
+            <button class="btn btn-outline-light" id="minusBtn">−</button>
+            <input id="countInput" type="number" class="form-control text-center" min="0" value="25" step="1">
+            <button class="btn btn-outline-light" id="plusBtn">＋</button>
+          </div>
+        </div>
+
+        <!-- 操作 -->
+        <div class="col-12 text-md-end">
+          <div class="d-flex gap-2 justify-content-md-end">
+            <div id="loadInfo" class="hint small mt-2 me-auto">資料載入中…</div>
+            <button id="startBtn" class="btn btn-primary btn-sm">測驗</button>
+            <button id="clearBtn" class="btn btn-outline-light btn-sm">清除</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 題目區 -->
+    <div id="quizArea" class="mb-3"></div>
+
+    <!-- 結果區 -->
+    <div id="resultArea" class="alert alert-info d-none"></div>
+  </main>
+
+  <script>
+    // ====== 快捷 ======
+    const $ = s => document.querySelector(s);
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const TYPING_INPUT_TYPES = new Set([
+      'insertText','insertFromPaste','insertFromDrop','insertCompositionText',
+      'deleteContentBackward','deleteContentForward','deleteByCut'
+    ]);
+    const isSpinnerLike = (e) => !e || !e.inputType || !TYPING_INPUT_TYPES.has(e.inputType);
+
+    // ====== DOM ======
+    const backBtn = $('#backBtn');
+
+    const startIdxEl = $('#startIdx');
+    const endIdxEl = $('#endIdx');
+    const startMinus = $('#startMinus');
+    const startPlus = $('#startPlus');
+    const endMinus = $('#endMinus');
+    const endPlus = $('#endPlus');
+
+    const countInput = $('#countInput');
+    const minusBtn = $('#minusBtn');
+    const plusBtn = $('#plusBtn');
+
+    const startBtn = $('#startBtn');
+    const clearBtn = $('#clearBtn');
+
+    const loadInfo = $('#loadInfo');
+    const quizArea = $('#quizArea');
+    const resultArea = $('#resultArea');
+
+    backBtn.addEventListener('click', () => history.back());
+
+    // ====== 資料 ======
+    let allRows = []; // {idx, idxNum, en, zh, pos, exEn, exZh}
+    let MAX_IDX = 1;
+
+    fetch('content/voca.txt?c=' + Date.now())
+      .then(r => { if(!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+      .then(txt => {
+        allRows = parseTSV(txt);
+        const idxList = allRows.map(r => r.idxNum);
+        const minIdx = Math.min(...idxList);
+        MAX_IDX = Math.max(...idxList);
+
+        // 預設顯示
+        startIdxEl.value = isFinite(minIdx) ? minIdx : 1;
+        endIdxEl.value   = isFinite(minIdx) ? Math.min(minIdx + 24, MAX_IDX) : 25;
+
+        setCountToRange(); // 起/迄初始時同步「測驗字數」= R
+        loadInfo.textContent = `已載入 ${allRows.length} 筆（可用編號 1 ~ ${MAX_IDX}）`;
+      })
+      .catch(err => { loadInfo.textContent = '讀取失敗：' + err.message; });
+
+    function parseTSV(txt){
+      return txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n')
+        .map(l=>l.trim()).filter(l=>l && !l.startsWith('#'))
+        .map(line=>{
+          const p = line.split('\t');
+          const [idx,en,zh,pos,exEn,exZh] = [
+            (p[0]||'').trim(),
+            (p[1]||'').trim(),
+            (p[2]||'').trim(),
+            (p[3]||'').trim(),
+            (p[4]||'').trim(),
+            (p[5]||'').trim(),
+          ];
+          const idxNum = parseInt(idx,10);
+          return { idx, idxNum: isNaN(idxNum)? -1: idxNum, en, zh, pos, exEn, exZh };
+        })
+        .filter(r => r.idxNum >= 1 && r.en);
+    }
+
+    // ====== 範圍/檢查 ======
+    function getLoHiRaw(){
+      const s = parseInt(startIdxEl.value,10);
+      const e = parseInt(endIdxEl.value,10);
+      return [isNaN(s)?1:s, isNaN(e)?1:e];
+    }
+    function getLoHiOrdered(){
+      const [s,e] = getLoHiRaw();
+      return [Math.min(s,e), Math.max(s,e)];
+    }
+    function getRange(){
+      const [s,e] = getLoHiRaw();
+      return (s>e) ? 0 : (e - s + 1);
+    }
+    function setCountToRange(){
+      const R = getRange();
+      countInput.value = Math.max(0, R);
+    }
+    function capCountToRange(){
+      const R = getRange();
+      let v = parseInt(countInput.value,10);
+      if (isNaN(v) || v < 0) v = 0;
+      if (v > R) v = R;
+      countInput.value = v;
+    }
+
+    // ====== 起/迄：手動輸入只檢 1~MAX；spinner/步進則再保證關係成立 ======
+    startIdxEl.addEventListener('input', (e) => {
+      let v = parseInt(startIdxEl.value,10);
+      if (isNaN(v)) v = 1;
+      v = clamp(v, 1, MAX_IDX);
+      // 若是 spinner/步進（包含滑輪或系統步進），需保證 起始 ≤ 結束
+      if (isSpinnerLike(e)) {
+        const eVal = parseInt(endIdxEl.value,10) || 1;
+        if (v > eVal) v = eVal;
+      }
+      startIdxEl.value = v;
+      setCountToRange();
+    });
+
+    endIdxEl.addEventListener('input', (e) => {
+      let v = parseInt(endIdxEl.value,10);
+      if (isNaN(v)) v = 1;
+      v = clamp(v, 1, MAX_IDX);
+      // 若是 spinner/步進，需保證 結束 ≥ 起始
+      if (isSpinnerLike(e)) {
+        const sVal = parseInt(startIdxEl.value,10) || 1;
+        if (v < sVal) v = sVal;
+      }
+      endIdxEl.value = v;
+      setCountToRange();
+    });
+
+    // ====== 「按鍵 ±」：維持起≤迄、迄≥起；變動時重設字數 ======
+    // 起始值
+    startMinus.addEventListener('click', () => {
+      let s = clamp((parseInt(startIdxEl.value,10)||1) - 1, 1, MAX_IDX);
+      const e = parseInt(endIdxEl.value,10)||1;
+      if (s > e) s = e;
+      startIdxEl.value = s;
+      setCountToRange();
+    });
+    startPlus.addEventListener('click', () => {
+      let s = clamp((parseInt(startIdxEl.value,10)||1) + 1, 1, MAX_IDX);
+      const e = parseInt(endIdxEl.value,10)||1;
+      if (s > e) s = e;
+      startIdxEl.value = s;
+      setCountToRange();
+    });
+
+    // 結束值
+    endMinus.addEventListener('click', () => {
+      const s = parseInt(startIdxEl.value,10)||1;
+      let e = clamp((parseInt(endIdxEl.value,10)||1) - 1, 1, MAX_IDX);
+      if (e < s) e = s;
+      endIdxEl.value = e;
+      setCountToRange();
+    });
+    endPlus.addEventListener('click', () => {
+      const s = parseInt(startIdxEl.value,10)||1;
+      let e = clamp((parseInt(endIdxEl.value,10)||1) + 1, 1, MAX_IDX);
+      if (e < s) e = s;
+      endIdxEl.value = e;
+      setCountToRange();
+    });
+
+    // 測驗字數：限制在 0~R（spinner/步進與手動輸入都一樣）
+    countInput.addEventListener('input', capCountToRange);
+    minusBtn.addEventListener('click', () => {
+      countInput.value = Math.max(0, (parseInt(countInput.value,10)||0) - 1);
+      capCountToRange();
+    });
+    plusBtn.addEventListener('click', () => {
+      countInput.value = Math.max(0, (parseInt(countInput.value,10)||0) + 1);
+      capCountToRange();
+    });
+    countInput.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+      e.preventDefault();
+      const dir = e.key === 'ArrowUp' ? +1 : -1;
+      const R = getRange();
+      let v = parseInt(countInput.value,10); if (isNaN(v)) v = 0;
+      v = clamp(v + dir, 0, R);
+      countInput.value = v;
+    });
+
+    // ====== 開始測驗 ======
+    startBtn.addEventListener('click', () => {
+      const [lo,hi] = getLoHiOrdered();
+      const R = getRange();
+      capCountToRange(); // 再保一次
+      let want = parseInt(countInput.value,10) || 0;
+
+      if (R <= 0 || want <= 0){
+        alert('測驗範圍為 0 或測驗字數為 0，無法開始。');
+        return;
+      }
+
+      const avail = allRows.filter(r => r.idxNum >= lo && r.idxNum <= hi);
+      if (!avail.length){ alert('此範圍沒有資料'); return; }
+
+      want = Math.min(want, R, avail.length);
+      const picked = randomSample(avail, want);
+      renderQuiz(picked);
+      resultArea.classList.add('d-none');
+      resultArea.textContent = '';
+    });
+
+    clearBtn.addEventListener('click', () => {
+      quizArea.innerHTML = '';
+      resultArea.classList.add('d-none');
+      resultArea.textContent = '';
+    });
+
+    // ====== 工具 ======
+    function randomSample(arr, n){
+      const a = arr.slice();
+      for (let i=a.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]] = [a[j],a[i]];
+      }
+      return a.slice(0,n);
+    }
+
+    function escapeHTML(s){return (s??'').replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;' }[c]));}
+    function normalize(s){ return (s||'').trim().toLowerCase(); }
+    function matchAnswer(user, ans){
+      if (!user) return false;
+      const cand = ans.split(/[\/,;、，；]\s*/).map(x=>normalize(x)).filter(Boolean);
+      return cand.includes(user);
+    }
+
+    // ====== 題目渲染 & 驗證 ======
+    function renderQuiz(rows){
+      quizArea.innerHTML = '';
+      let answered = 0, correct = 0;
+      const total = rows.length;
+
+      rows.forEach((r, idx) => {
+        const item = document.createElement('div');
+        item.className = 'q-item rounded p-3';
+
+        const label = document.createElement('div');
+        label.innerHTML = `
+          <span class="text-secondary small">#${r.idx}</span>
+          <b class="ms-2">${escapeHTML(r.zh)}</b>
+          ${r.pos ? `<span class="ms-1 hint">（${escapeHTML(r.pos)}）</span>` : '' }
+        `;
+
+        const inputGrp = document.createElement('div');
+        inputGrp.className = 'd-flex align-items-center gap-2 mt-2';
+        inputGrp.innerHTML = `
+          <input type="text" class="form-control form-control-sm answer-input" placeholder="輸入英文">
+          <button class="btn btn-outline-light btn-sm confirm-btn">確認</button>
+          <span class="ms-1 small result-flag"></span>
+        `;
+
+        const feedback = document.createElement('div');
+        feedback.className = 'mt-2 small';
+
+        item.append(label, inputGrp, feedback);
+        quizArea.appendChild(item);
+
+        const input = item.querySelector('.answer-input');
+        const btn = item.querySelector('.confirm-btn');
+        const flag = item.querySelector('.result-flag');
+
+        input.addEventListener('keydown', e => { if(e.key==='Enter') btn.click(); });
+
+        btn.addEventListener('click', () => {
+          if (btn.disabled) return;
+          const user = normalize(input.value);
+          const ans = normalize(r.en);
+
+          const ok = matchAnswer(user, ans);
+          btn.disabled = true;
+          input.disabled = true;
+
+          if (ok){
+            input.classList.add('is-correct');
+            flag.innerHTML = `<span class="badge bg-success">正確</span>`;
+            correct++;
+          }else{
+            input.classList.add('is-wrong');
+            flag.innerHTML = `<span class="badge bg-danger">錯誤</span>`;
+            feedback.innerHTML = `正確：<span class="badge badge-answer">${escapeHTML(r.en)}</span>`;
+          }
+
+          answered++;
+          if (answered === total){
+            const pct = ((correct/total)*100).toFixed(1);
+            resultArea.className = 'alert alert-info';
+            resultArea.classList.remove('d-none');
+            resultArea.textContent = `結果：${correct} / ${total}（正確率 ${pct}%）`;
+            resultArea.scrollIntoView({behavior:'smooth', block:'center'});
+          }else{
+            const next = item.nextElementSibling?.querySelector('.answer-input');
+            if (next && !next.disabled) next.focus();
+          }
+        });
+
+        if (idx === 0) setTimeout(()=>input.focus(), 0);
+      });
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
