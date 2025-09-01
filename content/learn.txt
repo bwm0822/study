@@ -1,0 +1,13 @@
+ch 發音(chair)
+th 發音(that)
+sh 發音(shoe)
+dr 發音(drink)
+tr 發音(tree)
+ou 發音(our)
+er 發音(teacher)
+ir 發音(girl)
+l 母音前發音(left)，l 母音後發音(girl)
+r 母音前發音(right)，r 母音後發音(ear)
+n 母音前發音(nine)，n 母音後發音(ten)
+m 母音前發音(my)，m 母音後發音(climb)
+

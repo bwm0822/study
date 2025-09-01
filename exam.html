@@ -10,13 +10,18 @@
   </style>
 </head>
 <body class="bg-light">
-  <div class="container py-4">
-    <a href="index.html" class="btn btn-secondary mb-3">← 返回清單</a>
+  <!-- 導覽列 -->
+  <nav class="navbar navbar-light bg-light border-bottom">
+    <div class="container d-flex justify-content-start">
+      <button id="backBtn" class="btn btn-outline-secondary btn-sm">返回</button>
+      <span class="navbar-brand ms-3 mb-0 h1" id="title">文字檔內容</span>
+    </div>
+  </nav>
 
+  <div class="container py-4">
+    <!-- 朗讀控制列 -->
     <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-2">
-      <h3 id="title" class="mb-0">文字檔內容</h3>
-      <!-- 朗讀控制列 -->
-      <div class="d-flex flex-wrap align-items-center gap-2">
+      <div class="d-flex flex-wrap align-items-center gap-2 ms-auto">
         <select id="voiceSelect" class="form-select form-select-sm" style="min-width:220px">
           <option value="">（載入可用音色中…）</option>
         </select>
@@ -41,7 +46,10 @@
   </div>
 
   <script>
-    // ====== 讀檔（與原本相同） ======
+    // ====== 返回鍵 ======
+    document.getElementById("backBtn").addEventListener("click", () => history.back());
+
+    // ====== 讀檔 ======
     const params = new URLSearchParams(location.search);
     const file = params.get("file") || "text1.txt";
     const outEl = document.getElementById("output");
@@ -50,10 +58,10 @@
 
     fetch("content/" + encodeURIComponent(file))
       .then(res => { if (!res.ok) throw new Error("HTTP " + res.status); return res.text(); })
-      .then(txt => { outEl.textContent = txt; })
+      .then(txt => { outEl.textContent = txt; window.scrollTo({ top: 0, behavior: "instant" }); })
       .catch(err => { outEl.textContent = "讀取失敗：" + err.message; });
 
-    // ====== 朗讀（Web Speech API） ======
+    // ====== 朗讀控制 ======
     const synth = window.speechSynthesis;
     const voiceSelect = document.getElementById("voiceSelect");
     const rateEl = document.getElementById("rate");
@@ -63,25 +71,18 @@
     const resumeBtn = document.getElementById("resumeBtn");
     const stopBtn = document.getElementById("stopBtn");
 
-    // 狀態
-    let chunks = [];          // 文字切段
-    let queue = [];           // Utterance 佇列
-    let idx = 0;              // 目前段落索引
-    let speaking = false;
+    let chunks = [], queue = [], idx = 0, speaking = false;
 
-    // 載入可用音色
     function populateVoices() {
       const voices = synth.getVoices();
-      const zhPrefer = ["zh-TW", "zh_HANT_TW", "zh-HK", "zh-CN", "zh"]; // 優先中文
+      const zhPrefer = ["zh-TW", "zh_HANT_TW", "zh-HK", "zh-CN", "zh"];
       voiceSelect.innerHTML = "";
-      voices.forEach((v, i) => {
+      voices.forEach(v => {
         const opt = document.createElement("option");
         opt.value = v.name;
         opt.textContent = `${v.name} — ${v.lang}`;
-        // 預設選擇：上次使用的 / 或第一個中文 / 否則第一個
         voiceSelect.appendChild(opt);
       });
-
       const saved = localStorage.getItem("tts_voice");
       if (saved && voices.find(v => v.name === saved)) {
         voiceSelect.value = saved;
@@ -95,24 +96,19 @@
       speechSynthesis.onvoiceschanged = populateVoices;
     }
 
-    // 切段：以空行或句號/問號/驚嘆號後的換行或空白切
     function splitText(text) {
       const trimmed = text.replace(/\r/g, "").trim();
       if (!trimmed) return [];
-      // 先以空行切
       let parts = trimmed.split(/\n{2,}/);
-      // 再把每一大段以句子標點再細切
       parts = parts.flatMap(p => p
-        .split(/(?<=[。！？!?\.])\s+/)  // 保留標點後切
+        .split(/(?<=[。！？!?\.])\s+/)
         .map(s => s.trim())
         .filter(Boolean)
       );
-      // 長段落再保險切塊（避免有瀏覽器內部長度限制）
-      const MAX_LEN = 180; // 可自行調整
+      const MAX_LEN = 180;
       const final = [];
       for (const s of parts) {
         if (s.length <= MAX_LEN) { final.push(s); continue; }
-        // 按空白切塊
         let buf = "";
         for (const w of s.split(/\s+/)) {
           if ((buf + " " + w).trim().length > MAX_LEN) { final.push(buf.trim()); buf = w; }
@@ -145,14 +141,12 @@
     function startSpeak() {
       const text = outEl.textContent || "";
       if (!text.trim()) return;
-      // 停掉舊的
       synth.cancel();
       speaking = true;
       buildQueue(text);
       if (queue.length) synth.speak(queue[0]);
     }
 
-    // 控制按鈕
     playBtn.addEventListener("click", () => {
       if (synth.paused && speaking) { synth.resume(); return; }
       startSpeak();
@@ -161,22 +155,15 @@
     resumeBtn.addEventListener("click", () => { if (synth.paused) synth.resume(); });
     stopBtn.addEventListener("click", () => { speaking = false; synth.cancel(); });
 
-    // 參數調整立即生效（若正在播，重新開始）
     [rateEl, pitchEl, voiceSelect].forEach(el => {
       el.addEventListener("input", () => {
         localStorage.setItem("tts_voice", voiceSelect.value || "");
         if (speaking || synth.speaking || synth.paused) {
-          speaking = true; // 保持播放狀態
+          speaking = true;
           startSpeak();
         }
       });
     });
-
-    // 當檔案載入後，自動把游標移到開頭，避免捲動影響
-    fetch("content/" + encodeURIComponent(file))
-      .then(res => res.ok ? res.text() : Promise.reject(new Error("HTTP " + res.status)))
-      .then(txt => { outEl.textContent = txt; window.scrollTo({ top: 0, behavior: "instant" }); })
-      .catch(() => {});
   </script>
 </body>
 </html>
