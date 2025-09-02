@@ -34,6 +34,9 @@
     .kk{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:0 .5rem;opacity:.95}
 
     .input-group .form-control.is-invalid{border-color:#dc3545}
+
+    /* 語音控制：讓滑桿同列時長度合適 */
+    .range-inline{width:260px;min-width:180px}
   </style>
 </head>
 <body>
@@ -49,20 +52,15 @@
   </nav>
 
   <main class="container container-narrow my-3">
-    <!-- 語音控制 -->
+    <!-- 語音控制（英文語音＋語速在同一列） -->
     <div class="card mb-3 bg-dark text-light border-secondary">
-      <div class="card-body row gy-2 gx-3 align-items-center">
-        <div class="col-12 col-md-4">
-          <label class="form-label mb-1">英文語音</label>
-          <select id="selEn" class="form-select form-select-sm bg-dark text-light border-secondary"></select>
-        </div>
-        <div class="col-12 col-md-4">
-          <label class="form-label mb-1">中文語音</label>
-          <select id="selZh" class="form-select form-select-sm bg-dark text-light border-secondary"></select>
-        </div>
-        <div class="col-12 col-md-4">
-          <label for="rate" class="form-label mb-1">語速：<span id="rateVal">1.00</span></label>
-          <input id="rate" type="range" class="form-range" min="0.5" max="2.0" step="0.05" value="1.00">
+      <div class="card-body">
+        <div class="d-flex align-items-center flex-wrap gap-3">
+          <label class="form-label mb-0">英文語音</label>
+          <select id="selEn" class="form-select form-select-sm w-auto bg-dark text-light border-secondary"></select>
+
+          <label for="rate" class="form-label mb-0">語速：<span id="rateVal">1.00</span></label>
+          <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00">
         </div>
       </div>
     </div>
@@ -96,13 +94,11 @@
 
   <script>
     const EN_LANG = 'en-US';
-    const ZH_LANG = 'zh-TW';
     const pageSize = 10;
 
     const $tbody  = document.querySelector('#voca tbody');
     const $pagination = document.getElementById('pagination');
     const $selEn = document.getElementById('selEn');
-    const $selZh = document.getElementById('selZh');
     const $rate = document.getElementById('rate');
     const $rateVal = document.getElementById('rateVal');
     const $empty = document.getElementById('emptyState');
@@ -130,20 +126,18 @@
         });
     }
 
-    /* ====== 語音 ====== */
-    function loadVoices(){ voices = speechSynthesis.getVoices(); populateVoiceSelects(); }
-    function populateVoiceSelects(){
+    /* ====== 語音（只列英文） ====== */
+    function loadVoices(){ voices = speechSynthesis.getVoices(); populateEnVoices(); }
+    function populateEnVoices(){
       if (!voices.length) return;
-      const enList = voices.filter(v => v.lang?.toLowerCase().startsWith('en'));
-      const zhList = voices.filter(v => /^(zh|cmn)/i.test(v.lang));
+      const enList = voices
+        .filter(v => v.lang?.toLowerCase().startsWith('en'))
+        .sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'en'));
       fillSelect($selEn, enList, localStorage.getItem('tts.enVoice'));
-      fillSelect($selZh, zhList, localStorage.getItem('tts.zhVoice'));
       if (!$selEn.value && enList.length) $selEn.value = enList[0].name+'||'+enList[0].lang;
-      if (!$selZh.value && zhList.length) $selZh.value = zhList[0].name+'||'+zhList[0].lang;
     }
     function fillSelect(sel, list, saved){
       sel.innerHTML = '';
-      list.sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'en'));
       for(const v of list){
         const opt=document.createElement('option');
         opt.value=v.name+'||'+v.lang;
@@ -162,12 +156,11 @@
              voices.find(v=>v.lang===lang) ||
              voices.find(v=>v.name===name) || null;
     }
-    function speak(text, lang, ondone){
+    function speakEn(text, ondone){
       if(!text) return;
       const u=new SpeechSynthesisUtterance(text);
-      u.lang=lang;
-      const sel=(lang.startsWith('zh')?$selZh.value:$selEn.value);
-      const chosen=getVoiceByValue(sel);
+      u.lang=EN_LANG;
+      const chosen=getVoiceByValue($selEn.value);
       if(chosen) u.voice=chosen;
       u.rate=rate; u.pitch=1; u.volume=1;
       u.onend=()=>ondone&&ondone();
@@ -195,7 +188,7 @@
     function isStarred(idx){ return getStarsSet().has(String(idx)); }
     function updateStarCount(){ $starCount.textContent = `★ ${loadStars().length}`; }
 
-    /* ====== 以星號建立 rowsStar，並在切頁時清掉未標註 ====== */
+    /* ====== 以星號建立 rowsStar，切頁時清掉未標註 ====== */
     function buildInitialStarRows(){
       const set = getStarsSet();
       rowsStar = rows.filter(r => set.has(String(r.idx)));
@@ -395,11 +388,11 @@
       // 右欄：按「單字」或「英文例句」會發音（只播英文）
       const el = ev.target.closest('[data-say]');
       if(!el) return;
+      const isEn = (el.getAttribute('data-lang')||'').toLowerCase().startsWith('en');
+      if (!isEn) return;
       const text = el.getAttribute('data-say')||el.textContent||'';
-      const lang = (el.getAttribute('data-lang')||'').toLowerCase().startsWith('en')?EN_LANG:ZH_LANG;
-      if (lang!==EN_LANG) return;
       el.classList.add('speaking');
-      speak(text, EN_LANG, ()=>el.classList.remove('speaking'));
+      speakEn(text, ()=>el.classList.remove('speaking'));
     });
 
     document.getElementById('backBtn').addEventListener('click', ()=>history.back());
@@ -413,7 +406,6 @@
 
     // 語音設定
     $selEn.addEventListener('change', ()=>localStorage.setItem('tts.enVoice',$selEn.value));
-    $selZh.addEventListener('change', ()=>localStorage.setItem('tts.zhVoice',$selZh.value));
     $rate.addEventListener('input', ()=>{
       rate = parseFloat($rate.value)||1;
       $rateVal.textContent = rate.toFixed(2);
@@ -428,9 +420,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-

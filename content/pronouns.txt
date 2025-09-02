@@ -1,0 +1,17 @@
+代名詞種類	主格	所有格	受格	所有代名詞
+第一人稱單數	I	my	me	mine
+	我	我的	我	我的
+第二人稱單數	you	your	you	yours
+	你	你的	你	你的
+第三人稱單數	he	his	him	his
+	他	他的	他	他的
+第三人稱單數	she	her	her	hers
+	她	她的	她	她的
+第三人稱單數	it	its	it	its
+	它、牠	它的、牠的	它、牠	它的、牠的
+第一人稱複數	we	our	us	ours
+	我們	我們的	我們	我們的
+第二人稱複數	you	your	you	yours
+	你們	你們的	你們	你們的
+第三人稱複數	they	their	them	theirs
+	他們	他們的	他們	他們的
