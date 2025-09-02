@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<!-- <html lang="zh-Hant" data-bs-theme="dark"> -->
-<html data-bs-theme="dark"></html>
+<html lang="zh-Hant" data-bs-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,6 +20,8 @@
     .is-correct{border-color:#3ddc97 !important}
     .is-wrong{border-color:#ff6b6b !important;color:#ff6b6b !important}
     .hint{color:#adb5bd}
+    /* 讓整列可點焦點 */
+    .list-item-focus{outline:none}
   </style>
 </head>
 <body>
@@ -34,43 +35,53 @@
   <main class="container py-3">
     <!-- 控制列 -->
     <div class="card mb-3">
-      <div class="card-body row gy-3 gx-3 align-items-end">
-        <!-- 起始值 -->
-        <div class="col-12 col-md-4">
-          <label class="form-label mb-1">起始編號</label>
-          <div class="input-group input-group-sm">
-            <button class="btn btn-outline-light" id="startMinus">−</button>
-            <input id="startIdx" type="number" class="form-control text-center" min="1" value="1" step="1">
-            <button class="btn btn-outline-light" id="startPlus">＋</button>
+      <div class="card-body">
+        <!-- 模式切換 -->
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+          <div class="btn-group btn-group-sm" role="group" aria-label="mode">
+            <button id="modeNormal" class="btn btn-outline-light" data-mode="normal">一般</button>
+            <button id="modeReview" class="btn btn-outline-light" data-mode="review">複習</button>
           </div>
+          <div id="loadInfo" class="hint small ms-auto">資料載入中…</div>
         </div>
 
-        <!-- 結束值 -->
-        <div class="col-12 col-md-4">
-          <label class="form-label mb-1">結束編號</label>
-          <div class="input-group input-group-sm">
-            <button class="btn btn-outline-light" id="endMinus">−</button>
-            <input id="endIdx" type="number" class="form-control text-center" min="1" value="25" step="1">
-            <button class="btn btn-outline-light" id="endPlus">＋</button>
+        <div class="row gy-3 gx-3 align-items-end">
+          <!-- 起始值（一般模式用） -->
+          <div class="col-12 col-md-4" id="colStart">
+            <label class="form-label mb-1">起始編號</label>
+            <div class="input-group input-group-sm">
+              <button class="btn btn-outline-light" id="startMinus">−</button>
+              <input id="startIdx" type="number" class="form-control text-center" min="1" value="1" step="1">
+              <button class="btn btn-outline-light" id="startPlus">＋</button>
+            </div>
           </div>
-        </div>
 
-        <!-- 測驗字數 -->
-        <div class="col-12 col-md-4">
-          <label class="form-label mb-1">測驗字數</label>
-          <div class="input-group input-group-sm">
-            <button class="btn btn-outline-light" id="minusBtn">−</button>
-            <input id="countInput" type="number" class="form-control text-center" min="0" value="25" step="1">
-            <button class="btn btn-outline-light" id="plusBtn">＋</button>
+          <!-- 結束值（一般模式用） -->
+          <div class="col-12 col-md-4" id="colEnd">
+            <label class="form-label mb-1">結束編號</label>
+            <div class="input-group input-group-sm">
+              <button class="btn btn-outline-light" id="endMinus">−</button>
+              <input id="endIdx" type="number" class="form-control text-center" min="1" value="25" step="1">
+              <button class="btn btn-outline-light" id="endPlus">＋</button>
+            </div>
           </div>
-        </div>
 
-        <!-- 操作 -->
-        <div class="col-12 text-md-end">
-          <div class="d-flex gap-2 justify-content-md-end">
-            <div id="loadInfo" class="hint small mt-2 me-auto">資料載入中…</div>
-            <button id="startBtn" class="btn btn-primary btn-sm">測驗</button>
-            <button id="clearBtn" class="btn btn-outline-light btn-sm">清除</button>
+          <!-- 測驗字數（兩種模式都用，容量依模式決定） -->
+          <div class="col-12 col-md-4" id="colCount">
+            <label class="form-label mb-1">測驗字數 <span class="hint" id="capHint"></span></label>
+            <div class="input-group input-group-sm">
+              <button class="btn btn-outline-light" id="minusBtn">−</button>
+              <input id="countInput" type="number" class="form-control text-center" min="0" value="25" step="1">
+              <button class="btn btn-outline-light" id="plusBtn">＋</button>
+            </div>
+          </div>
+
+          <!-- 操作 -->
+          <div class="col-12 text-md-end">
+            <div class="d-flex gap-2 justify-content-md-end">
+              <button id="startBtn" class="btn btn-primary btn-sm">測驗</button>
+              <button id="clearBtn" class="btn btn-outline-light btn-sm">清除</button>
+            </div>
           </div>
         </div>
       </div>
@@ -96,30 +107,39 @@
     // ====== DOM ======
     const backBtn = $('#backBtn');
 
+    const modeNormalBtn = $('#modeNormal');
+    const modeReviewBtn = $('#modeReview');
+    const capHint = $('#capHint');
+
+    const colStart = $('#colStart');
+    const colEnd   = $('#colEnd');
+
     const startIdxEl = $('#startIdx');
-    const endIdxEl = $('#endIdx');
+    const endIdxEl   = $('#endIdx');
     const startMinus = $('#startMinus');
-    const startPlus = $('#startPlus');
-    const endMinus = $('#endMinus');
-    const endPlus = $('#endPlus');
+    const startPlus  = $('#startPlus');
+    const endMinus   = $('#endMinus');
+    const endPlus    = $('#endPlus');
 
     const countInput = $('#countInput');
-    const minusBtn = $('#minusBtn');
-    const plusBtn = $('#plusBtn');
+    const minusBtn   = $('#minusBtn');
+    const plusBtn    = $('#plusBtn');
 
-    const startBtn = $('#startBtn');
-    const clearBtn = $('#clearBtn');
+    const startBtn   = $('#startBtn');
+    const clearBtn   = $('#clearBtn');
 
-    const loadInfo = $('#loadInfo');
-    const quizArea = $('#quizArea');
+    const loadInfo   = $('#loadInfo');
+    const quizArea   = $('#quizArea');
     const resultArea = $('#resultArea');
 
     backBtn.addEventListener('click', () => history.back());
 
-    // ====== 資料 ======
+    // ====== 狀態 ======
+    let MODE = localStorage.getItem('exam.mode') || 'normal'; // 'normal' | 'review'
     let allRows = []; // {idx, idxNum, en, zh, pos, exEn, exZh}
     let MAX_IDX = 1;
 
+    // ====== 資料 ======
     fetch('content/voca.txt?c=' + Date.now())
       .then(r => { if(!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
       .then(txt => {
@@ -128,12 +148,12 @@
         const minIdx = Math.min(...idxList);
         MAX_IDX = Math.max(...idxList);
 
-        // 預設顯示
+        // 一般模式預設起迄
         startIdxEl.value = isFinite(minIdx) ? minIdx : 1;
         endIdxEl.value   = isFinite(minIdx) ? Math.min(minIdx + 24, MAX_IDX) : 25;
 
-        setCountToRange(); // 起/迄初始時同步「測驗字數」= R
-        loadInfo.textContent = `已載入 ${allRows.length} 筆（可用編號 1 ~ ${MAX_IDX}）`;
+        updateLoadInfo();
+        applyModeUI(true); // 初始化 UI 與容量/字數
       })
       .catch(err => { loadInfo.textContent = '讀取失敗：' + err.message; });
 
@@ -156,7 +176,20 @@
         .filter(r => r.idxNum >= 1 && r.en);
     }
 
-    // ====== 範圍/檢查 ======
+    // ====== 標註存取（複習模式來源） ======
+    function loadStars(){
+      try{
+        const arr = JSON.parse(localStorage.getItem('voca.stars') || '[]');
+        return Array.isArray(arr) ? arr : [];
+      }catch(e){ return []; }
+    }
+    function getStarSet(){ return new Set(loadStars().map(String)); }
+    function getStarRows(){
+      const set = getStarSet();
+      return allRows.filter(r => set.has(String(r.idx)));
+    }
+
+    // ====== 範圍/容量 ======
     function getLoHiRaw(){
       const s = parseInt(startIdxEl.value,10);
       const e = parseInt(endIdxEl.value,10);
@@ -166,129 +199,202 @@
       const [s,e] = getLoHiRaw();
       return [Math.min(s,e), Math.max(s,e)];
     }
-    function getRange(){
+    function getRange(){ // 僅一般模式用的 R
       const [s,e] = getLoHiRaw();
       return (s>e) ? 0 : (e - s + 1);
     }
-    function setCountToRange(){
-      const R = getRange();
-      countInput.value = Math.max(0, R);
+    function getCapacity(){ // 依模式決定可用上限
+      if (MODE === 'review') return getStarRows().length;
+      return getRange();
     }
-    function capCountToRange(){
-      const R = getRange();
+    function setCountToCapacity(){ // 將字數設為當前容量
+      const cap = getCapacity();
+      countInput.value = Math.max(0, cap);
+      setCapHint(cap);
+    }
+    function capCountToCapacity(){ // 將字數限制到容量內
+      const cap = getCapacity();
       let v = parseInt(countInput.value,10);
       if (isNaN(v) || v < 0) v = 0;
-      if (v > R) v = R;
+      if (v > cap) v = cap;
       countInput.value = v;
+      setCapHint(cap);
+    }
+    function setCapHint(cap){
+      capHint.textContent = cap ? `（最多 ${cap}）` : '（目前無可用題目）';
+      countInput.max = Math.max(0, cap);
     }
 
-    // ====== 起/迄：手動輸入只檢 1~MAX；spinner/步進則再保證關係成立 ======
+    // ====== 模式切換 UI ======
+    function applyModeUI(isInit=false){
+      // 切換按鈕外觀
+      modeNormalBtn.classList.toggle('btn-primary', MODE==='normal');
+      modeNormalBtn.classList.toggle('btn-outline-light', MODE!=='normal');
+      modeReviewBtn.classList.toggle('btn-primary', MODE==='review');
+      modeReviewBtn.classList.toggle('btn-outline-light', MODE!=='review');
+
+      // 顯示/隱藏範圍欄位
+      const showRange = (MODE === 'normal');
+      colStart.classList.toggle('d-none', !showRange);
+      colEnd.classList.toggle('d-none', !showRange);
+
+      // 依模式設定「測驗字數」預設值
+      if (MODE === 'review'){
+        // 複習模式：預設 = 所有已標註數量
+        setCountToCapacity();
+      }else{
+        // 一般模式：預設 = 目前的範圍長度
+        setCountToCapacity();
+      }
+
+      // 更新載入資訊（顯示已標註數）
+      updateLoadInfo();
+
+      // 初始化時不用動；切換時清空目前題目
+      if (!isInit){
+        clearQuiz();
+      }
+    }
+
+    modeNormalBtn.addEventListener('click', () => {
+      if (MODE==='normal') return;
+      MODE = 'normal';
+      localStorage.setItem('exam.mode', MODE);
+      applyModeUI();
+    });
+    modeReviewBtn.addEventListener('click', () => {
+      if (MODE==='review') return;
+      MODE = 'review';
+      localStorage.setItem('exam.mode', MODE);
+      applyModeUI();
+    });
+
+    // ====== 載入資訊 ======
+    function updateLoadInfo(){
+      const starN = getStarRows().length;
+      loadInfo.textContent = `已載入 ${allRows.length} 筆（可用編號 1 ~ ${MAX_IDX}，已標註 ${starN}）`;
+    }
+
+    // ====== 起/迄輸入 ======
     startIdxEl.addEventListener('input', (e) => {
+      if (MODE!=='normal') return; // 複習模式忽略
       let v = parseInt(startIdxEl.value,10);
       if (isNaN(v)) v = 1;
       v = clamp(v, 1, MAX_IDX);
-      // 若是 spinner/步進（包含滑輪或系統步進），需保證 起始 ≤ 結束
       if (isSpinnerLike(e)) {
         const eVal = parseInt(endIdxEl.value,10) || 1;
         if (v > eVal) v = eVal;
       }
       startIdxEl.value = v;
-      setCountToRange();
+      setCountToCapacity();
     });
 
     endIdxEl.addEventListener('input', (e) => {
+      if (MODE!=='normal') return; // 複習模式忽略
       let v = parseInt(endIdxEl.value,10);
       if (isNaN(v)) v = 1;
       v = clamp(v, 1, MAX_IDX);
-      // 若是 spinner/步進，需保證 結束 ≥ 起始
       if (isSpinnerLike(e)) {
         const sVal = parseInt(startIdxEl.value,10) || 1;
         if (v < sVal) v = sVal;
       }
       endIdxEl.value = v;
-      setCountToRange();
+      setCountToCapacity();
     });
 
-    // ====== 「按鍵 ±」：維持起≤迄、迄≥起；變動時重設字數 ======
-    // 起始值
+    // ====== 起/迄按鍵 ======
     startMinus.addEventListener('click', () => {
+      if (MODE!=='normal') return;
       let s = clamp((parseInt(startIdxEl.value,10)||1) - 1, 1, MAX_IDX);
       const e = parseInt(endIdxEl.value,10)||1;
       if (s > e) s = e;
       startIdxEl.value = s;
-      setCountToRange();
+      setCountToCapacity();
     });
     startPlus.addEventListener('click', () => {
+      if (MODE!=='normal') return;
       let s = clamp((parseInt(startIdxEl.value,10)||1) + 1, 1, MAX_IDX);
       const e = parseInt(endIdxEl.value,10)||1;
       if (s > e) s = e;
       startIdxEl.value = s;
-      setCountToRange();
+      setCountToCapacity();
     });
 
-    // 結束值
     endMinus.addEventListener('click', () => {
+      if (MODE!=='normal') return;
       const s = parseInt(startIdxEl.value,10)||1;
       let e = clamp((parseInt(endIdxEl.value,10)||1) - 1, 1, MAX_IDX);
       if (e < s) e = s;
       endIdxEl.value = e;
-      setCountToRange();
+      setCountToCapacity();
     });
     endPlus.addEventListener('click', () => {
+      if (MODE!=='normal') return;
       const s = parseInt(startIdxEl.value,10)||1;
       let e = clamp((parseInt(endIdxEl.value,10)||1) + 1, 1, MAX_IDX);
       if (e < s) e = s;
       endIdxEl.value = e;
-      setCountToRange();
+      setCountToCapacity();
     });
 
-    // 測驗字數：限制在 0~R（spinner/步進與手動輸入都一樣）
-    countInput.addEventListener('input', capCountToRange);
+    // ====== 測驗字數：限制在 0~capacity ======
+    function capCountHandler(){
+      capCountToCapacity();
+    }
+    countInput.addEventListener('input', capCountHandler);
     minusBtn.addEventListener('click', () => {
       countInput.value = Math.max(0, (parseInt(countInput.value,10)||0) - 1);
-      capCountToRange();
+      capCountToCapacity();
     });
     plusBtn.addEventListener('click', () => {
       countInput.value = Math.max(0, (parseInt(countInput.value,10)||0) + 1);
-      capCountToRange();
+      capCountToCapacity();
     });
     countInput.addEventListener('keydown', e => {
       if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
       e.preventDefault();
       const dir = e.key === 'ArrowUp' ? +1 : -1;
-      const R = getRange();
+      const cap = getCapacity();
       let v = parseInt(countInput.value,10); if (isNaN(v)) v = 0;
-      v = clamp(v + dir, 0, R);
+      v = clamp(v + dir, 0, cap);
       countInput.value = v;
     });
 
     // ====== 開始測驗 ======
     startBtn.addEventListener('click', () => {
-      const [lo,hi] = getLoHiOrdered();
-      const R = getRange();
-      capCountToRange(); // 再保一次
+      const cap = getCapacity();
+      capCountToCapacity(); // 確保字數在上限內
       let want = parseInt(countInput.value,10) || 0;
 
-      if (R <= 0 || want <= 0){
-        alert('測驗範圍為 0 或測驗字數為 0，無法開始。');
+      if (cap <= 0 || want <= 0){
+        alert('目前沒有可用題目或測驗字數為 0，無法開始。');
         return;
       }
 
-      const avail = allRows.filter(r => r.idxNum >= lo && r.idxNum <= hi);
-      if (!avail.length){ alert('此範圍沒有資料'); return; }
+      let avail = [];
+      if (MODE === 'review'){
+        avail = getStarRows();
+        if (!avail.length){ alert('目前沒有已標註的單字'); return; }
+      }else{
+        const [lo,hi] = getLoHiOrdered();
+        avail = allRows.filter(r => r.idxNum >= lo && r.idxNum <= hi);
+        if (!avail.length){ alert('此範圍沒有資料'); return; }
+      }
 
-      want = Math.min(want, R, avail.length);
+      want = Math.min(want, cap, avail.length);
       const picked = randomSample(avail, want);
       renderQuiz(picked);
       resultArea.classList.add('d-none');
       resultArea.textContent = '';
     });
 
-    clearBtn.addEventListener('click', () => {
+    clearBtn.addEventListener('click', clearQuiz);
+
+    function clearQuiz(){
       quizArea.innerHTML = '';
       resultArea.classList.add('d-none');
       resultArea.textContent = '';
-    });
+    }
 
     // ====== 工具 ======
     function randomSample(arr, n){
@@ -316,7 +422,8 @@
 
       rows.forEach((r, idx) => {
         const item = document.createElement('div');
-        item.className = 'q-item rounded p-3';
+        item.className = 'q-item rounded p-3 list-item-focus';
+        item.tabIndex = 0;
 
         const label = document.createElement('div');
         label.innerHTML = `
@@ -380,9 +487,18 @@
         if (idx === 0) setTimeout(()=>input.focus(), 0);
       });
     }
+
+    // 初始化：套用記憶的模式按鈕樣式（資料載入後會再 applyModeUI(true)）
+    (function primeModeButtons(){
+      modeNormalBtn.classList.toggle('btn-primary', MODE==='normal');
+      modeNormalBtn.classList.toggle('btn-outline-light', MODE!=='normal');
+      modeReviewBtn.classList.toggle('btn-primary', MODE==='review');
+      modeReviewBtn.classList.toggle('btn-outline-light', MODE!=='review');
+    })();
   </script>
 </body>
 </html>
+
 
 
 
