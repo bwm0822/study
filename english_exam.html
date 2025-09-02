@@ -33,8 +33,8 @@
       color:#0b2e13; background:#75d79e; border-color:#75d79e;
     }
 
-    /* 讓整個 li 內的主連結區塊更好點：加上可點手勢 */
-    .list-group-item a.text-decoration-none{ cursor:pointer }
+    /* 讓整列看起來可點 */
+    .list-group-item.js-clickable{ cursor:pointer }
   </style>
 </head>
 <body>
@@ -98,8 +98,43 @@
   </div>
 
   <script>
+    // 返回
     document.getElementById('backBtn').addEventListener('click', () => history.back());
+
+    // 讓整個 li 可點：點 li 的任意非連結區域，前往左側主要連結
+    function enableRowClickNavigation(){
+      document.querySelectorAll('.list-group .list-group-item').forEach(li => {
+        const mainLink = li.querySelector('a.text-decoration-none[href]');
+        if (!mainLink) return;
+
+        li.classList.add('js-clickable');
+        li.tabIndex = 0; // 可鍵盤聚焦
+
+        li.addEventListener('click', (e) => {
+          // 如果點到任何<a>（包含右邊解答按鈕），就讓原生超連結處理
+          if (e.target.closest('a')) return;
+
+          const url = mainLink.getAttribute('href');
+          if (e.metaKey || e.ctrlKey) {
+            window.open(url, '_blank');
+          } else {
+            window.location.href = url;
+          }
+        });
+
+        // 鍵盤可及性：Enter / Space 也能開啟
+        li.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            mainLink.click();
+          }
+        });
+      });
+    }
+
+    enableRowClickNavigation();
   </script>
 </body>
 </html>
+
 

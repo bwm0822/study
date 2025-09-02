@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="zh-Hant" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vocabulary TTS — 複習（只顯示已標註）</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{background:#212529;color:#f8f9fa}
+    .container-narrow{max-width:980px}
+    .navbar{border-bottom:1px solid rgba(255,255,255,.15)}
+    .table thead th{position:sticky; top:0; z-index:1; background:#1b1f22}
+    tr.group-start td{border-top-width:2px !important}
+    th.col-word{width:220px}
+    th.col-ex{width:auto}
+    th.col-idx{width:72px}
+    td.small-muted{color:#adb5bd;font-size:.9rem}
+    .input-group .form-control.is-invalid{border-color:#dc3545}
+
+    td[data-say]{cursor:pointer;transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease}
+    td[data-say]:hover{background-color:rgba(255,255,255,.06)}
+    td[data-say]:active{transform:scale(1.03)}
+    @media (prefers-reduced-motion: reduce){ td[data-say]{transition:none} }
+    td[data-say].speaking{outline:2px solid var(--bs-primary); box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
+
+    /* 編號欄位：整格可點；★ 只在標註時顯示 */
+    td.idx-cell{cursor:pointer; user-select:none}
+    .idx-wrap{display:flex;flex-direction:column;align-items:center;gap:.25rem}
+    .idx-star{font-size:18px; line-height:1}
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container container-narrow d-flex align-items-center">
+      <button id="backBtn" class="btn btn-outline-light btn-sm">返回</button>
+      <span class="navbar-brand ms-3 mb-0 h1">複習單字</span>
+      <div class="ms-auto d-flex align-items-center gap-2">
+        <span class="badge text-bg-warning" id="starCount">★ 0</span>
+        <button id="clearStarsBtn" class="btn btn-outline-warning btn-sm">清除標註</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container container-narrow my-3">
+    <!-- 語音控制 -->
+    <div class="card mb-3 bg-dark text-light border-secondary">
+      <div class="card-body row gy-2 gx-3 align-items-center">
+        <div class="col-12 col-md-4">
+          <label class="form-label mb-1">英文語音</label>
+          <select id="selEn" class="form-select form-select-sm bg-dark text-light border-secondary"></select>
+        </div>
+        <div class="col-12 col-md-4">
+          <label class="form-label mb-1">中文語音</label>
+          <select id="selZh" class="form-select form-select-sm bg-dark text-light border-secondary"></select>
+        </div>
+        <div class="col-12 col-md-4">
+          <label for="rate" class="form-label mb-1">語速：<span id="rateVal">1.00</span></label>
+          <input id="rate" type="range" class="form-range" min="0.5" max="2.0" step="0.05" value="1.00">
+        </div>
+      </div>
+    </div>
+
+    <!-- 分頁（上方） -->
+    <nav class="mb-2 d-flex justify-content-center align-items-center gap-2 flex-wrap">
+      <ul id="pagination" class="pagination mb-0"></ul>
+      <div class="input-group input-group-sm" style="width:170px">
+        <input id="pageJump" type="number" class="form-control bg-dark text-light border-secondary" min="1" placeholder="頁碼">
+        <button id="pageGo" class="btn btn-outline-light">Go</button>
+      </div>
+    </nav>
+
+    <!-- 表格 -->
+    <div class="table-responsive">
+      <table id="voca" class="table table-dark table-hover align-middle mb-3">
+        <thead>
+          <tr>
+            <th class="col-idx">#</th>
+            <th class="col-word">單字 / 中文 / 詞性</th>
+            <th class="col-ex">例句（英 / 中）</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- 下方快速上下頁 -->
+    <nav class="mt-2">
+      <div id="quickPager" class="d-flex justify-content-center align-items-center gap-2 flex-wrap"></div>
+    </nav>
+
+    <!-- 空狀態 -->
+    <div id="emptyState" class="text-center text-secondary my-4" style="display:none">
+      目前沒有已標註的單字。到「全部單字」頁面先加些★吧！
+    </div>
+  </main>
+
+  <script>
+    const EN_LANG = 'en-US';
+    const ZH_LANG = 'zh-TW';
+    const pageSize = 10;
+
+    const $tbody  = document.querySelector('#voca tbody');
+    const $pagination = document.getElementById('pagination');
+    const $selEn = document.getElementById('selEn');
+    const $selZh = document.getElementById('selZh');
+    const $rate = document.getElementById('rate');
+    const $rateVal = document.getElementById('rateVal');
+    const $empty = document.getElementById('emptyState');
+    const $starCount = document.getElementById('starCount');
+
+    let voices = [];
+    let rows = [];       // 所有單字
+    let rowsStar = [];   // 本頁展示用（初始化為已標註；切頁時才清掉取消標註者）
+    let rate = parseFloat(localStorage.getItem('tts.rate') || '1') || 1;
+    let currentPage = parseInt(localStorage.getItem('voca.review.currentPage') || '1', 10) || 1;
+
+    // ---- 解析 voca.txt ----
+    function parseTSV(txt){
+      return txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n')
+        .map(l=>l.trim()).filter(l=>l && !l.startsWith('#'))
+        .map(line=>{
+          const parts=line.split('\t');
+          const [idx,en,zh,pos,exEn,exZh] = [
+            parts[0]||'', parts[1]||'', parts[2]||'',
+            (parts[3]||''), (parts[4]||parts[3]||''), (parts[5]||'')
+          ];
+          let _pos = pos, _exEn = exEn, _exZh = exZh;
+          if (parts.length===4){ _pos=''; _exEn=parts[3]; _exZh=''; }
+          return {idx,en,zh,pos:_pos,exEn:_exEn,exZh:_exZh};
+        });
+    }
+
+    // ---- 語音 ----
+    function loadVoices(){ voices = speechSynthesis.getVoices(); populateVoiceSelects(); }
+    function populateVoiceSelects(){
+      if (!voices.length) return;
+      const enList = voices.filter(v => v.lang?.toLowerCase().startsWith('en'));
+      const zhList = voices.filter(v => /^(zh|cmn)/i.test(v.lang));
+      fillSelect($selEn, enList, localStorage.getItem('tts.enVoice'));
+      fillSelect($selZh, zhList, localStorage.getItem('tts.zhVoice'));
+      if (!$selEn.value && enList.length) $selEn.value = enList[0].name+'||'+enList[0].lang;
+      if (!$selZh.value && zhList.length) $selZh.value = zhList[0].name+'||'+zhList[0].lang;
+    }
+    function fillSelect(sel, list, saved){
+      sel.innerHTML = '';
+      list.sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'en'));
+      for(const v of list){
+        const opt=document.createElement('option');
+        opt.value=v.name+'||'+v.lang;
+        opt.textContent=`${v.name} (${v.lang})${v.default?' ★':''}`;
+        sel.appendChild(opt);
+      }
+      if (saved && [...sel.options].some(o=>o.value===saved)) sel.value=saved;
+    }
+    loadVoices();
+    if('onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged=loadVoices;
+
+    // ---- TTS ----
+    function getVoiceByValue(val){
+      if(!val) return null;
+      const [name,lang]=val.split('||');
+      return voices.find(v=>v.name===name&&v.lang===lang) ||
+             voices.find(v=>v.lang===lang) ||
+             voices.find(v=>v.name===name) || null;
+    }
+    function speak(text, lang, ondone){
+      if(!text) return;
+      const u=new SpeechSynthesisUtterance(text);
+      u.lang=lang;
+      const sel=(lang.startsWith('zh')?$selZh.value:$selEn.value);
+      const chosen=getVoiceByValue(sel);
+      if(chosen) u.voice=chosen;
+      u.rate=rate; u.pitch=1; u.volume=1;
+      u.onend=()=>ondone&&ondone();
+      u.onerror=()=>ondone&&ondone();
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }
+
+    // ---- 標註存取 ----
+    function loadStars(){
+      try{
+        const arr = JSON.parse(localStorage.getItem('voca.stars') || '[]');
+        return Array.isArray(arr) ? arr : [];
+      }catch(e){ return []; }
+    }
+    function saveStars(list){
+      const nums=[], strs=[];
+      for(const v of list){
+        const n=Number(v);
+        if(!Number.isNaN(n)) nums.push(n); else strs.push(String(v));
+      }
+      nums.sort((a,b)=>a-b); strs.sort();
+      const merged=[...nums.map(n=>String(n)), ...strs];
+      localStorage.setItem('voca.stars', JSON.stringify(merged));
+      return merged;
+    }
+    function getStarsSet(){ return new Set(loadStars()); }
+    function isStarred(idx){ return getStarsSet().has(String(idx)); }
+    function updateStarCount(){ $starCount.textContent = `★ ${loadStars().length}`; }
+
+    // ---- rowsStar 初始化 & 清除未標註列 ----
+    function buildInitialStarRows(){
+      const set = getStarsSet();
+      rowsStar = rows.filter(r => set.has(String(r.idx)));
+      const nums=[],strs=[];
+      for(const r of rowsStar){
+        const n = Number(r.idx);
+        if(!Number.isNaN(n)) nums.push(r); else strs.push(r);
+      }
+      nums.sort((a,b)=>Number(a.idx)-Number(b.idx));
+      strs.sort((a,b)=>String(a.idx).localeCompare(String(b.idx)));
+      rowsStar = [...nums, ...strs];
+    }
+    function purgeUnstarredFromRowsStar(){
+      const set = getStarsSet();
+      rowsStar = rowsStar.filter(r => set.has(String(r.idx)));
+    }
+
+    // ---- 分頁（切頁時才清掉已取消標註）----
+    function savePage(){ localStorage.setItem('voca.review.currentPage', String(currentPage)); }
+    function goPage(p){
+      const totalPages = Math.ceil(rowsStar.length / pageSize) || 1;
+      const nextPage = Math.min(Math.max(1, p), totalPages || 1);
+      if (nextPage !== currentPage){
+        purgeUnstarredFromRowsStar(); // 切頁才清理
+      }
+      currentPage = Math.min(Math.max(1, nextPage), Math.ceil(rowsStar.length / pageSize) || 1);
+      savePage();
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ---- 渲染 ----
+    function render(){
+      $tbody.innerHTML='';
+      const totalPages = Math.ceil(rowsStar.length / pageSize) || 1;
+      if (currentPage > totalPages) currentPage = totalPages || 1;
+
+      // 空狀態
+      if (rowsStar.length === 0){
+        document.querySelector('table#voca').style.display='none';
+        document.getElementById('quickPager').innerHTML='';
+        $pagination.innerHTML='';
+        $empty.style.display='';
+        updateStarCount();
+        return;
+      } else {
+        document.querySelector('table#voca').style.display='';
+        $empty.style.display='none';
+      }
+
+      const start=(currentPage-1)*pageSize;
+      const pageRows=rowsStar.slice(start,start+pageSize);
+      const starSet = getStarsSet(); // 依當前狀態決定是否顯示★
+
+      for(const r of pageRows){
+        const tr1=document.createElement('tr');
+        tr1.className='group-start';
+
+        const tdIdx=document.createElement('td');
+        tdIdx.rowSpan=3;
+        tdIdx.className='text-secondary small text-center align-middle idx-cell';
+        tdIdx.dataset.idx = r.idx;
+
+        const idxWrap=document.createElement('div');
+        idxWrap.className='idx-wrap';
+        const idxText=document.createElement('div');
+        idxText.textContent=r.idx;
+
+        const starSpan=document.createElement('div');
+        starSpan.className='idx-star';
+        starSpan.textContent='★';
+        starSpan.hidden = !starSet.has(String(r.idx));
+
+        idxWrap.append(idxText,starSpan);
+        tdIdx.appendChild(idxWrap);
+
+        const tdEn=document.createElement('td');
+        tdEn.innerHTML=`<b>${r.en}</b>`;
+        tdEn.setAttribute('data-say', r.en);
+        tdEn.setAttribute('data-lang','en');
+
+        const tdExEn=document.createElement('td');
+        tdExEn.textContent = r.exEn || '';
+        if (r.exEn){
+          tdExEn.setAttribute('data-say', r.exEn);
+          tdExEn.setAttribute('data-lang','en');
+        }
+        tr1.append(tdIdx, tdEn, tdExEn);
+
+        const tr2=document.createElement('tr');
+        const tdZh=document.createElement('td');
+        tdZh.className='small-muted';
+        tdZh.textContent=r.zh;
+        const tdExZh=document.createElement('td');
+        tdExZh.className='small-muted';
+        tdExZh.textContent=r.exZh || '';
+        tr2.append(tdZh, tdExZh);
+
+        const tr3=document.createElement('tr');
+        const tdPos=document.createElement('td');
+        tdPos.className='small-muted';
+        tdPos.textContent=r.pos || '';
+        const tdEmpty=document.createElement('td');
+        tdEmpty.textContent='';
+        tr3.append(tdPos, tdEmpty);
+
+        $tbody.append(tr1, tr2, tr3);
+      }
+
+      renderPagination(totalPages);
+      renderQuickPager(totalPages);
+      updateStarCount();
+    }
+
+    function renderPagination(totalPages){
+      $pagination.innerHTML='';
+      const add=(label,page,disabled=false,active=false)=>{
+        const li=document.createElement('li');
+        li.className=`page-item ${disabled?'disabled':''} ${active?'active':''}`;
+        li.innerHTML=`<a class="page-link" href="#">${label}</a>`;
+        if(!disabled) li.addEventListener('click',e=>{e.preventDefault();goPage(page);});
+        $pagination.appendChild(li);
+      };
+      add('<<', Math.max(1, currentPage-1), currentPage===1);
+      for(let i=1;i<=totalPages;i++) add(i, i, false, i===currentPage);
+      add('>>', Math.min(totalPages, currentPage+1), currentPage===totalPages);
+
+      // 直接輸入跳頁
+      const pageJump = document.getElementById('pageJump');
+      const pageGo = document.getElementById('pageGo');
+      if (pageJump){
+        pageJump.max = totalPages;
+        const go = () => {
+          const p = parseInt(pageJump.value, 10);
+          if (!isNaN(p) && p >= 1 && p <= totalPages) goPage(p);
+          else {
+            pageJump.classList.add('is-invalid');
+            setTimeout(()=>pageJump.classList.remove('is-invalid'), 1200);
+          }
+        };
+        pageJump.onkeydown = (e)=>{ if(e.key==='Enter') go(); };
+        if (pageGo) pageGo.onclick = go;
+      }
+    }
+
+    function renderQuickPager(totalPages){
+      const qp=document.getElementById('quickPager');
+      qp.innerHTML='';
+      if(totalPages<=1) return;
+
+      const makeBtn=(label,handler,disabled=false,primary=false)=>{
+        const btn=document.createElement('button');
+        btn.className=`btn btn-sm ${primary?'btn-primary':'btn-outline-light'}`;
+        btn.textContent=label; btn.disabled=!!disabled;
+        if(handler) btn.addEventListener('click', handler);
+        return btn;
+      };
+
+      if(currentPage<=1){
+        qp.appendChild(makeBtn('1', null, true, true));
+        qp.appendChild(makeBtn('>>', ()=>goPage(currentPage+1)));
+      }else if(currentPage>=totalPages){
+        qp.appendChild(makeBtn('<<', ()=>goPage(currentPage-1)));
+        qp.appendChild(makeBtn('last', null, true, true));
+      }else{
+        qp.appendChild(makeBtn('<<', ()=>goPage(currentPage-1)));
+        qp.appendChild(makeBtn(String(currentPage), null, true, true));
+        qp.appendChild(makeBtn('>>', ()=>goPage(currentPage+1)));
+      }
+    }
+
+    // ---- 載入資料 ----
+    async function loadData(){
+      try{
+        const res = await fetch('content/voca.txt?c='+Date.now());
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const text = await res.text();
+        rows = parseTSV(text);
+        buildInitialStarRows();  // 以當下標註建立列表
+        const totalPages = Math.ceil(rowsStar.length/pageSize) || 1;
+        if (currentPage > totalPages) currentPage = totalPages || 1;
+        if (currentPage < 1) currentPage = 1;
+        render();
+      }catch(err){
+        alert('讀取失敗：'+err.message);
+      }
+    }
+
+    // ---- 事件 ----
+    // 點「編號欄位」→ 只切星號與計數，不立刻移除列；切頁時才清掉
+    document.getElementById('voca').addEventListener('click', ev=>{
+      const idxCell = ev.target.closest('td.idx-cell');
+      if (idxCell){
+        const idx = idxCell.dataset.idx;
+        const set = getStarsSet();
+        if (set.has(idx)) set.delete(idx); else set.add(idx);
+        saveStars([...set]);
+        const star = idxCell.querySelector('.idx-star');
+        if (star) star.hidden = !isStarred(idx);
+        updateStarCount();
+        ev.stopPropagation();
+        return;
+      }
+      // 英文發音
+      const td = ev.target.closest('td[data-say]');
+      if(!td) return;
+      const text = td.getAttribute('data-say')||td.textContent||'';
+      if (td.getAttribute('data-lang')!=='en') return;
+      td.classList.add('speaking');
+      speak(text, EN_LANG, ()=>td.classList.remove('speaking'));
+    });
+
+    // 返回
+    document.getElementById('backBtn').addEventListener('click', ()=>history.back());
+
+    // 清除標註 → 立刻清除資料＋畫面（變空）
+    document.getElementById('clearStarsBtn').addEventListener('click', ()=>{
+      if (!confirm('確定要清除所有標註嗎？')) return;
+      localStorage.setItem('voca.stars', '[]');
+      rowsStar = [];
+      currentPage = 1;
+      render(); // 立刻進入空狀態
+    });
+
+    // 語音設定
+    $selEn.addEventListener('change', ()=>localStorage.setItem('tts.enVoice',$selEn.value));
+    $selZh.addEventListener('change', ()=>localStorage.setItem('tts.zhVoice',$selZh.value));
+    $rate.addEventListener('input', ()=>{
+      rate = parseFloat($rate.value)||1;
+      $rateVal.textContent = rate.toFixed(2);
+      localStorage.setItem('tts.rate', rate);
+    });
+
+    // 初始化
+    $rate.value = rate.toFixed(2);
+    $rateVal.textContent = rate.toFixed(2);
+    updateStarCount();
+    loadData();
+  </script>
+</body>
+</html>
+
+
+
+
+
