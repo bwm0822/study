@@ -1,5 +1,5 @@
 1	a	一個	[冠詞]	I see a cat.	我看到一隻貓。
-2	an	一個	[冠詞]	She has an apple.	她有一顆蘋果。
+2	an	一個(母音開頭)	[冠詞]	She has an apple.	她有一顆蘋果。
 3	the	這/那	[冠詞]	The sun is bright.	太陽很明亮。
 4	I	我	[代名詞]	I am happy.	我很開心。
 5	you	你(們)	[代名詞]	You are my friend.	你是我的朋友。

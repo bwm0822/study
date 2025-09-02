@@ -90,7 +90,8 @@
     const file = params.get("file") || "text1.txt";
     const outEl = document.getElementById("output");
     const titleEl = document.getElementById("title");
-    titleEl.textContent = file.includes("ans") ? "解答內容" : "題目內容";
+    const fileName = file.replace(/\.[^/.]+$/, "");
+    titleEl.textContent = file.includes("ans") ? "[解答] "+fileName : "[測驗] "+fileName;
 
     fetch("content/" + encodeURIComponent(file))
       .then(res => { if (!res.ok) throw new Error("HTTP " + res.status); return res.text(); })
