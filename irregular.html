@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-Hant" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>不規則動詞表</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{background:#212529;color:#f8f9fa}
+    .navbar{border-bottom:1px solid rgba(255,255,255,.15)}
+    .table thead th{position:sticky;top:0;z-index:1;background:#1b1f22}
+    td.kind{white-space:nowrap}
+    tr.cn td{color:#adb5bd}
+
+    /* 點英文會發音 */
+    td[data-say]{cursor:pointer;transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease}
+    td[data-say]:hover{background-color:rgba(255,255,255,.06)}
+    td[data-say]:active{transform:scale(1.03)}
+    td.speaking{outline:2px solid var(--bs-primary);box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
+
+    .range-inline{width:260px;min-width:180px}
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container d-flex align-items-center">
+      <button id="backBtn" class="btn btn-outline-light btn-sm">返回</button>
+      <span class="navbar-brand ms-3 mb-0 h1">不規則動詞表</span>
+      <span id="loadInfo" class="ms-auto small text-secondary">資料載入中…</span>
+    </div>
+  </nav>
+
+  <main class="container py-3">
+    <!-- 英文語音 + 語速（同一列） -->
+    <div class="card mb-3 bg-dark text-light border-secondary">
+      <div class="card-body">
+        <div class="d-flex align-items-center flex-wrap gap-3">
+          <label class="form-label mb-0">英文語音</label>
+          <select id="selEn" class="form-select form-select-sm w-auto bg-dark text-light border-secondary"></select>
+
+          <label for="rate" class="form-label mb-0">語速：<span id="rateVal">1.00</span></label>
+          <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00">
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table id="tbl" class="table table-dark table-hover align-middle">
+        <thead><tr id="theadRow"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    // ====== 返回鍵 ======
+    document.getElementById('backBtn').addEventListener('click', ()=>history.back());
+
+    // ====== 語音 ======
+    const selEn   = document.getElementById('selEn');
+    const rateEl  = document.getElementById('rate');
+    const rateVal = document.getElementById('rateVal');
+    const loadInfo= document.getElementById('loadInfo');
+
+    let voices = [];
+    let rate = parseFloat(localStorage.getItem('tts.rate') || '1') || 1;
+
+    function loadVoices(){
+      voices = speechSynthesis.getVoices();
+      const list = voices
+        .filter(v => v.lang && v.lang.toLowerCase().startsWith('en'))
+        .sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'en'));
+      const saved = localStorage.getItem('tts.enVoice');
+      selEn.innerHTML = '';
+      list.forEach(v=>{
+        const opt=document.createElement('option');
+        opt.value=v.name+'||'+v.lang;
+        opt.textContent=`${v.name} (${v.lang})${v.default?' ★':''}`;
+        selEn.appendChild(opt);
+      });
+      if (saved && [...selEn.options].some(o=>o.value===saved)) selEn.value=saved;
+      else if (list.length) selEn.value=list[0].value;
+    }
+    function getVoice(val){
+      if(!val) return null;
+      const [name,lang]=val.split('||');
+      return voices.find(v=>v.name===name&&v.lang===lang) ||
+             voices.find(v=>v.lang===lang) || null;
+    }
+    function speakEn(text){
+      if(!text) return;
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      const voice = getVoice(selEn.value);
+      if (voice) u.voice = voice;
+      u.rate = rate; u.pitch=1; u.volume=1;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }
+    rateEl.value = rate.toFixed(2);
+    rateVal.textContent = rate.toFixed(2);
+    rateEl.addEventListener('input', ()=>{
+      rate = parseFloat(rateEl.value)||1;
+      rateVal.textContent = rate.toFixed(2);
+      localStorage.setItem('tts.rate', rate);
+    });
+    selEn.addEventListener('change', ()=>localStorage.setItem('tts.enVoice', selEn.value));
+    loadVoices();
+    if ('onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices;
+
+    // ====== 讀取 irregular.txt（單列型：中譯/原形/過去/過去分詞） ======
+    const theadRow = document.getElementById('theadRow');
+    const tbody    = document.getElementById('tbody');
+
+    fetch('content/irregular.txt?c='+Date.now())
+      .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+      .then(txt => {
+        const rows = parseTSV(txt); // 只回傳資料列（自動略過含「中譯」的表頭）
+        buildThead(['中譯','原形動詞','過去式','過去分詞']);
+        render(rows);
+        loadInfo.textContent = `共 ${rows.length} 筆`;
+      })
+      .catch(err => loadInfo.textContent = '讀取失敗：' + err.message);
+
+    function parseTSV(txt){
+      // 移除 BOM、CR，按行切割；移除純空白行
+      const lines = txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n')
+                       .filter(l => l.trim() !== '');
+      if (!lines.length) return [];
+      const data = lines.map(line => line.split('\t').map(s=>s.trim()));
+      // 若第一列是表頭（含「中譯」），就去掉它
+      const body = data[0].some(c => /中譯|原形|過去|過去分詞/.test(c)) ? data.slice(1) : data;
+      // 只保留前四欄
+      return body.map(cols => [cols[0]||'', cols[1]||'', cols[2]||'', cols[3]||''])
+                 .filter(row => row.some(v => v)); // 至少有一欄非空
+    }
+
+    function buildThead(header){
+      theadRow.innerHTML='';
+      header.forEach((h)=>{
+        const th = document.createElement('th');
+        th.textContent = h || '';
+        theadRow.appendChild(th);
+      });
+    }
+
+    function render(rows){
+      tbody.innerHTML='';
+      const frag = document.createDocumentFragment();
+      rows.forEach(([cn, base, past, part])=>{
+        const tr = document.createElement('tr');
+
+        const tdCN = document.createElement('td');
+        tdCN.textContent = cn;
+        tr.appendChild(tdCN);
+
+        const tdBase = document.createElement('td');
+        tdBase.innerHTML = `<b>${escapeHTML(base)}</b>`;
+        tdBase.setAttribute('data-say', base);
+        tdBase.addEventListener('click', onSpeakCell);
+        tr.appendChild(tdBase);
+
+        const tdPast = document.createElement('td');
+        tdPast.innerHTML = `<b>${escapeHTML(past)}</b>`;
+        tdPast.setAttribute('data-say', past);
+        tdPast.addEventListener('click', onSpeakCell);
+        tr.appendChild(tdPast);
+
+        const tdPart = document.createElement('td');
+        tdPart.innerHTML = `<b>${escapeHTML(part)}</b>`;
+        tdPart.setAttribute('data-say', part);
+        tdPart.addEventListener('click', onSpeakCell);
+        tr.appendChild(tdPart);
+
+        frag.appendChild(tr);
+      });
+      tbody.appendChild(frag);
+    }
+
+    function onSpeakCell(e){
+      const td = e.currentTarget;
+      const text = td.getAttribute('data-say') || td.textContent.trim();
+      if (!text) return;
+      td.classList.add('speaking');
+      speakEn(text);
+      setTimeout(()=>td.classList.remove('speaking'), 300);
+    }
+
+    function escapeHTML(s){return (s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  </script>
+</body>
+</html>
+
+
+
+
+
