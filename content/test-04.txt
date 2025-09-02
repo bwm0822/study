@@ -12,26 +12,26 @@ They sit in thirty chairs.
 Questions
 
 1. How many students does Anna see?
-    a) ten
-    b) twenty
-    c) thirty
+    A. ten
+    B. twenty
+    C. thirty
 
 2. How many boys sit on the left?
-    a) eleven
-    b) nine
-    c) seven
+    A. eleven
+    B. nine
+    C. seven
 
 3. What does Anna look at?
-    a) the teacher’s face
-    b) the teacher’s hand
-    c) the teacher’s leg
+    A. the teacher’s face
+    B. the teacher’s hand
+    C. the teacher’s leg
 
 4. How many chairs are in the class?
-    a) twenty
-    b) thirty
-    c) forty
+    A. twenty
+    B. thirty
+    C. forty
 
 5. Each student has two _______.
-    a) heads
-    b) hands
-    c) noses
+    A. heads
+    B. hands
+    C. noses

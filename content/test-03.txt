@@ -10,26 +10,26 @@ Tom is happy.
 Questions
 
 1. How many heads does Tom have?
-    a) two
-    b) one
-    c) three
+    A. two
+    B. one
+    C. three
 
 2. What color is Tom’s hair?
-    a) black
-    b) red
-    c) yellow
+    A. black
+    B. red
+    C. yellow
 
 3. How many eyes does Tom have?
-    a) two
-    b) one
-    c) four
+    A. two
+    B. one
+    C. four
 
 4. Which part helps Tom to eat?
-    a) nose
-    b) mouth
-    c) foot
+    A. nose
+    B. mouth
+    C. foot
 
 5. Tom has two _______.
-    a) heads
-    b) mouths
-    c) feet
+    A. heads
+    B. mouths
+    C. feet
