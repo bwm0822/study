@@ -9,55 +9,41 @@
     /* 全站暗色 */
     body{background:#212529;color:#f8f9fa}
     .container-narrow{max-width:980px}
-
-    /* 導覽列 */
     .navbar{border-bottom:1px solid rgba(255,255,255,.15)}
 
-    /* 表格（暗色＋sticky 表頭） */
-    .table thead th{
-      position:sticky; top:0; z-index:1;
-      background:#1b1f22;
-    }
+    /* 兩欄表格（無表頭） */
+    .table { table-layout: fixed; }
+    .idx-cell{width:72px; cursor:pointer; user-select:none}
     tr.group-start td{border-top-width:2px !important}
 
-    /* 欄寬 */
-    th.col-word{width:220px}
-    th.col-ex{width:auto}
-    th.col-idx{width:72px}
-
     /* 次要文字 */
-    td.small-muted{color:#adb5bd;font-size:.9rem}
+    .small-muted{color:#adb5bd;font-size:.9rem}
+
+    /* 可發音效果（英語） */
+    [data-say]{cursor:pointer;transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease}
+    [data-say]:hover{background-color:rgba(255,255,255,.06)}
+    [data-say]:active{transform:scale(1.03)}
+    @media (prefers-reduced-motion: reduce){ [data-say]{transition:none} }
+    .speaking{ outline:2px solid var(--bs-primary); box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2) }
+
+    /* 編號欄位：同一格內含「索引」與（可隱藏）★ */
+    .idx-wrap{display:flex;flex-direction:column;align-items:center;gap:.25rem}
+    .idx-star{font-size:18px;line-height:1;color:#fff !important}
+
+    /* 文字排版 */
+    .word-line b{font-size:1.05rem}
+    .kk{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; margin:0 .5rem; opacity:.95}
 
     .input-group .form-control.is-invalid{border-color:#dc3545}
-
-    td[data-say]{cursor:pointer;transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease}
-    td[data-say]:hover{background-color:rgba(255,255,255,.06)}
-    td[data-say]:active{transform:scale(1.03)}
-    @media (prefers-reduced-motion: reduce){
-      td[data-say]{transition:none}
-    }
-    td[data-say].speaking{
-      outline:2px solid var(--bs-primary);
-      box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)
-    }
-
-    /* ★ 編號欄位：整格可點，內含 idx 與(可隱藏的)★ */
-    td.idx-cell{cursor:pointer; user-select:none}
-    .idx-wrap{display:flex;flex-direction:column;align-items:center;gap:.25rem}
-    .idx-star{
-      font-size:18px;
-      line-height:1;
-      color:#fff !important; /* ← 讓星星永遠是白色 */
-    }
   </style>
 </head>
 <body>
-  <!-- 導覽列（暗色） -->
+  <!-- 導覽列 -->
   <nav class="navbar navbar-dark bg-dark">
     <div class="container container-narrow d-flex align-items-center">
       <button id="backBtn" class="btn btn-outline-light btn-sm">返回</button>
       <span class="navbar-brand ms-3 mb-0 h1">國小必學 500 單字</span>
-      <div class="ms-auto">
+      <div class="ms-auto d-flex gap-2">
         <button id="clearStarsBtn" class="btn btn-outline-warning btn-sm">清除標註</button>
       </div>
     </div>
@@ -91,21 +77,14 @@
       </div>
     </nav>
 
-    <!-- 單字表格（三列一組） -->
+    <!-- 兩欄表格（每筆三行） -->
     <div class="table-responsive">
       <table id="voca" class="table table-dark table-hover align-middle mb-3">
-        <thead>
-          <tr>
-            <th class="col-idx">#</th>
-            <th class="col-word">單字 / 中文 / 詞性</th>
-            <th class="col-ex">例句（英 / 中）</th>
-          </tr>
-        </thead>
         <tbody></tbody>
       </table>
     </div>
 
-    <!-- 最下面：上下頁快速鍵 -->
+    <!-- 下方快速換頁 -->
     <nav class="mt-2">
       <div id="quickPager" class="d-flex justify-content-center align-items-center gap-2 flex-wrap"></div>
     </nav>
@@ -127,7 +106,7 @@
     let rows = [];
     let rate = parseFloat(localStorage.getItem('tts.rate') || '1') || 1;
 
-    // 讀取起始頁：先看 URL ?page=，否則用 localStorage
+    // 起始頁（URL > localStorage）
     let currentPage = 1;
     const urlParams = new URLSearchParams(location.search);
     const urlPage = parseInt(urlParams.get('page'), 10);
@@ -135,7 +114,7 @@
     if (!isNaN(urlPage)  && urlPage  > 0) currentPage = urlPage;
     else if (!isNaN(savedPage) && savedPage > 0) currentPage = savedPage;
 
-    // 語音載入
+    /* ====== 語音 ====== */
     function loadVoices(){
       voices = speechSynthesis.getVoices();
       populateVoiceSelects();
@@ -163,7 +142,6 @@
     loadVoices();
     if('onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged=loadVoices;
 
-    // TTS
     function getVoiceByValue(val){
       if(!val) return null;
       const [name,lang]=val.split('||');
@@ -185,7 +163,7 @@
       speechSynthesis.speak(u);
     }
 
-    // 工具
+    /* ====== 工具 ====== */
     function escapeHTML(s){return (s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
     function savePage(){
       try{
@@ -193,7 +171,7 @@
         const u = new URL(location.href);
         u.searchParams.set('page', currentPage);
         history.replaceState(null, '', u);
-      }catch(e){/* ignore */}
+      }catch(e){}
     }
     function goPage(p){
       const totalPages = Math.ceil(rows.length / pageSize) || 1;
@@ -203,7 +181,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ★ 標註儲存
+    /* ====== 星號（標註） ====== */
     function loadStars(){
       try{
         const arr = JSON.parse(localStorage.getItem('voca.stars') || '[]');
@@ -211,7 +189,6 @@
       }catch(e){ return []; }
     }
     function saveStars(list){
-      // 依編號數字排序，小到大；非數字放後面字母排序
       const nums = [], strs = [];
       for(const v of list){
         const n = Number(v);
@@ -234,23 +211,21 @@
     }
     function clearAllStars(){ localStorage.setItem('voca.stars','[]'); }
 
-    // 解析 voca.txt
+    /* ====== 解析 voca.txt（7 欄：#, word, KK, 中文, 詞性, 例句EN, 例句ZH） ====== */
     function parseTSV(txt){
       return txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n')
         .map(l=>l.trim()).filter(l=>l && !l.startsWith('#'))
         .map(line=>{
           const parts=line.split('\t');
-          const [idx,en,zh,pos,exEn,exZh] = [
+          const [idx, word, kk, zh, pos, exEn, exZh] = [
             parts[0]||'', parts[1]||'', parts[2]||'',
-            (parts[3]||''), (parts[4]||parts[3]||''), (parts[5]||'')
+            parts[3]||'', parts[4]||'', parts[5]||'', parts[6]||''
           ];
-          let _pos = pos, _exEn = exEn, _exZh = exZh;
-          if (parts.length===4){ _pos=''; _exEn=parts[3]; _exZh=''; }
-          return {idx,en,zh,pos:_pos,exEn:_exEn,exZh:_exZh};
+          return { idx, word, kk, zh, pos, exEn, exZh };
         });
     }
 
-    // 渲染
+    /* ====== 渲染：兩欄（左：索引+★，右：內容），每筆三行 ====== */
     function render(){
       $tbody.innerHTML='';
       const start=(currentPage-1)*pageSize;
@@ -259,67 +234,57 @@
 
       for(const r of pageRows){
         const idx = escapeHTML(r.idx);
-        const en  = escapeHTML(r.en);
+        const word= escapeHTML(r.word);
+        const kk  = escapeHTML(r.kk);
         const zh  = escapeHTML(r.zh);
         const pos = escapeHTML(r.pos);
         const exEn= escapeHTML(r.exEn);
         const exZh= escapeHTML(r.exZh);
 
-        // 第一列
+        // 第 1 行：# | word [KK] 中文 [詞性]
         const tr1=document.createElement('tr');
         tr1.className='group-start';
 
-        // 編號欄位（整格可點擊切換）
         const tdIdx=document.createElement('td');
-        tdIdx.rowSpan=3;
+        tdIdx.rowSpan=3;                // ← 兩欄版：左側同一格跨三行
         tdIdx.className='text-secondary small text-center align-middle idx-cell';
-        tdIdx.dataset.idx = r.idx;           // ← 用來辨識該筆
+        tdIdx.dataset.idx = r.idx;
 
         const idxWrap = document.createElement('div');
         idxWrap.className = 'idx-wrap';
         const idxText = document.createElement('div');
         idxText.textContent = idx;
-
         const starSpan = document.createElement('div');
         starSpan.className = 'idx-star';
         starSpan.textContent = '★';
-        // 沒標註就隱藏，不顯示空心星
-        starSpan.hidden = !starSet.has(String(r.idx));
-
+        starSpan.hidden = !starSet.has(String(r.idx)); // 未標註則隱藏
         idxWrap.append(idxText, starSpan);
         tdIdx.appendChild(idxWrap);
 
-        const tdEn=document.createElement('td');
-        tdEn.innerHTML = `<b>${en}</b>`;
-        tdEn.setAttribute('data-say', r.en);
-        tdEn.setAttribute('data-lang','en');
+        const tdMain=document.createElement('td');
+        tdMain.className='word-line';
+        tdMain.setAttribute('data-say', r.word);   // 點「單字」→ 英文發音
+        tdMain.setAttribute('data-lang','en');
+        tdMain.innerHTML = `<b>${word}</b> <span class="kk">${kk}</span> <span>${zh}</span> <span class="small-muted">${pos}</span>`;
 
+        tr1.append(tdIdx, tdMain);
+
+        // 第 2 行：（右欄）英文例句（可點）
+        const tr2=document.createElement('tr');
         const tdExEn=document.createElement('td');
-        tdExEn.textContent = r.exEn || '';
+        tdExEn.textContent = exEn || '';
         if (r.exEn){
           tdExEn.setAttribute('data-say', r.exEn);
           tdExEn.setAttribute('data-lang','en');
         }
-        tr1.append(tdIdx, tdEn, tdExEn);
+        tr2.append(tdExEn);
 
-        // 第二列
-        const tr2=document.createElement('tr');
-        const tdZh=document.createElement('td');
-        tdZh.className='small-muted';
-        tdZh.textContent = zh;
+        // 第 3 行：（右欄）中文例句
+        const tr3=document.createElement('tr');
         const tdExZh=document.createElement('td');
         tdExZh.className='small-muted';
         tdExZh.textContent = exZh || '';
-        tr2.append(tdZh, tdExZh);
-
-        // 第三列
-        const tr3=document.createElement('tr');
-        const tdPos=document.createElement('td');
-        tdPos.className='small-muted';
-        tdPos.textContent = pos || '';
-        const tdEmpty=document.createElement('td');
-        tdEmpty.textContent = '';
-        tr3.append(tdPos, tdEmpty);
+        tr3.append(tdExZh);
 
         $tbody.append(tr1, tr2, tr3);
       }
@@ -328,7 +293,7 @@
       renderQuickPager();
     }
 
-    // 分頁 UI
+    /* ====== 分頁 UI ====== */
     function renderPagination(){
       const totalPages = Math.ceil(rows.length / pageSize) || 1;
       $pagination.innerHTML = '';
@@ -337,12 +302,7 @@
         const li = document.createElement('li');
         li.className = `page-item ${disabled?'disabled':''} ${active?'active':''}`;
         li.innerHTML = `<a class="page-link" href="#">${label}</a>`;
-        if (!disabled) {
-          li.addEventListener('click', e => {
-            e.preventDefault();
-            goPage(page);
-          });
-        }
+        if (!disabled) li.addEventListener('click', e => { e.preventDefault(); goPage(page); });
         $pagination.appendChild(li);
       };
       const addEllipsis = () => {
@@ -362,8 +322,7 @@
 
         if (atStart) {
           for (let i = 1; i <= Math.min(9, totalPages-1); i++) add(i, i, false, i === currentPage);
-          addEllipsis();
-          add(String(totalPages), totalPages, false, currentPage === totalPages);
+          addEllipsis(); add(String(totalPages), totalPages, false, currentPage === totalPages);
         } else if (atEnd) {
           add('1', 1, false, currentPage === 1);
           addEllipsis();
@@ -399,7 +358,6 @@
       }
     }
 
-    // 快速上下頁
     function renderQuickPager(){
       const totalPages = Math.ceil(rows.length / pageSize) || 1;
       const qp = document.getElementById('quickPager');
@@ -418,59 +376,43 @@
       if (currentPage <= 1) {
         qp.appendChild(makeBtn('1', null, true, true));
         qp.appendChild(makeBtn('>>', () => goPage(currentPage + 1)));
-      } else if (currentPage >= totalPages) {
-        qp.appendChild(makeBtn('<<', () => goPage(currentPage - 1)));
-        qp.appendChild(makeBtn('last', null, true, true));
       } else {
-        qp.appendChild(makeBtn('<<', () => goPage(currentPage - 1)));
-        qp.appendChild(makeBtn(String(currentPage), null, true, true));
-        qp.appendChild(makeBtn('>>', () => goPage(currentPage + 1)));
+        const totalPages = Math.ceil(rows.length / pageSize) || 1;
+        if (currentPage >= totalPages) {
+          qp.appendChild(makeBtn('<<', () => goPage(currentPage - 1)));
+          qp.appendChild(makeBtn('last', null, true, true));
+        } else {
+          qp.appendChild(makeBtn('<<', () => goPage(currentPage - 1)));
+          qp.appendChild(makeBtn(String(currentPage), null, true, true));
+          qp.appendChild(makeBtn('>>', () => goPage(currentPage + 1)));
+        }
       }
     }
 
-    async function loadData(){
-      try{
-        const res=await fetch('content/voca.txt?c='+Date.now());
-        if(!res.ok) throw new Error('HTTP '+res.status);
-        const text=await res.text();
-        rows=parseTSV(text);
-
-        const totalPages=Math.ceil(rows.length/pageSize)||1;
-        if (currentPage>totalPages) currentPage=totalPages;
-        if (currentPage<1) currentPage=1;
-        savePage();
-
-        render();
-      }catch(err){alert('讀取失敗：'+err.message);}
-    }
-
-    // 事件
+    /* ====== 事件 ====== */
     document.getElementById('voca').addEventListener('click',ev=>{
-      // A) 若點到「編號欄位」，切換標註狀態（只顯示/隱藏實心星）
+      // A) 點左欄 → 切換標註（★）
       const idxCell = ev.target.closest('td.idx-cell');
       if (idxCell){
         const idx = idxCell.dataset.idx;
         toggleStar(idx);
-        // 即時切換該格內的 ★ 顯示
         const star = idxCell.querySelector('.idx-star');
         if (star) star.hidden = !isStarred(idx);
         ev.stopPropagation();
         return;
       }
 
-      // B) 其餘才是點發音（只讓英文）
-      const td=ev.target.closest('td[data-say]');
-      if(!td) return;
-      const text=td.getAttribute('data-say')||td.textContent||'';
-      const lang=td.getAttribute('data-lang')==='en'?EN_LANG:ZH_LANG;
+      // B) 其他：若帶 data-say 且為英文 → 發音
+      const el = ev.target.closest('[data-say]');
+      if(!el) return;
+      const text=el.getAttribute('data-say')||el.textContent||'';
+      const lang=(el.getAttribute('data-lang')||'').toLowerCase().startsWith('en')?EN_LANG:ZH_LANG;
       if(lang!==EN_LANG) return;
-      td.classList.add('speaking');
-      speak(text,lang,()=>td.classList.remove('speaking'));
+      el.classList.add('speaking');
+      speak(text,lang,()=>el.classList.remove('speaking'));
     });
 
     document.getElementById('backBtn').addEventListener('click',()=>history.back());
-
-    // 清除所有標註
     document.getElementById('clearStarsBtn').addEventListener('click',()=>{
       if (!confirm('確定要清除所有標註嗎？')) return;
       clearAllStars();
@@ -489,19 +431,36 @@
     // 支援瀏覽器前進/後退：依網址 ?page 重新渲染
     window.addEventListener('popstate', () => {
       const p = parseInt(new URLSearchParams(location.search).get('page'), 10);
-      if (!isNaN(p) && p !== currentPage) {
-        currentPage = p;
-        render();
-      }
+      if (!isNaN(p) && p !== currentPage) { currentPage = p; render(); }
     });
 
     // 初始化
-    $rate.value=rate.toFixed(2);
-    $rateVal.textContent=rate.toFixed(2);
-    loadData();
+    (function init(){
+      $rate.value=rate.toFixed(2);
+      $rateVal.textContent=rate.toFixed(2);
+      loadData();
+    })();
+
+    async function loadData(){
+      try{
+        const res=await fetch('content/voca.txt?c='+Date.now());
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const text=await res.text();
+        rows=parseTSV(text);
+
+        const totalPages=Math.ceil(rows.length/pageSize)||1;
+        if (currentPage>totalPages) currentPage=totalPages;
+        if (currentPage<1) currentPage=1;
+        savePage();
+
+        render();
+      }catch(err){alert('讀取失敗：'+err.message);}
+    }
   </script>
 </body>
 </html>
+
+
 
 
 

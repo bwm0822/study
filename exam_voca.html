@@ -20,7 +20,6 @@
     .is-correct{border-color:#3ddc97 !important}
     .is-wrong{border-color:#ff6b6b !important;color:#ff6b6b !important}
     .hint{color:#adb5bd}
-    /* 讓整列可點焦點 */
     .list-item-focus{outline:none}
   </style>
 </head>
@@ -36,7 +35,6 @@
     <!-- 控制列 -->
     <div class="card mb-3">
       <div class="card-body">
-        <!-- 模式切換 -->
         <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
           <div class="btn-group btn-group-sm" role="group" aria-label="mode">
             <button id="modeNormal" class="btn btn-outline-light" data-mode="normal">一般</button>
@@ -46,7 +44,6 @@
         </div>
 
         <div class="row gy-3 gx-3 align-items-end">
-          <!-- 起始值（一般模式用） -->
           <div class="col-12 col-md-4" id="colStart">
             <label class="form-label mb-1">起始編號</label>
             <div class="input-group input-group-sm">
@@ -56,7 +53,6 @@
             </div>
           </div>
 
-          <!-- 結束值（一般模式用） -->
           <div class="col-12 col-md-4" id="colEnd">
             <label class="form-label mb-1">結束編號</label>
             <div class="input-group input-group-sm">
@@ -66,7 +62,6 @@
             </div>
           </div>
 
-          <!-- 測驗字數（兩種模式都用，容量依模式決定） -->
           <div class="col-12 col-md-4" id="colCount">
             <label class="form-label mb-1">測驗字數 <span class="hint" id="capHint"></span></label>
             <div class="input-group input-group-sm">
@@ -76,7 +71,6 @@
             </div>
           </div>
 
-          <!-- 操作 -->
           <div class="col-12 text-md-end">
             <div class="d-flex gap-2 justify-content-md-end">
               <button id="startBtn" class="btn btn-primary btn-sm">測驗</button>
@@ -106,28 +100,22 @@
 
     // ====== DOM ======
     const backBtn = $('#backBtn');
-
     const modeNormalBtn = $('#modeNormal');
     const modeReviewBtn = $('#modeReview');
     const capHint = $('#capHint');
-
     const colStart = $('#colStart');
     const colEnd   = $('#colEnd');
-
     const startIdxEl = $('#startIdx');
     const endIdxEl   = $('#endIdx');
     const startMinus = $('#startMinus');
     const startPlus  = $('#startPlus');
     const endMinus   = $('#endMinus');
     const endPlus    = $('#endPlus');
-
     const countInput = $('#countInput');
     const minusBtn   = $('#minusBtn');
     const plusBtn    = $('#plusBtn');
-
     const startBtn   = $('#startBtn');
     const clearBtn   = $('#clearBtn');
-
     const loadInfo   = $('#loadInfo');
     const quizArea   = $('#quizArea');
     const resultArea = $('#resultArea');
@@ -136,7 +124,8 @@
 
     // ====== 狀態 ======
     let MODE = localStorage.getItem('exam.mode') || 'normal'; // 'normal' | 'review'
-    let allRows = []; // {idx, idxNum, en, zh, pos, exEn, exZh}
+    // 7 欄物件：{idx, idxNum, word, kk, zh, pos, exEn, exZh}
+    let allRows = [];
     let MAX_IDX = 1;
 
     // ====== 資料 ======
@@ -148,32 +137,33 @@
         const minIdx = Math.min(...idxList);
         MAX_IDX = Math.max(...idxList);
 
-        // 一般模式預設起迄
         startIdxEl.value = isFinite(minIdx) ? minIdx : 1;
         endIdxEl.value   = isFinite(minIdx) ? Math.min(minIdx + 24, MAX_IDX) : 25;
 
         updateLoadInfo();
-        applyModeUI(true); // 初始化 UI 與容量/字數
+        applyModeUI(true);
       })
       .catch(err => { loadInfo.textContent = '讀取失敗：' + err.message; });
 
+    // ==== 解析 7 欄：#, word, KK, 中文, 詞性, 例句EN, 例句ZH ====
     function parseTSV(txt){
       return txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n')
-        .map(l=>l.trim()).filter(l=>l && !l.startsWith('#'))
+        .map(l=>l.trim()).filter(l=>l && !l.startsWith('#')) // 丟掉表頭與註解（以 # 開頭）
         .map(line=>{
           const p = line.split('\t');
-          const [idx,en,zh,pos,exEn,exZh] = [
+          const [idx, word, kk, zh, pos, exEn, exZh] = [
             (p[0]||'').trim(),
             (p[1]||'').trim(),
             (p[2]||'').trim(),
             (p[3]||'').trim(),
             (p[4]||'').trim(),
             (p[5]||'').trim(),
+            (p[6]||'').trim(),
           ];
           const idxNum = parseInt(idx,10);
-          return { idx, idxNum: isNaN(idxNum)? -1: idxNum, en, zh, pos, exEn, exZh };
+          return { idx, idxNum: isNaN(idxNum)? -1: idxNum, word, kk, zh, pos, exEn, exZh };
         })
-        .filter(r => r.idxNum >= 1 && r.en);
+        .filter(r => r.idxNum >= 1 && r.word);
     }
 
     // ====== 標註存取（複習模式來源） ======
@@ -183,7 +173,25 @@
         return Array.isArray(arr) ? arr : [];
       }catch(e){ return []; }
     }
+    function saveStars(list){
+      // 與其他頁一致：數字編號先排序，再字串
+      const nums=[], strs=[];
+      for(const v of list){ const n=Number(v); if(!Number.isNaN(n)) nums.push(n); else strs.push(String(v)); }
+      nums.sort((a,b)=>a-b); strs.sort();
+      const merged=[...nums.map(n=>String(n)), ...strs];
+      localStorage.setItem('voca.stars', JSON.stringify(merged));
+      return merged;
+    }
     function getStarSet(){ return new Set(loadStars().map(String)); }
+    function isStarred(idx){ return getStarSet().has(String(idx)); }
+    function toggleStar(idx){
+      const set = getStarSet();
+      const key = String(idx);
+      if (set.has(key)) set.delete(key); else set.add(key);
+      saveStars([...set]);
+      updateLoadInfo();
+      return set.has(key);
+    }
     function getStarRows(){
       const set = getStarSet();
       return allRows.filter(r => set.has(String(r.idx)));
@@ -199,20 +207,20 @@
       const [s,e] = getLoHiRaw();
       return [Math.min(s,e), Math.max(s,e)];
     }
-    function getRange(){ // 僅一般模式用的 R
+    function getRange(){
       const [s,e] = getLoHiRaw();
       return (s>e) ? 0 : (e - s + 1);
     }
-    function getCapacity(){ // 依模式決定可用上限
+    function getCapacity(){
       if (MODE === 'review') return getStarRows().length;
       return getRange();
     }
-    function setCountToCapacity(){ // 將字數設為當前容量
+    function setCountToCapacity(){
       const cap = getCapacity();
       countInput.value = Math.max(0, cap);
       setCapHint(cap);
     }
-    function capCountToCapacity(){ // 將字數限制到容量內
+    function capCountToCapacity(){
       const cap = getCapacity();
       let v = parseInt(countInput.value,10);
       if (isNaN(v) || v < 0) v = 0;
@@ -227,33 +235,19 @@
 
     // ====== 模式切換 UI ======
     function applyModeUI(isInit=false){
-      // 切換按鈕外觀
       modeNormalBtn.classList.toggle('btn-primary', MODE==='normal');
       modeNormalBtn.classList.toggle('btn-outline-light', MODE!=='normal');
       modeReviewBtn.classList.toggle('btn-primary', MODE==='review');
       modeReviewBtn.classList.toggle('btn-outline-light', MODE!=='review');
 
-      // 顯示/隱藏範圍欄位
       const showRange = (MODE === 'normal');
       colStart.classList.toggle('d-none', !showRange);
       colEnd.classList.toggle('d-none', !showRange);
 
-      // 依模式設定「測驗字數」預設值
-      if (MODE === 'review'){
-        // 複習模式：預設 = 所有已標註數量
-        setCountToCapacity();
-      }else{
-        // 一般模式：預設 = 目前的範圍長度
-        setCountToCapacity();
-      }
-
-      // 更新載入資訊（顯示已標註數）
+      setCountToCapacity();
       updateLoadInfo();
 
-      // 初始化時不用動；切換時清空目前題目
-      if (!isInit){
-        clearQuiz();
-      }
+      if (!isInit){ clearQuiz(); }
     }
 
     modeNormalBtn.addEventListener('click', () => {
@@ -277,9 +271,8 @@
 
     // ====== 起/迄輸入 ======
     startIdxEl.addEventListener('input', (e) => {
-      if (MODE!=='normal') return; // 複習模式忽略
-      let v = parseInt(startIdxEl.value,10);
-      if (isNaN(v)) v = 1;
+      if (MODE!=='normal') return;
+      let v = parseInt(startIdxEl.value,10); if (isNaN(v)) v = 1;
       v = clamp(v, 1, MAX_IDX);
       if (isSpinnerLike(e)) {
         const eVal = parseInt(endIdxEl.value,10) || 1;
@@ -290,9 +283,8 @@
     });
 
     endIdxEl.addEventListener('input', (e) => {
-      if (MODE!=='normal') return; // 複習模式忽略
-      let v = parseInt(endIdxEl.value,10);
-      if (isNaN(v)) v = 1;
+      if (MODE!=='normal') return;
+      let v = parseInt(endIdxEl.value,10); if (isNaN(v)) v = 1;
       v = clamp(v, 1, MAX_IDX);
       if (isSpinnerLike(e)) {
         const sVal = parseInt(startIdxEl.value,10) || 1;
@@ -338,9 +330,7 @@
     });
 
     // ====== 測驗字數：限制在 0~capacity ======
-    function capCountHandler(){
-      capCountToCapacity();
-    }
+    function capCountHandler(){ capCountToCapacity(); }
     countInput.addEventListener('input', capCountHandler);
     minusBtn.addEventListener('click', () => {
       countInput.value = Math.max(0, (parseInt(countInput.value,10)||0) - 1);
@@ -363,7 +353,7 @@
     // ====== 開始測驗 ======
     startBtn.addEventListener('click', () => {
       const cap = getCapacity();
-      capCountToCapacity(); // 確保字數在上限內
+      capCountToCapacity();
       let want = parseInt(countInput.value,10) || 0;
 
       if (cap <= 0 || want <= 0){
@@ -389,23 +379,14 @@
     });
 
     clearBtn.addEventListener('click', clearQuiz);
-
-    function clearQuiz(){
-      quizArea.innerHTML = '';
-      resultArea.classList.add('d-none');
-      resultArea.textContent = '';
-    }
+    function clearQuiz(){ quizArea.innerHTML = ''; resultArea.classList.add('d-none'); resultArea.textContent=''; }
 
     // ====== 工具 ======
     function randomSample(arr, n){
       const a = arr.slice();
-      for (let i=a.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [a[i],a[j]] = [a[j],a[i]];
-      }
+      for (let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; }
       return a.slice(0,n);
     }
-
     function escapeHTML(s){return (s??'').replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;' }[c]));}
     function normalize(s){ return (s||'').trim().toLowerCase(); }
     function matchAnswer(user, ans){
@@ -414,7 +395,7 @@
       return cand.includes(user);
     }
 
-    // ====== 題目渲染 & 驗證 ======
+    // ====== 題目渲染 & 驗證（按鈕跟在左邊文字後方） ======
     function renderQuiz(rows){
       quizArea.innerHTML = '';
       let answered = 0, correct = 0;
@@ -425,13 +406,35 @@
         item.className = 'q-item rounded p-3 list-item-focus';
         item.tabIndex = 0;
 
+        // 標題列：#idx 中文（詞性） 後接 [標註/取消標註]
         const label = document.createElement('div');
-        label.innerHTML = `
+        label.className = 'd-flex align-items-center flex-wrap gap-2';
+
+        const left = document.createElement('div');
+        left.innerHTML = `
           <span class="text-secondary small">#${r.idx}</span>
           <b class="ms-2">${escapeHTML(r.zh)}</b>
           ${r.pos ? `<span class="ms-1 hint">（${escapeHTML(r.pos)}）</span>` : '' }
         `;
 
+        const starBtn = document.createElement('button');
+        starBtn.type = 'button';
+        const setStarAppearance = () => {
+          const starred = isStarred(r.idx);
+          starBtn.className = `btn btn-sm ms-3 ${starred ? 'btn-warning' : 'btn-outline-warning'}`;
+          starBtn.textContent = starred ? '取消標註' : '標註';
+        };
+        setStarAppearance();
+        starBtn.addEventListener('click', () => {
+          toggleStar(r.idx);
+          setStarAppearance();
+          // 若在複習模式想即時更新「最多 N」提示，可打開：
+          if (MODE==='review') setCapHint(getCapacity());
+        });
+
+        label.append(left, starBtn);
+
+        // 輸入列
         const inputGrp = document.createElement('div');
         inputGrp.className = 'd-flex align-items-center gap-2 mt-2';
         inputGrp.innerHTML = `
@@ -455,7 +458,7 @@
         btn.addEventListener('click', () => {
           if (btn.disabled) return;
           const user = normalize(input.value);
-          const ans = normalize(r.en);
+          const ans = normalize(r.word);   // 正解＝第 2 欄 word
 
           const ok = matchAnswer(user, ans);
           btn.disabled = true;
@@ -468,7 +471,7 @@
           }else{
             input.classList.add('is-wrong');
             flag.innerHTML = `<span class="badge bg-danger">錯誤</span>`;
-            feedback.innerHTML = `正確：<span class="badge badge-answer">${escapeHTML(r.en)}</span>`;
+            feedback.innerHTML = `正確：<span class="badge badge-answer">${escapeHTML(r.word)}</span>`;
           }
 
           answered++;
@@ -488,7 +491,7 @@
       });
     }
 
-    // 初始化：套用記憶的模式按鈕樣式（資料載入後會再 applyModeUI(true)）
+    // 初始化：先把模式按鈕外觀設上（資料載入後會再 applyModeUI(true)）
     (function primeModeButtons(){
       modeNormalBtn.classList.toggle('btn-primary', MODE==='normal');
       modeNormalBtn.classList.toggle('btn-outline-light', MODE!=='normal');
@@ -498,6 +501,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 

@@ -1,504 +1,505 @@
-1	a	一個	[冠詞]	I see a cat.	我看到一隻貓。
-2	an	一個(母音開頭)	[冠詞]	She has an apple.	她有一顆蘋果。
-3	the	這/那	[冠詞]	The sun is bright.	太陽很明亮。
-4	I	我	[代名詞]	I am happy.	我很開心。
-5	you	你(們)	[代名詞]	You are my friend.	你是我的朋友。
-6	he	他	[代名詞]	He is tall.	他很高。
-7	she	她	[代名詞]	She is my sister.	她是我的姊姊。
-8	it	它/牠	[代名詞]	It is a dog.	牠是一隻狗。
-9	we	我們	[代名詞]	We play in the park.	我們在公園玩。
-10	they	他們	[代名詞]	They are students.	他們是學生。
-11	me	我	[受格]	Look at me.	看我。
-12	him	他	[受格]	I see him at school.	我在學校看到他。
-13	us	我們	[受格]	Come with us.	跟我們一起來。
-14	them	他們	[受格]	She talks to them.	她跟他們說話。
-15	my	我的	[所有格]	This is my book.	這是我的書。
-16	your	你(們)的	[所有格]	Is this your bag?	這是你的書包嗎？
-17	her	她的	[所有格]	This is her pencil.	這是她的鉛筆。
-18	his	他的	[所有格]	That is his ball.	那是他的球。
-19	its	它的	[所有格]	The dog wags its tail.	那隻狗搖著它的尾巴。
-20	our	我們的	[所有格]	This is our classroom.	這是我們的教室。
-21	their	他們的	[所有格]	That is their car.	那是他們的車。
-22	this	這個	[代名詞]	This is my pen.	這是我的筆。
-23	that	那個	[代名詞]	That is a tree.	那是一棵樹。
-24	can	可以	[助動詞]	I can swim.	我會游泳。
-25	all	全部	[形容詞]	All students are here.	所有學生都在這裡。
-26	both	兩者	[形容詞]	Both hands are clean.	兩隻手都很乾淨。
-27	last	最後的	[形容詞]	I am the last in line.	我在隊伍的最後面。
-28	many	許多	[形容詞]	Many kids like dogs.	很多小朋友喜歡狗。
-29	some	一些	[形容詞]	I have some candy.	我有一些糖果。
-30	every	每一個	[形容詞]	Every day I read.	我每天讀書。
-31	how	如何	[疑問詞]	How are you?	你好嗎？
-32	what	什麼	[疑問詞]	What is this?	這是什麼？
-33	when	何時	[疑問詞]	When is lunch?	午餐是什麼時候？
-34	where	在哪裡	[疑問詞]	Where is the book?	書在哪裡？
-35	which	哪一個	[疑問詞]	Which bag is yours?	哪一個包包是你的？
-36	who	誰	[疑問詞]	Who is your teacher?	誰是你的老師？
-37	whose	誰的	[疑問詞]	Whose pencil is this?	這是誰的鉛筆？
-38	why	為什麼	[疑問詞]	Why are you late?	為什麼你遲到？
-39	and	和	[連接詞]	I like apples and bananas.	我喜歡蘋果和香蕉。
-40	but	但是	[連接詞]	I am small but strong.	我很小，但很強壯。
-41	because	因為	[連接詞]	I stay home because it rains.	因為下雨，我待在家裡。
-42	do	做	[動詞]	I do my homework.	我做我的功課。
-43	go	去	[動詞]	We go to school.	我們去上學。
-44	find	找到	[動詞]	I find my key.	我找到我的鑰匙。
-45	help	幫助	[動詞]	Please help me.	請幫助我。
-46	jump	跳	[動詞]	The boy can jump high.	那個男孩會跳很高。
-47	laugh	笑	[動詞]	They laugh together.	他們一起笑。
-48	like	喜歡	[動詞]	I like this game.	我喜歡這個遊戲。
-49	pull	拉	[動詞]	Pull the door open.	把門拉開。
-50	push	推	[動詞]	Push the cart slowly.	慢慢推手推車。
-51	see	看見	[動詞]	I see the stars.	我看到星星。
-52	take	拿/帶	[動詞]	Take a seat, please.	請坐。
-53	walk	走路	[動詞]	We walk to the park.	我們走路去公園。
-54	number	數字	[名詞]	What is your number?	你的號碼是什麼？
-55	zero	零	[名詞]	I can count to zero.	我會數到零。
-56	one	一	[名詞]	I can count to one.	我會數到一。
-57	two	二	[名詞]	I can count to two.	我會數到二。
-58	three	三	[名詞]	I can count to three.	我會數到三。
-59	four	四	[名詞]	I can count to four.	我會數到四。
-60	five	五	[名詞]	I can count to five.	我會數到五。
-61	six	六	[名詞]	I can count to six.	我會數到六。
-62	seven	七	[名詞]	I can count to seven.	我會數到七。
-63	eight	八	[名詞]	I can count to eight.	我會數到八。
-64	nine	九	[名詞]	I can count to nine.	我會數到九。
-65	ten	十	[名詞]	I can count to ten.	我會數到十。
-66	eleven	十一	[名詞]	I can count to eleven.	我會數到十一。
-67	twelve	十二	[名詞]	I can count to twelve.	我會數到十二。
-68	thirteen	十三	[名詞]	I can count to thirteen.	我會數到十三。
-69	fourteen	十四	[名詞]	I can count to fourteen.	我會數到十四。
-70	fifteen	十五	[名詞]	I can count to fifteen.	我會數到十五。
-71	sixteen	十六	[名詞]	I can count to sixteen.	我會數到十六。
-72	seventeen	十七	[名詞]	I can count to seventeen.	我會數到十七。
-73	eighteen	十八	[名詞]	I can count to eighteen.	我會數到十八。
-74	nineteen	十九	[名詞]	I can count to nineteen.	我會數到十九。
-75	twenty	二十	[名詞]	I can count to twenty.	我會數到二十。
-76	thirty	三十	[名詞]	I can count to thirty.	我會數到三十。
-77	forty	四十	[名詞]	I can count to forty.	我會數到四十。
-78	fifty	五十	[名詞]	I can count to fifty.	我會數到五十。
-79	sixty	六十	[名詞]	I can count to sixty.	我會數到六十。
-80	seventy	七十	[名詞]	I can count to seventy.	我會數到七十。
-81	eighty	八十	[名詞]	I can count to eighty.	我會數到八十。
-82	ninety	九十	[名詞]	I can count to ninety.	我會數到九十。
-83	hundred	一百	[名詞]	I can count to hundred.	我會數到一百。
-84	first	第一	[名詞]	I am first in the race.	我在比賽中第一名。
-85	second	第二	[名詞]	You are second.	你是第二名。
-86	third	第三	[名詞]	He is third.	他是第三名。
-87	face	臉	[名詞]	Wash your face.	把臉洗一洗。
-88	head	頭	[名詞]	Touch your head.	摸摸你的頭。
-89	eye	眼睛	[名詞]	I have two eyes.	我有兩隻眼睛。
-90	nose	鼻子	[名詞]	Touch your nose.	摸摸你的鼻子。
-91	mouth	嘴巴	[名詞]	Open your mouth.	把嘴巴張開。
-92	ear	耳朵	[名詞]	This is my ear.	這是我的耳朵。
-93	tooth	牙齒	[名詞]	My tooth hurts.	我的牙齒痛。
-94	hair	頭髮	[名詞]	Her hair is long.	她的頭髮很長。
-95	hand	手	[名詞]	Wash your hands.	把手洗乾淨。
-96	arm	手臂	[名詞]	Raise your arm.	把手臂舉起來。
-97	leg	腿	[名詞]	I hurt my leg.	我的腿受傷了。
-98	foot	腳	[名詞]	This is my foot.	這是我的腳。
-99	back	背	[名詞]	My back hurts.	我的背痛。
-100	person	人	[名詞]	That person is kind.	那個人很親切。
-101	man	男人	[名詞]	The man is tall.	那位男人很高。
-102	woman	女人	[名詞]	The woman is nice.	那位女士很親切。
-103	boy	男孩	[名詞]	The boy runs fast.	那個男孩跑很快。
-104	girl	女孩	[名詞]	The girl is smart.	那個女孩很聰明。
-105	kid	小孩	[名詞]	The kid is happy.	那個小孩很開心。
-106	baby	嬰兒	[名詞]	The baby sleeps.	那個嬰兒在睡覺。
-107	sky	天空	[名詞]	The sky is blue.	天空是藍色的。
-108	sun	太陽	[名詞]	The sun is bright.	太陽很明亮。
-109	moon	月亮	[名詞]	The moon is white.	月亮是白色的。
-110	cloud	雲	[名詞]	A cloud looks like cotton.	雲像棉花一樣。
-111	rain	雨	[名詞]	It may rain today.	今天可能會下雨。
-112	snow	雪	[名詞]	It may snow in winter.	冬天可能會下雪。
-113	star	星星	[名詞]	I see a bright star.	我看到一顆亮亮的星星。
-114	rainbow	彩虹	[名詞]	A rainbow has many colors.	彩虹有很多顏色。
-115	typhoon	颱風	[名詞]	A typhoon brings strong wind.	颱風帶來強風。
-116	wind	風	[名詞]	The wind is strong.	風很大。
-117	weather	天氣	[名詞]	The weather is cool.	天氣很涼。
-118	money	錢	[名詞]	I save my money.	我把錢存起來。
-119	buy	買	[動詞]	We buy bread.	我們買麵包。
-120	dollar	美元/元	[名詞]	It costs one dollar.	它要一塊錢。
-121	free	免費的	[形容詞]	The water is free.	這水是免費的。
-122	color	顏色	[名詞]	What color do you like?	你喜歡什麼顏色？
-123	black	黑色	[形容詞]	The ball is black.	這顆球是黑色。
-124	white	白色	[形容詞]	The ball is white.	這顆球是白色。
-125	red	紅色	[形容詞]	The ball is red.	這顆球是紅色。
-126	orange	橘色	[形容詞]	The ball is orange.	這顆球是橘色。
-127	yellow	黃色	[形容詞]	The ball is yellow.	這顆球是黃色。
-128	green	綠色	[形容詞]	The ball is green.	這顆球是綠色。
-129	blue	藍色	[形容詞]	The ball is blue.	這顆球是藍色。
-130	purple	紫色	[形容詞]	The ball is purple.	這顆球是紫色。
-131	pink	粉紅色	[形容詞]	The ball is pink.	這顆球是粉紅色。
-132	brown	咖啡色	[形容詞]	The ball is brown.	這顆球是咖啡色。
-133	gray	灰色	[形容詞]	The ball is gray.	這顆球是灰色。
-134	morning	早上	[名詞]	Good morning!	早安！
-135	noon	中午	[名詞]	We eat at noon.	我們中午吃飯。
-136	afternoon	下午	[名詞]	I play in the afternoon.	我下午玩。
-137	evening	傍晚	[名詞]	We walk in the evening.	我們傍晚散步。
-138	night	晚上	[名詞]	Good night, Mom.	晚安，媽媽。
-139	week	週	[名詞]	There are seven days in a week.	一週有七天。
-140	Monday	星期一	[名詞]	Today is Monday.	今天是星期一。
-141	Tuesday	星期二	[名詞]	Today is Tuesday.	今天是星期二。
-142	Wednesday	星期三	[名詞]	Today is Wednesday.	今天是星期三。
-143	Thursday	星期四	[名詞]	Today is Thursday.	今天是星期四。
-144	Friday	星期五	[名詞]	Today is Friday.	今天是星期五。
-145	Saturday	星期六	[名詞]	Today is Saturday.	今天是星期六。
-146	Sunday	星期日	[名詞]	Today is Sunday.	今天是星期日。
-147	month	月份	[名詞]	A month has about 30 days.	一個月大約有三十天。
-148	January	一月	[名詞]	My birthday is in January.	我的生日在一月。
-149	February	二月	[名詞]	My birthday is in February.	我的生日在二月。
-150	March	三月	[名詞]	My birthday is in March.	我的生日在三月。
-151	April	四月	[名詞]	My birthday is in April.	我的生日在四月。
-152	May	五月	[名詞]	My birthday is in May.	我的生日在五月。
-153	June	六月	[名詞]	My birthday is in June.	我的生日在六月。
-154	July	七月	[名詞]	My birthday is in July.	我的生日在七月。
-155	August	八月	[名詞]	My birthday is in August.	我的生日在八月。
-156	September	九月	[名詞]	My birthday is in September.	我的生日在九月。
-157	October	十月	[名詞]	My birthday is in October.	我的生日在十月。
-158	November	十一月	[名詞]	My birthday is in November.	我的生日在十一月。
-159	December	十二月	[名詞]	My birthday is in December.	我的生日在十二月。
-160	season	季節	[名詞]	Spring is my favorite season.	春天是我最喜歡的季節。
-161	spring	春天	[名詞]	Flowers bloom in spring.	春天花開。
-162	summer	夏天	[名詞]	We swim in summer.	夏天我們游泳。
-163	fall	秋天	[名詞]	Leaves fall in fall.	秋天葉子落下。
-164	winter	冬天	[名詞]	It snows in winter.	冬天會下雪。
-165	day	天/日	[名詞]	A day has 24 hours.	一天有二十四小時。
-166	year	年	[名詞]	This year I am ten.	今年我十歲。
-167	today	今天	[名詞]	Today we have a test.	今天我們有小考。
-168	tomorrow	明天	[名詞]	See you tomorrow.	明天見。
-169	yesterday	昨天	[名詞]	I played soccer yesterday.	我昨天踢足球。
-170	clock	時鐘	[名詞]	The clock is big.	那個時鐘很大。
-171	watch	手錶	[名詞]	This is my watch.	這是我的手錶。
-172	time	時間	[名詞]	What time is it?	現在幾點？
-173	early	早	[形容詞/副詞]	We get up early.	我們很早起床。
-174	late	晚/遲	[形容詞/副詞]	He is late for class.	他上課遲到。
-175	now	現在	[時間副詞]	Do it now.	現在就做。
-176	animal	動物	[名詞]	This is an animal.	這是一種動物。
-177	pet	寵物	[名詞]	I have a pet dog.	我有一隻寵物狗。
-178	bear	熊	[名詞]	The bear is big.	熊很大。
-179	cat	貓	[名詞]	The cat is cute.	這隻貓很可愛。
-180	chicken	雞	[名詞]	The chicken is small.	小雞很小。
-181	cow	牛	[名詞]	The cow eats grass.	牛吃草。
-182	dog	狗	[名詞]	The dog runs fast.	狗跑得很快。
-183	elephant	大象	[名詞]	The elephant is big.	大象很大。
-184	horse	馬	[名詞]	The horse can run.	馬會跑。
-185	koala	無尾熊	[名詞]	The koala climbs trees.	無尾熊會爬樹。
-186	lion	獅子	[名詞]	The lion is strong.	獅子很強壯。
-187	monkey	猴子	[名詞]	The monkey climbs fast.	猴子爬得很快。
-188	mouse	老鼠	[名詞]	The mouse is tiny.	老鼠很小。
-189	panda	熊貓	[名詞]	The panda eats bamboo.	熊貓吃竹子。
-190	pig	豬	[名詞]	The pig is pink.	豬是粉紅色的。
-191	rabbit	兔子	[名詞]	The rabbit jumps high.	兔子跳得高。
-192	sheep	羊	[名詞]	The sheep is white.	羊是白色的。
-193	snake	蛇	[名詞]	The snake is long.	蛇很長。
-194	spider	蜘蛛	[名詞]	The spider makes a web.	蜘蛛會結網。
-195	tiger	老虎	[名詞]	The tiger is strong.	老虎很強壯。
-196	zebra	斑馬	[名詞]	The zebra has stripes.	斑馬有條紋。
-197	fish	魚	[名詞]	The fish swims.	魚會游泳。
-198	frog	青蛙	[名詞]	The frog jumps.	青蛙會跳。
-199	turtle	烏龜	[名詞]	The turtle walks slowly.	烏龜走得很慢。
-200	whale	鯨魚	[名詞]	The whale is very big.	鯨魚很大。
-201	bird	鳥	[名詞]	I see a bird.	我看到一隻鳥。
-202	duck	鴨子	[名詞]	The duck swims.	那隻鴨子在游泳。
-203	bee	蜜蜂	[名詞]	A bee is small.	蜜蜂很小。
-204	butterfly	蝴蝶	[名詞]	The butterfly is pretty.	蝴蝶很漂亮。
-205	bite	咬	[動詞]	The dog will not bite.	那隻狗不會咬人。
-206	clothes	衣服	[名詞]	My clothes are clean.	我的衣服很乾淨。
-207	coat	外套	[名詞]	Put on your coat.	穿上你的外套。
-208	dress	洋裝	[名詞]	She wears a blue dress.	她穿藍色的洋裝。
-209	pants	褲子	[名詞]	His pants are black.	他的褲子是黑色的。
-210	shorts	短褲	[名詞]	I wear shorts in summer.	我夏天穿短褲。
-211	pocket	口袋	[名詞]	The key is in my pocket.	鑰匙在我的口袋裡。
-212	shirt	襯衫	[名詞]	This shirt is new.	這件襯衫是新的。
-213	skirt	裙子	[名詞]	The skirt is pink.	這條裙子是粉紅色的。
-214	sweater	毛衣	[名詞]	This sweater is warm.	這件毛衣很保暖。
-215	bag	包包	[名詞]	This is my bag.	這是我的包包。
-216	cap	鴨舌帽	[名詞]	He wears a cap.	他戴著鴨舌帽。
-217	hat	帽子	[名詞]	She has a big hat.	她有一頂大帽子。
-218	shoes	鞋子	[名詞]	My shoes are blue.	我的鞋子是藍色的。
-219	socks	襪子	[名詞]	I wear red socks.	我穿紅色的襪子。
-220	glasses	眼鏡	[名詞]	Dad wears glasses.	爸爸戴眼鏡。
-221	wear	穿／戴	[動詞]	We wear uniforms at school.	我們在學校穿制服。
-222	family	家庭／家人	[名詞]	My family is big.	我的家庭很大。
-223	father	父親	[名詞]	My father cooks dinner.	我爸爸煮晚餐。
-224	mother	母親	[名詞]	My mother is kind.	我媽媽很親切。
-225	parent	家長/父或母	[名詞]	My parent is at work.	我的家長在上班。
-226	brother	兄弟	[名詞]	I play with my brother.	我和我的哥哥/弟弟玩。
-227	sister	姊妹	[名詞]	My sister draws a picture.	我的姊姊/妹妹畫畫。
-228	son	兒子	[名詞]	Their son is six.	他們的兒子六歲。
-229	daughter	女兒	[名詞]	Her daughter likes cats.	她的女兒喜歡貓。
-230	grandfather	祖父/外公	[名詞]	Grandfather tells a story.	祖父說故事。
-231	grandmother	祖母/外婆	[名詞]	Grandmother makes cookies.	祖母做餅乾。
-232	uncle	叔叔/舅舅	[名詞]	My uncle drives a car.	我的叔叔開車。
-233	aunt	阿姨/姑姑	[名詞]	My aunt is a nurse.	我的阿姨是護士。
-234	cousin	堂(表)兄弟姊妹	[名詞]	I visit my cousin.	我去看我的表(堂)兄弟姊妹。
-235	grow	成長/生長	[動詞]	Plants grow in spring.	植物在春天生長。
-236	live	居住	[動詞]	I live in a house.	我住在一間房子裡。
-237	fruit	水果	[名詞]	I like fruit.	我喜歡水果。
-238	apple	蘋果	[名詞]	I eat an apple.	我吃一顆蘋果。
-239	banana	香蕉	[名詞]	He peels a banana.	他剝一根香蕉。
-240	grape	葡萄	[名詞]	We share grapes.	我們分享葡萄。
-241	lemon	檸檬	[名詞]	The lemon is sour.	檸檬很酸。
-242	orange	橘子	[名詞]	She peels an orange.	她在剝橘子。
-243	peach	桃子	[名詞]	The peach is sweet.	桃子很甜。
-244	food	食物	[名詞]	The food is yummy.	這些食物很好吃。
-245	beef	牛肉	[名詞]	Beef is tasty.	牛肉很好吃。
-246	chicken	雞肉	[名詞]	We eat chicken for dinner.	我們晚餐吃雞肉。
-247	duck	鴨肉	[名詞]	Mom cooks duck.	媽媽煮鴨肉。
-248	fish	魚肉	[名詞]	The fish is fresh.	魚很新鮮。
-249	pork	豬肉	[名詞]	Pork is on the plate.	盤子上有豬肉。
-250	noodles	麵	[名詞]	I like noodles.	我喜歡吃麵。
-251	egg	蛋	[名詞]	I have an egg.	我有一顆蛋。
-252	rice	飯	[名詞]	I eat rice.	我吃白飯。
-253	salad	沙拉	[名詞]	She makes a salad.	她做沙拉。
-254	soup	湯	[名詞]	The soup is hot.	湯很熱。
-255	cake	蛋糕	[名詞]	This cake is big.	這個蛋糕很大。
-256	candy	糖果	[名詞]	Candy is sweet.	糖果很甜。
-257	chocolate	巧克力	[名詞]	I love chocolate.	我喜歡巧克力。
-258	cookie	餅乾	[名詞]	I eat a cookie.	我吃一片餅乾。
-259	bread	麵包	[名詞]	We bake bread.	我們烤麵包。
-260	ice cream	冰淇淋	[名詞]	We eat ice cream.	我們吃冰淇淋。
-261	pie	派	[名詞]	The pie smells good.	這個派很香。
-262	pizza	披薩	[名詞]	We share a pizza.	我們分享一個披薩。
-263	sandwich	三明治	[名詞]	He makes a sandwich.	他做一個三明治。
-264	coffee	咖啡	[名詞]	Dad drinks coffee.	爸爸喝咖啡。
-265	coke	可樂	[名詞]	I drink coke.	我喝可樂。
-266	juice	果汁	[名詞]	She drinks juice.	她喝果汁。
-267	milk	牛奶	[名詞]	I drink milk.	我喝牛奶。
-268	tea	茶	[名詞]	Grandma drinks tea.	奶奶喝茶。
-269	water	水	[名詞]	Water is clear.	水很清澈。
-270	breakfast	早餐	[名詞]	Breakfast is at 7.	早餐在七點。
-271	lunch	午餐	[名詞]	Lunch is at noon.	午餐在中午。
-272	dinner	晚餐	[名詞]	Dinner is at six.	晚餐在六點。
-273	cook	煮/做菜	[動詞]	Dad cooks dinner.	爸爸煮晚餐。
-274	drink	喝	[動詞]	I drink water.	我喝水。
-275	eat	吃	[動詞]	We eat lunch at school.	我們在學校吃午餐。
-276	taste	嚐起來	[動詞]	The soup tastes good.	這湯喝起來很好喝。
-277	Miss	小姐	[名詞]	Good morning, Miss Chen.	陳小姐，早安。
-278	Mr.	先生	[名詞]	Hello, Mr. Lin.	林先生，你好。
-279	Mrs.	太太	[名詞]	Thank you, Mrs. Wang.	謝謝你，王太太。
-280	name	名字	[名詞]	What is your name?	你叫什麼名字？
-281	beach	海灘	[名詞]	We play at the beach.	我們在海灘玩。
-282	lake	湖	[名詞]	The lake is calm.	湖面很平靜。
-283	mountain	山	[名詞]	The mountain is high.	那座山很高。
-284	river	河	[名詞]	The river is long.	這條河很長。
-285	sea	海	[名詞]	The sea is blue.	海是藍色的。
-286	house	房子	[名詞]	This is my house.	這是我的房子。
-287	home	家	[名詞]	I go home after school.	放學後我回家。
-288	garden	花園	[名詞]	There are flowers in the garden.	花園裡有花。
-289	street	街道	[名詞]	Cars are on the street.	街上有車子。
-290	living room	客廳	[名詞]	We sit in the living room.	我們坐在客廳。
-291	door	門	[名詞]	Open the door, please.	請把門打開。
-292	fan	電風扇	[名詞]	The fan is on.	電風扇開著。
-293	floor	地板	[名詞]	The floor is clean.	地板很乾淨。
-294	sofa	沙發	[名詞]	I sit on the sofa.	我坐在沙發上。
-295	telephone	電話	[名詞]	The telephone rings.	電話在響。
-296	television	電視	[名詞]	We watch television.	我們在看電視。
-297	wall	牆壁	[名詞]	The wall is white.	牆是白色的。
-298	window	窗戶	[名詞]	Open the window.	把窗戶打開。
-299	dining room	餐廳	[名詞]	We eat in the dining room.	我們在餐廳吃飯。
-300	table	桌子	[名詞]	The table is round.	這張桌子是圓的。
-301	kitchen	廚房	[名詞]	Mom is in the kitchen.	媽媽在廚房。
-302	refrigerator	冰箱	[名詞]	The refrigerator is cold.	冰箱很冷。
-303	bedroom	臥室	[名詞]	My bedroom is small.	我的臥室很小。
-304	bed	床	[名詞]	This bed is soft.	這張床很軟。
-305	chair	椅子	[名詞]	Sit on the chair.	坐在椅子上。
-306	desk	書桌	[名詞]	This is my desk.	這是我的書桌。
-307	computer	電腦	[名詞]	I use the computer.	我用電腦。
-308	lamp	檯燈	[名詞]	Turn on the lamp.	把檯燈打開。
-309	key	鑰匙	[名詞]	I have a key.	我有一把鑰匙。
-310	shelf	架子	[名詞]	The books are on the shelf.	書在架子上。
-311	bathroom	浴室	[名詞]	The bathroom is clean.	浴室很乾淨。
-312	shower	淋浴	[名詞]	I take a shower.	我洗澡。
-313	towel	毛巾	[名詞]	This towel is dry.	這條毛巾是乾的。
-314	sweep	掃地	[動詞]	I sweep the floor.	我掃地。
-315	wash	洗	[動詞]	Wash your hands.	把手洗乾淨。
-316	work	工作	[動詞]	We work together.	我們一起工作。
-317	job	工作	[名詞]	Dad has a new job.	爸爸有一份新工作。
-318	cook	廚師	[名詞]	My mom is a cook.	我媽媽是廚師。
-319	doctor	醫生	[名詞]	The doctor helps people.	醫生幫助人們。
-320	driver	司機	[名詞]	The driver drives a bus.	司機開公車。
-321	farmer	農夫	[名詞]	The farmer grows rice.	農夫種稻米。
-322	nurse	護士	[名詞]	The nurse is kind.	護士很親切。
-323	police officer	警察	[名詞]	The police officer keeps us safe.	警察保護我們。
-324	singer	歌手	[名詞]	She is a singer.	她是一位歌手。
-325	soldier	士兵	[名詞]	The soldier is brave.	那位士兵很勇敢。
-326	happy	開心的	[形容詞]	I am happy today.	我今天很開心。
-327	angry	生氣的	[形容詞]	He is angry.	他很生氣。
-328	good	好的	[形容詞]	This is a good book.	這是一本好書。
-329	bad	不好的	[形容詞]	The milk smells bad.	牛奶聞起來不好。
-330	tall	高的	[形容詞]	The boy is tall.	那個男孩很高。
-331	short	矮的/短的	[形容詞]	The girl is short.	那個女孩很矮。
-332	fat	胖的	[形容詞]	The cat is fat.	那隻貓很胖。
-333	thin	瘦的	[形容詞]	The man is thin.	那個男人很瘦。
-334	busy	忙碌的	[形容詞]	Mom is busy.	媽媽很忙。
-335	cute	可愛的	[形容詞]	The puppy is cute.	小狗很可愛。
-336	old	老的/舊的	[形容詞]	This bike is old.	這台腳踏車很舊。
-337	young	年輕的	[形容詞]	The teacher is young.	那位老師很年輕。
-338	smart	聰明的	[形容詞]	She is smart.	她很聰明。
-339	sad	難過的	[形容詞]	I feel sad.	我覺得難過。
-340	pretty	漂亮的	[形容詞]	The flower is pretty.	那朵花很漂亮。
-341	bank	銀行	[名詞]	We go to the bank.	我們去銀行。
-342	bookstore	書店	[名詞]	I buy a book at the bookstore.	我在書店買一本書。
-343	library	圖書館	[名詞]	I read in the library.	我在圖書館讀書。
-344	market	市場	[名詞]	Mom buys fruit at the market.	媽媽在市場買水果。
-345	office	辦公室	[名詞]	Dad works in an office.	爸爸在辦公室上班。
-346	park	公園	[名詞]	We play at the park.	我們在公園玩。
-347	restaurant	餐廳	[名詞]	We eat at a restaurant.	我們在餐廳吃飯。
-348	restroom	洗手間	[名詞]	The restroom is clean.	洗手間很乾淨。
-349	store	商店	[名詞]	This store is new.	這家商店是新的。
-350	supermarket	超市	[名詞]	We shop at the supermarket.	我們在超市購物。
-351	zoo	動物園	[名詞]	We see lions at the zoo.	我們在動物園看到獅子。
-352	fire station	消防局	[名詞]	The fire station is near the park.	消防局在公園附近。
-353	hospital	醫院	[名詞]	The hospital is big.	這家醫院很大。
-354	police station	警察局	[名詞]	The police station is on this street.	警察局在這條街上。
-355	post office	郵局	[名詞]	I mail a letter at the post office.	我在郵局寄信。
-356	right	右邊	[名詞]	Turn right here.	在這裡向右轉。
-357	left	左邊	[名詞]	Turn left at the corner.	在轉角向左轉。
-358	back	後面	[名詞]	The ball is behind my back.	球在我背後。
-359	here	這裡	[名詞]	Come here, please.	請到這裡來。
-360	there	那裡	[名詞]	The cat is there.	那隻貓在那裡。
-361	school	學校	[名詞]	I walk to school.	我走路去學校。
-362	teacher	老師	[名詞]	My teacher is nice.	我的老師很親切。
-363	student	學生	[名詞]	I am a student.	我是一名學生。
-364	classmate	同學	[名詞]	He is my classmate.	他是我的同學。
-365	test	考試	[名詞]	We have a test today.	我們今天有考試。
-366	blackboard	黑板	[名詞]	The blackboard is clean.	黑板很乾淨。
-367	book	書	[名詞]	This book is fun.	這本書很好玩。
-368	classroom	教室	[名詞]	Our classroom is bright.	我們的教室很明亮。
-369	Chinese	中文	[名詞]	This is Chinese.	這是中文。
-370	English	英文	[名詞]	This is English.	這是英文。
-371	art	美術	[名詞]	We draw in art class.	我們在美術課畫畫。
-372	math	數學	[名詞]	Math is fun.	數學很好玩。
-373	physical education	體育	[名詞]	We run in physical education.	我們在體育課跑步。
-374	music	音樂	[名詞]	We sing in music class.	我們在音樂課唱歌。
-375	science	自然	[名詞]	Science is interesting.	自然課很有趣。
-376	eraser	橡皮擦	[名詞]	I use an eraser.	我用橡皮擦。
-377	friend	朋友	[名詞]	He is my friend.	他是我的朋友。
-378	glue	膠水	[名詞]	Use glue to stick it.	用膠水把它黏起來。
-379	homework	作業	[名詞]	I do my homework.	我要寫作業。
-380	paper	紙	[名詞]	Give me a piece of paper.	請給我一張紙。
-381	pencil	鉛筆	[名詞]	I sharpen my pencil.	我要削鉛筆。
-382	ruler	尺	[名詞]	I use a ruler.	我用尺量長度。
-383	picture	圖片/圖畫	[名詞]	This picture is beautiful.	這張圖很漂亮。
-384	question	問題	[名詞]	I have a question.	我有一個問題。
-385	story	故事	[名詞]	Grandpa tells a story.	爺爺講一個故事。
-386	ask	問	[動詞]	I ask a question.	我問一個問題。
-387	answer	回答	[動詞]	Please answer the question.	請回答這個問題。
-388	draw	畫畫	[動詞]	I draw a cat.	我畫一隻貓。
-389	listen	聽	[動詞]	Listen to the teacher.	請聽老師講。
-390	read	讀/看	[動詞]	I read a story.	我讀一個故事。
-391	say	說	[動詞]	Please say your name.	請說出你的名字。
-392	spell	拼字	[動詞]	I can spell my name.	我會拼我的名字。
-393	study	讀書	[動詞]	We study English.	我們學英文。
-394	write	寫	[動詞]	Write your name.	寫下你的名字。
-395	big	大的	[形容詞]	The box is big.	這個箱子很大。
-396	small	小的	[形容詞]	The ant is small.	這隻螞蟻很小。
-397	long	長的	[形容詞]	The rope is long.	這條繩子很長。
-398	short	矮的/短的	[形容詞]	The girl is short.	那個女孩很矮。
-399	heavy	重的	[形容詞]	The bag is heavy.	這個包包很重。
-400	light	輕的	[形容詞]	The bag is light.	這個包很輕。
-401	high	高的	[形容詞]	The wall is high.	這面牆很高。
-402	low	低的	[形容詞]	The chair is low.	這張椅子很低。
-403	sport	運動	[名詞]	Sport is fun.	運動很好玩。
-404	ball	球	[名詞]	This is a ball.	這是一顆球。
-405	baseball	棒球	[名詞]	We play baseball.	我們打棒球。
-406	basketball	籃球	[名詞]	He plays basketball.	他打籃球。
-407	soccer	足球	[名詞]	They play soccer.	他們踢足球。
-408	doll	洋娃娃	[名詞]	The doll is pretty.	那個洋娃娃很漂亮。
-409	drum	鼓	[名詞]	I play the drum.	我打鼓。
-410	game	遊戲	[名詞]	This game is fun.	這個遊戲很好玩。
-411	kite	風箏	[名詞]	The kite flies high.	風箏飛很高。
-412	movie	電影	[名詞]	We watch a movie.	我們看電影。
-413	piano	鋼琴	[名詞]	She plays the piano.	她彈鋼琴。
-414	song	歌曲	[名詞]	This song is nice.	這首歌很好聽。
-415	toy	玩具	[名詞]	That toy is new.	那個玩具是新的。
-416	trip	旅行	[名詞]	We go on a trip.	我們去旅行。
-417	climb	爬	[動詞]	We climb the hill.	我們爬小山。
-418	dance	跳舞	[動詞]	They dance to music.	他們跟著音樂跳舞。
-419	fish	釣魚	[動詞]	We fish at the lake.	我們在湖邊釣魚。
-420	kick	踢	[動詞]	He kicks the ball.	他踢球。
-421	play	玩	[動詞]	I play with my friends.	我和朋友一起玩。
-422	run	跑步	[動詞]	I run fast.	我跑得很快。
-423	sing	唱歌	[動詞]	She sings well.	她唱得很好。
-424	swim	游泳	[動詞]	They swim in the pool.	他們在泳池裡游泳。
-425	win	贏	[動詞]	We will win the game.	我們會贏得比賽。
-426	chopsticks	筷子	[名詞]	I eat noodles with chopsticks.	我用筷子吃麵。
-427	spoon	湯匙	[名詞]	Use a spoon for soup.	喝湯要用湯匙。
-428	knife	刀子	[名詞]	Be careful with the knife.	用刀子要小心。
-429	fork	叉子	[名詞]	Use a fork to eat salad.	用叉子吃沙拉。
-430	cup	杯子	[名詞]	This cup is blue.	這個杯子是藍色的。
-431	dish	盤子	[名詞]	The dish is on the table.	盤子在桌上。
-432	glass	玻璃杯	[名詞]	The glass is full.	玻璃杯裝滿了。
-433	airplane	飛機	[名詞]	We take an airplane.	我們搭飛機。
-434	bicycle	腳踏車	[名詞]	I ride a bicycle.	我騎腳踏車。
-435	boat	小船	[名詞]	The boat is on the lake.	小船在湖上。
-436	ship	大船/船	[名詞]	The ship is big.	那艘船很大。
-437	bus	公車	[名詞]	We go by bus.	我們搭公車去。
-438	car	汽車	[名詞]	This car is red.	這台車是紅色的。
-439	motorcycle	機車	[名詞]	He rides a motorcycle.	他騎機車。
-440	MRT	捷運	[名詞]	We take the MRT.	我們搭捷運。
-441	taxi	計程車	[名詞]	We take a taxi.	我們搭計程車。
-442	train	火車	[名詞]	The train is fast.	火車很快。
-443	truck	卡車	[名詞]	The truck is heavy.	卡車很重。
-444	fast	快的	[形容詞]	The cheetah is fast.	獵豹很快。
-445	slow	慢的	[形容詞]	The turtle is slow.	烏龜很慢。
-446	drive	開(車)	[動詞]	Dad drives a car.	爸爸開車。
-447	fly	飛/搭飛機	[動詞]	The plane can fly high.	飛機可以飛很高。
-448	ride	騎/乘坐	[動詞]	I ride a bicycle.	我騎腳踏車。
-449	turn	轉彎	[動詞]	Turn left at the corner.	在轉角向左轉。
-450	goodbye	再見	[感嘆詞]	Goodbye, see you tomorrow.	再見，明天見。
-451	hello	哈囉/你好	[感嘆詞]	Hello, my name is Tom.	哈囉，我叫湯姆。
-452	please	請	[名詞]	Please sit down.	請坐。
-453	at	在...（地點/時間）	[介系詞]	We meet at school.	我們在學校見面。
-454	in	在...裡面	[介系詞]	The cat is in the box.	貓在盒子裡。
-455	out	向外	[介系詞]	We go out to play.	我們出去玩。
-456	by	藉由/乘坐（交通工具）	[介系詞]	I go to school by bus.	我搭公車上學。
-457	outside	在...外面	[介系詞]	The dog is outside.	狗在外面。
-458	inside	在...裡面	[介系詞]	The bird is inside the cage.	鳥在籠子裡。
-459	next to	在...旁邊	[介系詞]	The school is next to the park.	學校在公園旁邊。
-460	on	在...上面	[介系詞]	The book is on the desk.	書在桌上。
-461	over	在...上方/越過	[介系詞]	The plane flies over the city.	飛機從城市上空飛過。
-462	under	在...下面	[介系詞]	The ball is under the chair.	球在椅子下面。
-463	near	在...附近	[介系詞]	My home is near the lake.	我家在湖的附近。
-464	before	在...之前	[介系詞]	Wash your hands before lunch.	午餐前請洗手。
-465	after	在...之後	[介系詞]	We play after class.	下課後我們玩。
-466	in front of	在...前面	[介系詞]	The car is in front of the house.	車子在房子前面。
-467	behind	在...後面	[介系詞]	The tree is behind the house.	樹在房子後面。
-468	same	相同的	[形容詞]	These bags are the same.	這兩個包包是一樣的。
-469	different	不同的	[形容詞]	The two cats are different.	這兩隻貓不一樣。
-470	easy	容易的	[形容詞]	This test is easy.	這次考試很簡單。
-471	hard	困難的/硬的	[形容詞]	The math is hard.	這題數學很難。
-472	fine	好的	[形容詞]	Everything is fine.	一切都很好。
-473	fun	有趣的	[形容詞]	The game is fun.	這個遊戲很好玩。
-474	great	很棒的	[形容詞]	You did a great job!	你做得很棒！
-475	hot	熱的	[形容詞]	The soup is hot.	湯很熱。
-476	new	新的	[形容詞]	This is a new bike.	這是一台新腳踏車。
-477	OK	可以/好的	[形容詞]	It is OK.	可以的。
-478	only	僅有的	[形容詞]	This is my only pen.	這是我唯一的一支筆。
-479	noisy	吵的	[形容詞]	The class is noisy.	班上很吵。
-480	quiet	安靜的	[形容詞]	The library is quiet.	圖書館很安靜。
-481	ready	準備好的	[形容詞]	I am ready.	我準備好了。
-482	right	正確的	[形容詞]	Your answer is right.	你的答案是對的。
-483	wrong	錯的	[形容詞]	That is the wrong way.	那是錯的路。
-484	sorry	對不起	[形容詞]	I am sorry.	對不起。
-485	sure	確定的/當然	[形容詞]	I am sure.	我很確定。
-486	dry	乾的	[形容詞]	The towel is dry.	毛巾是乾的。
-487	wet	濕的	[形容詞]	The floor is wet.	地板是濕的。
-488	sweet	甜的	[形容詞]	The cake is sweet.	蛋糕很甜。
-489	again	再一次	[副詞]	Please say it again.	請再說一次。
-490	always	總是	[副詞]	She always smiles.	她總是微笑。
-491	maybe	也許	[副詞]	Maybe it will rain.	也許會下雨。
-492	never	從不	[副詞]	I never lie.	我從不說謊。
-493	no	不/不是	[副詞]	No, thank you.	不用，謝謝。
-494	not	不	[副詞]	I am not late.	我沒有遲到。
-495	only	僅僅	[副詞]	I only have a pen.	我只有一支筆。
-496	really	真的	[副詞]	I really like it.	我真的很喜歡。
-497	so	如此/所以	[副詞]	I am so happy.	我好開心。
-498	still	仍然	[副詞]	He is still here.	他還在這裡。
-499	sure	確定的/當然	[副詞]	I am sure.	我很確定。
-500	then	然後	[副詞]	Then we go home.	然後我們回家。
-501	together	一起	[副詞]	We walk together.	我們一起走。
-502	too	也/太	[副詞]	Me too.	我也是。
-503	very	非常	[副詞]	I am very tired.	我很累。
-504	yes	是的	[副詞]	Yes, I understand.	是的，我懂了。
+1	a	[ə]	一個	[冠詞]	I see a cat.	我看到一隻貓。
+2	an	[æn]	一個(母音開頭)	[冠詞]	She has an apple.	她有一顆蘋果。
+3	the	[ðə]/[ði]	這/那	[冠詞]	The sun is bright.	太陽很明亮。
+4	I	[aɪ]	我	[代名詞]	I am happy.	我很開心。
+5	you	[ju]	你(們)	[代名詞]	You are my friend.	你是我的朋友。
+6	he	[hi]	他	[代名詞]	He is tall.	他很高。
+7	she	[ʃi]	她	[代名詞]	She is my sister.	她是我的姊姊。
+8	it	[ɪt]	它/牠	[代名詞]	It is a dog.	牠是一隻狗。
+9	we	[wi]	我們	[代名詞]	We play in the park.	我們在公園玩。
+10	they	[ðe]	他們	[代名詞]	They are students.	他們是學生。
+11	me	[mi]	我	[受格]	Look at me.	看我。
+12	him	[hɪm]	他	[受格]	I see him at school.	我在學校看到他。
+13	us	[ʌs]	我們	[受格]	Come with us.	跟我們一起來。
+14	them	[ðɛm]	他們	[受格]	She talks to them.	她跟他們說話。
+15	my	[maɪ]	我的	[所有格]	This is my book.	這是我的書。
+16	your	[jʊr]	你(們)的	[所有格]	Is this your bag?	這是你的書包嗎？
+17	her	[hɝ]	她的	[所有格]	This is her pencil.	這是她的鉛筆。
+18	his	[hɪz]	他的	[所有格]	That is his ball.	那是他的球。
+19	its	[ɪts]	它的	[所有格]	The dog wags its tail.	那隻狗搖著它的尾巴。
+20	our	[aʊr]	我們的	[所有格]	This is our classroom.	這是我們的教室。
+21	their	[ðɛr]	他們的	[所有格]	That is their car.	那是他們的車。
+22	this	[ðɪs]	這個	[代名詞]	This is my pen.	這是我的筆。
+23	that	[ðæt]	那個	[代名詞]	That is a tree.	那是一棵樹。
+24	can	[kæn]	可以	[助動詞]	I can swim.	我會游泳。
+25	all	[ɔl]	全部	[形容詞]	All students are here.	所有學生都在這裡。
+26	both	[boθ]	兩者	[形容詞]	Both hands are clean.	兩隻手都很乾淨。
+27	last	[læst]	最後的	[形容詞]	I am the last in line.	我在隊伍的最後面。
+28	many	[ˈmɛni]	許多	[形容詞]	Many kids like dogs.	很多小朋友喜歡狗。
+29	some	[sʌm]	一些	[形容詞]	I have some candy.	我有一些糖果。
+30	every	[ˈɛvri]	每一個	[形容詞]	Every day I read.	我每天讀書。
+31	how	[haʊ]	如何	[疑問詞]	How are you?	你好嗎？
+32	what	[wʌt]	什麼	[疑問詞]	What is this?	這是什麼？
+33	when	[wɛn]	何時	[疑問詞]	When is lunch?	午餐是什麼時候？
+34	where	[wɛr]	在哪裡	[疑問詞]	Where is the book?	書在哪裡？
+35	which	[wɪtʃ]	哪一個	[疑問詞]	Which bag is yours?	哪一個包包是你的？
+36	who	[hu]	誰	[疑問詞]	Who is your teacher?	誰是你的老師？
+37	whose	[huz]	誰的	[疑問詞]	Whose pencil is this?	這是誰的鉛筆？
+38	why	[waɪ]	為什麼	[疑問詞]	Why are you late?	為什麼你遲到？
+39	and	[ænd]	和	[連接詞]	I like apples and bananas.	我喜歡蘋果和香蕉。
+40	but	[bʌt]	但是	[連接詞]	I am small but strong.	我很小，但很強壯。
+41	because	[bɪˈkɔz]	因為	[連接詞]	I stay home because it rains.	因為下雨，我待在家裡。
+42	do	[du]	做	[動詞]	I do my homework.	我做我的功課。
+43	go	[go]	去	[動詞]	We go to school.	我們去上學。
+44	find	[faɪnd]	找到	[動詞]	I find my key.	我找到我的鑰匙。
+45	help	[hɛlp]	幫助	[動詞]	Please help me.	請幫助我。
+46	jump	[dʒʌmp]	跳	[動詞]	The boy can jump high.	那個男孩會跳很高。
+47	laugh	[læf]	笑	[動詞]	They laugh together.	他們一起笑。
+48	like	[laɪk]	喜歡	[動詞]	I like this game.	我喜歡這個遊戲。
+49	pull	[pʊl]	拉	[動詞]	Pull the door open.	把門拉開。
+50	push	[pʊʃ]	推	[動詞]	Push the cart slowly.	慢慢推手推車。
+51	see	[si]	看見	[動詞]	I see the stars.	我看到星星。
+52	take	[tek]	拿/帶	[動詞]	Take a seat, please.	請坐。
+53	walk	[wɔk]	走路	[動詞]	We walk to the park.	我們走路去公園。
+54	number	[ˈnʌmbɚ]	數字	[名詞]	What is your number?	你的號碼是什麼？
+55	zero	[ˈzɪro]	零	[名詞]	I can count to zero.	我會數到零。
+56	one	[wʌn]	一	[名詞]	I can count to one.	我會數到一。
+57	two	[tu]	二	[名詞]	I can count to two.	我會數到二。
+58	three	[θri]	三	[名詞]	I can count to three.	我會數到三。
+59	four	[fɔr]	四	[名詞]	I can count to four.	我會數到四。
+60	five	[faɪv]	五	[名詞]	I can count to five.	我會數到五。
+61	six	[sɪks]	六	[名詞]	I can count to six.	我會數到六。
+62	seven	[ˈsɛvən]	七	[名詞]	I can count to seven.	我會數到七。
+63	eight	[et]	八	[名詞]	I can count to eight.	我會數到八。
+64	nine	[naɪn]	九	[名詞]	I can count to nine.	我會數到九。
+65	ten	[tɛn]	十	[名詞]	I can count to ten.	我會數到十。
+66	eleven	[ɪˈlɛvən]	十一	[名詞]	I can count to eleven.	我會數到十一。
+67	twelve	[twɛlv]	十二	[名詞]	I can count to twelve.	我會數到十二。
+68	thirteen	[ˌθɝˈtin]	十三	[名詞]	I can count to thirteen.	我會數到十三。
+69	fourteen	[ˌfɔrˈtin]	十四	[名詞]	I can count to fourteen.	我會數到十四。
+70	fifteen	[ˌfɪfˈtin]	十五	[名詞]	I can count to fifteen.	我會數到十五。
+71	sixteen	[ˌsɪksˈtin]	十六	[名詞]	I can count to sixteen.	我會數到十六。
+72	seventeen	[ˌsɛvənˈtin]	十七	[名詞]	I can count to seventeen.	我會數到十七。
+73	eighteen	[ˌeˈtin]	十八	[名詞]	I can count to eighteen.	我會數到十八。
+74	nineteen	[ˌnaɪnˈtin]	十九	[名詞]	I can count to nineteen.	我會數到十九。
+75	twenty	[ˈtwɛntɪ]	二十	[名詞]	I can count to twenty.	我會數到二十。
+76	thirty	[ˈθɝti]	三十	[名詞]	I can count to thirty.	我會數到三十。
+77	forty	[ˈfɔrti]	四十	[名詞]	I can count to forty.	我會數到四十。
+78	fifty	[ˈfɪfti]	五十	[名詞]	I can count to fifty.	我會數到五十。
+79	sixty	[ˈsɪksti]	六十	[名詞]	I can count to sixty.	我會數到六十。
+80	seventy	[ˈsɛvəntɪ]	七十	[名詞]	I can count to seventy.	我會數到七十。
+81	eighty	[ˈetɪ]	八十	[名詞]	I can count to eighty.	我會數到八十。
+82	ninety	[ˈnaɪntɪ]	九十	[名詞]	I can count to ninety.	我會數到九十。
+83	hundred	[ˈhʌndrəd]	一百	[名詞]	I can count to hundred.	我會數到一百。
+84	first	[fɝst]	第一	[名詞]	I am first in the race.	我在比賽中第一名。
+85	second	[ˈsɛkənd]	第二	[名詞]	You are second.	你是第二名。
+86	third	[θɝd]	第三	[名詞]	He is third.	他是第三名。
+87	face	[fes]	臉	[名詞]	Wash your face.	把臉洗一洗。
+88	head	[hɛd]	頭	[名詞]	Touch your head.	摸摸你的頭。
+89	eye	[aɪ]	眼睛	[名詞]	I have two eyes.	我有兩隻眼睛。
+90	nose	[noz]	鼻子	[名詞]	Touch your nose.	摸摸你的鼻子。
+91	mouth	[maʊθ]	嘴巴	[名詞]	Open your mouth.	把嘴巴張開。
+92	ear	[ɪr]	耳朵	[名詞]	This is my ear.	這是我的耳朵。
+93	tooth	[tuθ]	牙齒	[名詞]	My tooth hurts.	我的牙齒痛。
+94	hair	[hɛr]	頭髮	[名詞]	Her hair is long.	她的頭髮很長。
+95	hand	[hænd]	手	[名詞]	Wash your hands.	把手洗乾淨。
+96	arm	[ɑrm]	手臂	[名詞]	Raise your arm.	把手臂舉起來。
+97	leg	[lɛg]	腿	[名詞]	I hurt my leg.	我的腿受傷了。
+98	foot	[fʊt]	腳	[名詞]	This is my foot.	這是我的腳。
+99	back	[bæk]	背	[名詞]	My back hurts.	我的背痛。
+100	person	[ˈpɝsən]	人	[名詞]	That person is kind.	那個人很親切。
+101	man	[mæn]	男人	[名詞]	The man is tall.	那位男人很高。
+102	woman	[ˈwʊmən]	女人	[名詞]	The woman is nice.	那位女士很親切。
+103	boy	[bɔɪ]	男孩	[名詞]	The boy runs fast.	那個男孩跑很快。
+104	girl	[gɝl]	女孩	[名詞]	The girl is smart.	那個女孩很聰明。
+105	kid	[kɪd]	小孩	[名詞]	The kid is happy.	那個小孩很開心。
+106	baby	[ˈbebɪ]	嬰兒	[名詞]	The baby sleeps.	那個嬰兒在睡覺。
+107	sky	[skaɪ]	天空	[名詞]	The sky is blue.	天空是藍色的。
+108	sun	[sʌn]	太陽	[名詞]	The sun is bright.	太陽很明亮。
+109	moon	[mun]	月亮	[名詞]	The moon is white.	月亮是白色的。
+110	cloud	[klaʊd]	雲	[名詞]	A cloud looks like cotton.	雲像棉花一樣。
+111	rain	[ren]	雨	[名詞]	It may rain today.	今天可能會下雨。
+112	snow	[sno]	雪	[名詞]	It may snow in winter.	冬天可能會下雪。
+113	star	[stɑr]	星星	[名詞]	I see a bright star.	我看到一顆亮亮的星星。
+114	rainbow	[ˈrenˌbo]	彩虹	[名詞]	A rainbow has many colors.	彩虹有很多顏色。
+115	typhoon	[taɪˈfun]	颱風	[名詞]	A typhoon brings strong wind.	颱風帶來強風。
+116	wind	[wɪnd]	風	[名詞]	The wind is strong.	風很大。
+117	weather	[ˈwɛðɚ]	天氣	[名詞]	The weather is cool.	天氣很涼。
+118	money	[ˈmʌnɪ]	錢	[名詞]	I save my money.	我把錢存起來。
+119	buy	[baɪ]	買	[動詞]	We buy bread.	我們買麵包。
+120	dollar	[ˈdɑlɚ]	美元/元	[名詞]	It costs one dollar.	它要一塊錢。
+121	free	[fri]	免費的	[形容詞]	The water is free.	這水是免費的。
+122	color	[ˈkʌlɚ]	顏色	[名詞]	What color do you like?	你喜歡什麼顏色？
+123	black	[blæk]	黑色	[形容詞]	The ball is black.	這顆球是黑色。
+124	white	[waɪt]	白色	[形容詞]	The ball is white.	這顆球是白色。
+125	red	[rɛd]	紅色	[形容詞]	The ball is red.	這顆球是紅色。
+126	orange	[ˈɔrɪndʒ]	橘色	[形容詞]	The ball is orange.	這顆球是橘色。
+127	yellow	[ˈjɛlo]	黃色	[形容詞]	The ball is yellow.	這顆球是黃色。
+128	green	[grin]	綠色	[形容詞]	The ball is green.	這顆球是綠色。
+129	blue	[blu]	藍色	[形容詞]	The ball is blue.	這顆球是藍色。
+130	purple	[ˈpɝpəl]	紫色	[形容詞]	The ball is purple.	這顆球是紫色。
+131	pink	[pɪŋk]	粉紅色	[形容詞]	The ball is pink.	這顆球是粉紅色。
+132	brown	[braʊn]	咖啡色	[形容詞]	The ball is brown.	這顆球是咖啡色。
+133	gray	[gre]	灰色	[形容詞]	The ball is gray.	這顆球是灰色。
+134	morning	[ˈmɔrnɪŋ]	早上	[名詞]	Good morning!	早安！
+135	noon	[nun]	中午	[名詞]	We eat at noon.	我們中午吃飯。
+136	afternoon	[ˌæftɚˈnun]	下午	[名詞]	I play in the afternoon.	我下午玩。
+137	evening	[ˈivnɪŋ]	傍晚	[名詞]	We walk in the evening.	我們傍晚散步。
+138	night	[naɪt]	晚上	[名詞]	Good night, Mom.	晚安，媽媽。
+139	week	[wik]	週	[名詞]	There are seven days in a week.	一週有七天。
+140	Monday	[ˈmʌnˌde]	星期一	[名詞]	Today is Monday.	今天是星期一。
+141	Tuesday	[ˈtjuzˌde]	星期二	[名詞]	Today is Tuesday.	今天是星期二。
+142	Wednesday	[ˈwɛnzˌde]	星期三	[名詞]	Today is Wednesday.	今天是星期三。
+143	Thursday	[ˈθɝzˌde]	星期四	[名詞]	Today is Thursday.	今天是星期四。
+144	Friday	[ˈfraɪˌde]	星期五	[名詞]	Today is Friday.	今天是星期五。
+145	Saturday	[ˈsætɚˌde]	星期六	[名詞]	Today is Saturday.	今天是星期六。
+146	Sunday	[ˈsʌnˌde]	星期日	[名詞]	Today is Sunday.	今天是星期日。
+147	month	[mʌnθ]	月份	[名詞]	A month has about 30 days.	一個月大約有三十天。
+148	January	[ˈdʒænjuˌɛrɪ]	一月	[名詞]	My birthday is in January.	我的生日在一月。
+149	February	[ˈfɛbjʊˌɛrɪ]	二月	[名詞]	My birthday is in February.	我的生日在二月。
+150	March	[mɑrtʃ]	三月	[名詞]	My birthday is in March.	我的生日在三月。
+151	April	[ˈeprəl]	四月	[名詞]	My birthday is in April.	我的生日在四月。
+152	May	[me]	五月	[名詞]	My birthday is in May.	我的生日在五月。
+153	June	[dʒun]	六月	[名詞]	My birthday is in June.	我的生日在六月。
+154	July	[dʒʊˈlaɪ]	七月	[名詞]	My birthday is in July.	我的生日在七月。
+155	August	[ˈɔgəst]	八月	[名詞]	My birthday is in August.	我的生日在八月。
+156	September	[sɛpˈtɛmbɚ]	九月	[名詞]	My birthday is in September.	我的生日在九月。
+157	October	[ɑkˈtobɚ]	十月	[名詞]	My birthday is in October.	我的生日在十月。
+158	November	[noˈvɛmbɚ]	十一月	[名詞]	My birthday is in November.	我的生日在十一月。
+159	December	[dɪˈsɛmbɚ]	十二月	[名詞]	My birthday is in December.	我的生日在十二月。
+160	season	[ˈsizən]	季節	[名詞]	Spring is my favorite season.	春天是我最喜歡的季節。
+161	spring	[sprɪŋ]	春天	[名詞]	Flowers bloom in spring.	春天花開。
+162	summer	[ˈsʌmɚ]	夏天	[名詞]	We swim in summer.	夏天我們游泳。
+163	fall	[fɔl]	秋天	[名詞]	Leaves fall in fall.	秋天葉子落下。
+164	winter	[ˈwɪntɚ]	冬天	[名詞]	It snows in winter.	冬天會下雪。
+165	day	[de]	天/日	[名詞]	A day has 24 hours.	一天有二十四小時。
+166	year	[jɪr]	年	[名詞]	This year I am ten.	今年我十歲。
+167	today	[təˈde]	今天	[名詞]	Today we have a test.	今天我們有小考。
+168	tomorrow	[təˈmɑro]	明天	[名詞]	See you tomorrow.	明天見。
+169	yesterday	[ˈjɛstɚˌde]	昨天	[名詞]	I played soccer yesterday.	我昨天踢足球。
+170	clock	[klɑk]	時鐘	[名詞]	The clock is big.	那個時鐘很大。
+171	watch	[wɑtʃ]	手錶	[名詞]	This is my watch.	這是我的手錶。
+172	time	[taɪm]	時間	[名詞]	What time is it?	現在幾點？
+173	early	[ˈɝlɪ]	早	[形容詞/副詞]	We get up early.	我們很早起床。
+174	late	[let]	晚/遲	[形容詞/副詞]	He is late for class.	他上課遲到。
+175	now	[naʊ]	現在	[時間副詞]	Do it now.	現在就做。
+176	animal	[ˈænəməl]	動物	[名詞]	This is an animal.	這是一種動物。
+177	pet	[pɛt]	寵物	[名詞]	I have a pet dog.	我有一隻寵物狗。
+178	bear	[bɛr]	熊	[名詞]	The bear is big.	熊很大。
+179	cat	[kæt]	貓	[名詞]	The cat is cute.	這隻貓很可愛。
+180	chicken	[ˈtʃɪkɪn]	雞	[名詞]	The chicken is small.	小雞很小。
+181	cow	[kaʊ]	牛	[名詞]	The cow eats grass.	牛吃草。
+182	dog	[dɔg]	狗	[名詞]	The dog runs fast.	狗跑得很快。
+183	elephant	[ˈɛləfənt]	大象	[名詞]	The elephant is big.	大象很大。
+184	horse	[hɔrs]	馬	[名詞]	The horse can run.	馬會跑。
+185	koala	[koˈɑlə]	無尾熊	[名詞]	The koala climbs trees.	無尾熊會爬樹。
+186	lion	[ˈlaɪən]	獅子	[名詞]	The lion is strong.	獅子很強壯。
+187	monkey	[ˈmʌŋkɪ]	猴子	[名詞]	The monkey climbs fast.	猴子爬得很快。
+188	mouse	[maʊs]	老鼠	[名詞]	The mouse is tiny.	老鼠很小。
+189	panda	[ˈpændə]	熊貓	[名詞]	The panda eats bamboo.	熊貓吃竹子。
+190	pig	[pɪg]	豬	[名詞]	The pig is pink.	豬是粉紅色的。
+191	rabbit	[ˈræbɪt]	兔子	[名詞]	The rabbit jumps high.	兔子跳得高。
+192	sheep	[ʃip]	羊	[名詞]	The sheep is white.	羊是白色的。
+193	snake	[snek]	蛇	[名詞]	The snake is long.	蛇很長。
+194	spider	[ˈspaɪdɚ]	蜘蛛	[名詞]	The spider makes a web.	蜘蛛會結網。
+195	tiger	[ˈtaɪgɚ]	老虎	[名詞]	The tiger is strong.	老虎很強壯。
+196	zebra	[ˈzibrə]	斑馬	[名詞]	The zebra has stripes.	斑馬有條紋。
+197	fish	[fɪʃ]	魚	[名詞]	The fish swims.	魚會游泳。
+198	frog	[frɔg]	青蛙	[名詞]	The frog jumps.	青蛙會跳。
+199	turtle	[ˈtɝtəl]	烏龜	[名詞]	The turtle walks slowly.	烏龜走得很慢。
+200	whale	[wel]	鯨魚	[名詞]	The whale is very big.	鯨魚很大。
+201	bird	[bɝd]	鳥	[名詞]	I see a bird.	我看到一隻鳥。
+202	duck	[dʌk]	鴨子	[名詞]	The duck swims.	那隻鴨子在游泳。
+203	bee	[bi]	蜜蜂	[名詞]	A bee is small.	蜜蜂很小。
+204	butterfly	[ˈbʌtɚˌflaɪ]	蝴蝶	[名詞]	The butterfly is pretty.	蝴蝶很漂亮。
+205	bite	[baɪt]	咬	[動詞]	The dog will not bite.	那隻狗不會咬人。
+206	clothes	[kloðz]	衣服	[名詞]	My clothes are clean.	我的衣服很乾淨。
+207	coat	[kot]	外套	[名詞]	Put on your coat.	穿上你的外套。
+208	dress	[drɛs]	洋裝	[名詞]	She wears a blue dress.	她穿藍色的洋裝。
+209	pants	[pænts]	褲子	[名詞]	His pants are black.	他的褲子是黑色的。
+210	shorts	[ʃɔrts]	短褲	[名詞]	I wear shorts in summer.	我夏天穿短褲。
+211	pocket	[ˈpɑkɪt]	口袋	[名詞]	The key is in my pocket.	鑰匙在我的口袋裡。
+212	shirt	[ʃɝt]	襯衫	[名詞]	This shirt is new.	這件襯衫是新的。
+213	skirt	[skɝt]	裙子	[名詞]	The skirt is pink.	這條裙子是粉紅色的。
+214	sweater	[ˈswɛtɚ]	毛衣	[名詞]	This sweater is warm.	這件毛衣很保暖。
+215	bag	[bæg]	包包	[名詞]	This is my bag.	這是我的包包。
+216	cap	[kæp]	鴨舌帽	[名詞]	He wears a cap.	他戴著鴨舌帽。
+217	hat	[hæt]	帽子	[名詞]	She has a big hat.	她有一頂大帽子。
+218	shoes	[ʃuz]	鞋子	[名詞]	My shoes are blue.	我的鞋子是藍色的。
+219	socks	[sɑks]	襪子	[名詞]	I wear red socks.	我穿紅色的襪子。
+220	glasses	[ˈglæsɪz]	眼鏡	[名詞]	Dad wears glasses.	爸爸戴眼鏡。
+221	wear	[wɛr]	穿／戴	[動詞]	We wear uniforms at school.	我們在學校穿制服。
+222	family	[ˈfæməlɪ]	家庭／家人	[名詞]	My family is big.	我的家庭很大。
+223	father	[ˈfɑðɚ]	父親	[名詞]	My father cooks dinner.	我爸爸煮晚餐。
+224	mother	[ˈmʌðɚ]	母親	[名詞]	My mother is kind.	我媽媽很親切。
+225	parent	[ˈpɛrənt]	家長/父或母	[名詞]	My parent is at work.	我的家長在上班。
+226	brother	[ˈbrʌðɚ]	兄弟	[名詞]	I play with my brother.	我和我的哥哥/弟弟玩。
+227	sister	[ˈsɪstɚ]	姊妹	[名詞]	My sister draws a picture.	我的姊姊/妹妹畫畫。
+228	son	[sʌn]	兒子	[名詞]	Their son is six.	他們的兒子六歲。
+229	daughter	[ˈdɔtɚ]	女兒	[名詞]	Her daughter likes cats.	她的女兒喜歡貓。
+230	grandfather	[ˈgrænˌfɑðɚ]	祖父/外公	[名詞]	Grandfather tells a story.	祖父說故事。
+231	grandmother	[ˈgrænˌmʌðɚ]	祖母/外婆	[名詞]	Grandmother makes cookies.	祖母做餅乾。
+232	uncle	[ˈʌŋkəl]	叔叔/舅舅	[名詞]	My uncle drives a car.	我的叔叔開車。
+233	aunt	[ænt]	阿姨/姑姑	[名詞]	My aunt is a nurse.	我的阿姨是護士。
+234	cousin	[ˈkʌzən]	堂(表)兄弟姊妹	[名詞]	I visit my cousin.	我去看我的表(堂)兄弟姊妹。
+235	grow	[gro]	成長/生長	[動詞]	Plants grow in spring.	植物在春天生長。
+236	live	[lɪv]	居住	[動詞]	I live in a house.	我住在一間房子裡。
+237	fruit	[frut]	水果	[名詞]	I like fruit.	我喜歡水果。
+238	apple	[ˈæpəl]	蘋果	[名詞]	I eat an apple.	我吃一顆蘋果。
+239	banana	[bəˈnænə]	香蕉	[名詞]	He peels a banana.	他剝一根香蕉。
+240	grape	[grep]	葡萄	[名詞]	We share grapes.	我們分享葡萄。
+241	lemon	[ˈlɛmən]	檸檬	[名詞]	The lemon is sour.	檸檬很酸。
+242	orange	[ˈɔrɪndʒ]	橘子	[名詞]	She peels an orange.	她在剝橘子。
+243	peach	[pitʃ]	桃子	[名詞]	The peach is sweet.	桃子很甜。
+244	food	[fud]	食物	[名詞]	The food is yummy.	這些食物很好吃。
+245	beef	[bif]	牛肉	[名詞]	Beef is tasty.	牛肉很好吃。
+246	chicken	[ˈtʃɪkɪn]	雞肉	[名詞]	We eat chicken for dinner.	我們晚餐吃雞肉。
+247	duck	[dʌk]	鴨肉	[名詞]	Mom cooks duck.	媽媽煮鴨肉。
+248	fish	[fɪʃ]	魚肉	[名詞]	The fish is fresh.	魚很新鮮。
+249	pork	[pɔrk]	豬肉	[名詞]	Pork is on the plate.	盤子上有豬肉。
+250	noodles	[ˈnudəlz]	麵	[名詞]	I like noodles.	我喜歡吃麵。
+251	egg	[ɛg]	蛋	[名詞]	I have an egg.	我有一顆蛋。
+252	rice	[raɪs]	飯	[名詞]	I eat rice.	我吃白飯。
+253	salad	[ˈsælɪd]	沙拉	[名詞]	She makes a salad.	她做沙拉。
+254	soup	[sup]	湯	[名詞]	The soup is hot.	湯很熱。
+255	cake	[kek]	蛋糕	[名詞]	This cake is big.	這個蛋糕很大。
+256	candy	[ˈkændɪ]	糖果	[名詞]	Candy is sweet.	糖果很甜。
+257	chocolate	[ˈtʃɑklɪt]	巧克力	[名詞]	I love chocolate.	我喜歡巧克力。
+258	cookie	[ˈkʊkɪ]	餅乾	[名詞]	I eat a cookie.	我吃一片餅乾。
+259	bread	[brɛd]	麵包	[名詞]	We bake bread.	我們烤麵包。
+260	ice cream	[ˈaɪs ˌkrim]	冰淇淋	[名詞]	We eat ice cream.	我們吃冰淇淋。
+261	pie	[paɪ]	派	[名詞]	The pie smells good.	這個派很香。
+262	pizza	[ˈpitsə]	披薩	[名詞]	We share a pizza.	我們分享一個披薩。
+263	sandwich	[ˈsændwɪtʃ]	三明治	[名詞]	He makes a sandwich.	他做一個三明治。
+264	coffee	[ˈkɔfɪ]	咖啡	[名詞]	Dad drinks coffee.	爸爸喝咖啡。
+265	coke	[kok]	可樂	[名詞]	I drink coke.	我喝可樂。
+266	juice	[dʒus]	果汁	[名詞]	She drinks juice.	她喝果汁。
+267	milk	[mɪlk]	牛奶	[名詞]	I drink milk.	我喝牛奶。
+268	tea	[ti]	茶	[名詞]	Grandma drinks tea.	奶奶喝茶。
+269	water	[ˈwɔtɚ]	水	[名詞]	Water is clear.	水很清澈。
+270	breakfast	[ˈbrɛkfəst]	早餐	[名詞]	Breakfast is at 7.	早餐在七點。
+271	lunch	[lʌntʃ]	午餐	[名詞]	Lunch is at noon.	午餐在中午。
+272	dinner	[ˈdɪnɚ]	晚餐	[名詞]	Dinner is at six.	晚餐在六點。
+273	cook	[kʊk]	煮/做菜	[動詞]	Dad cooks dinner.	爸爸煮晚餐。
+274	drink	[drɪŋk]	喝	[動詞]	I drink water.	我喝水。
+275	eat	[it]	吃	[動詞]	We eat lunch at school.	我們在學校吃午餐。
+276	taste	[test]	嚐起來	[動詞]	The soup tastes good.	這湯喝起來很好喝。
+277	Miss	[mɪs]	小姐	[名詞]	Good morning, Miss Chen.	陳小姐，早安。
+278	Mr.	[ˈmɪstɚ]	先生	[名詞]	Hello, Mr. Lin.	林先生，你好。
+279	Mrs.	[ˈmɪsɪz]	太太	[名詞]	Thank you, Mrs. Wang.	謝謝你，王太太。
+280	name	[nem]	名字	[名詞]	What is your name?	你叫什麼名字？
+281	beach	[bitʃ]	海灘	[名詞]	We play at the beach.	我們在海灘玩。
+282	lake	[lek]	湖	[名詞]	The lake is calm.	湖面很平靜。
+283	mountain	[ˈmaʊntən]	山	[名詞]	The mountain is high.	那座山很高。
+284	river	[ˈrɪvɚ]	河	[名詞]	The river is long.	這條河很長。
+285	sea	[si]	海	[名詞]	The sea is blue.	海是藍色的。
+286	house	[haʊs]	房子	[名詞]	This is my house.	這是我的房子。
+287	home	[hom]	家	[名詞]	I go home after school.	放學後我回家。
+288	garden	[ˈgɑrdn]	花園	[名詞]	There are flowers in the garden.	花園裡有花。
+289	street	[strit]	街道	[名詞]	Cars are on the street.	街上有車子。
+290	living room	[ˈlɪvɪŋ ˌrum]	客廳	[名詞]	We sit in the living room.	我們坐在客廳。
+291	door	[dɔr]	門	[名詞]	Open the door, please.	請把門打開。
+292	fan	[fæn]	電風扇	[名詞]	The fan is on.	電風扇開著。
+293	floor	[flɔr]	地板	[名詞]	The floor is clean.	地板很乾淨。
+294	sofa	[ˈsofə]	沙發	[名詞]	I sit on the sofa.	我坐在沙發上。
+295	telephone	[ˈtɛləˌfon]	電話	[名詞]	The telephone rings.	電話在響。
+296	television	[ˈtɛləˌvɪʒən]	電視	[名詞]	We watch television.	我們在看電視。
+297	wall	[wɔl]	牆壁	[名詞]	The wall is white.	牆是白色的。
+298	window	[ˈwɪndo]	窗戶	[名詞]	Open the window.	把窗戶打開。
+299	dining room	[ˈdaɪnɪŋ ˌrum]	餐廳	[名詞]	We eat in the dining room.	我們在餐廳吃飯。
+300	table	[ˈtebəl]	桌子	[名詞]	The table is round.	這張桌子是圓的。
+301	kitchen	[ˈkɪtʃɪn]	廚房	[名詞]	Mom is in the kitchen.	媽媽在廚房。
+302	refrigerator	[rɪˈfrɪdʒəˌretɚ]	冰箱	[名詞]	The refrigerator is cold.	冰箱很冷。
+303	bedroom	[ˈbɛdˌrum]	臥室	[名詞]	My bedroom is small.	我的臥室很小。
+304	bed	[bɛd]	床	[名詞]	This bed is soft.	這張床很軟。
+305	chair	[tʃɛr]	椅子	[名詞]	Sit on the chair.	坐在椅子上。
+306	desk	[dɛsk]	書桌	[名詞]	This is my desk.	這是我的書桌。
+307	computer	[kəmˈpjutɚ]	電腦	[名詞]	I use the computer.	我用電腦。
+308	lamp	[læmp]	檯燈	[名詞]	Turn on the lamp.	把檯燈打開。
+309	key	[ki]	鑰匙	[名詞]	I have a key.	我有一把鑰匙。
+310	shelf	[ʃɛlf]	架子	[名詞]	The books are on the shelf.	書在架子上。
+311	bathroom	[ˈbæθˌrum]	浴室	[名詞]	The bathroom is clean.	浴室很乾淨。
+312	shower	[ˈʃaʊɚ]	淋浴	[名詞]	I take a shower.	我洗澡。
+313	towel	[ˈtaʊəl]	毛巾	[名詞]	This towel is dry.	這條毛巾是乾的。
+314	sweep	[swip]	掃地	[動詞]	I sweep the floor.	我掃地。
+315	wash	[wɑʃ]	洗	[動詞]	Wash your hands.	把手洗乾淨。
+316	work	[wɝk]	工作	[動詞]	We work together.	我們一起工作。
+317	job	[dʒɑb]	工作	[名詞]	Dad has a new job.	爸爸有一份新工作。
+318	cook	[kʊk]	廚師	[名詞]	My mom is a cook.	我媽媽是廚師。
+319	doctor	[ˈdɑktɚ]	醫生	[名詞]	The doctor helps people.	醫生幫助人們。
+320	driver	[ˈdraɪvɚ]	司機	[名詞]	The driver drives a bus.	司機開公車。
+321	farmer	[ˈfɑrmɚ]	農夫	[名詞]	The farmer grows rice.	農夫種稻米。
+322	nurse	[nɝs]	護士	[名詞]	The nurse is kind.	護士很親切。
+323	police officer	[pəˈlis ˌɔfɪsɚ]	警察	[名詞]	The police officer keeps us safe.	警察保護我們。
+324	singer	[ˈsɪŋɚ]	歌手	[名詞]	She is a singer.	她是一位歌手。
+325	soldier	[ˈsoldʒɚ]	士兵	[名詞]	The soldier is brave.	那位士兵很勇敢。
+326	happy	[ˈhæpɪ]	開心的	[形容詞]	I am happy today.	我今天很開心。
+327	angry	[ˈæŋgrɪ]	生氣的	[形容詞]	He is angry.	他很生氣。
+328	good	[gʊd]	好的	[形容詞]	This is a good book.	這是一本好書。
+329	bad	[bæd]	不好的	[形容詞]	The milk smells bad.	牛奶聞起來不好。
+330	tall	[tɔl]	高的	[形容詞]	The boy is tall.	那個男孩很高。
+331	short	[ʃɔrt]	矮的/短的	[形容詞]	The girl is short.	那個女孩很矮。
+332	fat	[fæt]	胖的	[形容詞]	The cat is fat.	那隻貓很胖。
+333	thin	[θɪn]	瘦的	[形容詞]	The man is thin.	那個男人很瘦。
+334	busy	[ˈbɪzɪ]	忙碌的	[形容詞]	Mom is busy.	媽媽很忙。
+335	cute	[kjut]	可愛的	[形容詞]	The puppy is cute.	小狗很可愛。
+336	old	[old]	老的/舊的	[形容詞]	This bike is old.	這台腳踏車很舊。
+337	young	[jʌŋ]	年輕的	[形容詞]	The teacher is young.	那位老師很年輕。
+338	smart	[smɑrt]	聰明的	[形容詞]	She is smart.	她很聰明。
+339	sad	[sæd]	難過的	[形容詞]	I feel sad.	我覺得難過。
+340	pretty	[ˈprɪtɪ]	漂亮的	[形容詞]	The flower is pretty.	那朵花很漂亮。
+341	bank	[bæŋk]	銀行	[名詞]	We go to the bank.	我們去銀行。
+342	bookstore	[ˈbʊkˌstor]	書店	[名詞]	I buy a book at the bookstore.	我在書店買一本書。
+343	library	[ˈlaɪˌbrɛrɪ]	圖書館	[名詞]	I read in the library.	我在圖書館讀書。
+344	market	[ˈmɑrkɪt]	市場	[名詞]	Mom buys fruit at the market.	媽媽在市場買水果。
+345	office	[ˈɔfɪs]	辦公室	[名詞]	Dad works in an office.	爸爸在辦公室上班。
+346	park	[pɑrk]	公園	[名詞]	We play at the park.	我們在公園玩。
+347	restaurant	[ˈrɛstəˌrɑnt]	餐廳	[名詞]	We eat at a restaurant.	我們在餐廳吃飯。
+348	restroom	[ˈrɛstˌrum]	洗手間	[名詞]	The restroom is clean.	洗手間很乾淨。
+349	store	[stor]	商店	[名詞]	This store is new.	這家商店是新的。
+350	supermarket	[ˈsupɚˌmɑrkɪt]	超市	[名詞]	We shop at the supermarket.	我們在超市購物。
+351	zoo	[zu]	動物園	[名詞]	We see lions at the zoo.	我們在動物園看到獅子。
+352	fire station	[ˈfaɪɚ ˌsteʃən]	消防局	[名詞]	The fire station is near the park.	消防局在公園附近。
+353	hospital	[ˈhɑspɪˌtəl]	醫院	[名詞]	The hospital is big.	這家醫院很大。
+354	police station	[pəˈlis ˌsteʃən]	警察局	[名詞]	The police station is on this street.	警察局在這條街上。
+355	post office	[ˈpost ˌɔfɪs]	郵局	[名詞]	I mail a letter at the post office.	我在郵局寄信。
+356	right	[raɪt]	右邊	[名詞]	Turn right here.	在這裡向右轉。
+357	left	[lɛft]	左邊	[名詞]	Turn left at the corner.	在轉角向左轉。
+358	back	[bæk]	後面	[名詞]	The ball is behind my back.	球在我背後。
+359	here	[hɪr]	這裡	[名詞]	Come here, please.	請到這裡來。
+360	there	[ðɛr]	那裡	[名詞]	The cat is there.	那隻貓在那裡。
+361	school	[skul]	學校	[名詞]	I walk to school.	我走路去學校。
+362	teacher	[ˈtitʃɚ]	老師	[名詞]	My teacher is nice.	我的老師很親切。
+363	student	[ˈstudənt]	學生	[名詞]	I am a student.	我是一名學生。
+364	classmate	[ˈklæsˌmet]	同學	[名詞]	He is my classmate.	他是我的同學。
+365	test	[tɛst]	考試	[名詞]	We have a test today.	我們今天有考試。
+366	blackboard	[ˈblækˌbord]	黑板	[名詞]	The blackboard is clean.	黑板很乾淨。
+367	book	[bʊk]	書	[名詞]	This book is fun.	這本書很好玩。
+368	classroom	[ˈklæsˌrum]	教室	[名詞]	Our classroom is bright.	我們的教室很明亮。
+369	Chinese	[tʃaɪˈniz]	中文	[名詞]	This is Chinese.	這是中文。
+370	English	[ˈɪŋglɪʃ]	英文	[名詞]	This is English.	這是英文。
+371	art	[ɑrt]	美術	[名詞]	We draw in art class.	我們在美術課畫畫。
+372	math	[mæθ]	數學	[名詞]	Math is fun.	數學很好玩。
+373	physical education	[ˌfɪzɪkəl ˌɛdʒəˈkeʃən]	體育	[名詞]	We run in physical education.	我們在體育課跑步。
+374	music	[ˈmjuzɪk]	音樂	[名詞]	We sing in music class.	我們在音樂課唱歌。
+375	science	[ˈsaɪəns]	自然	[名詞]	Science is interesting.	自然課很有趣。
+376	eraser	[ɪˈresɚ]	橡皮擦	[名詞]	I use an eraser.	我用橡皮擦。
+377	friend	[frɛnd]	朋友	[名詞]	He is my friend.	他是我的朋友。
+378	glue	[glu]	膠水	[名詞]	Use glue to stick it.	用膠水把它黏起來。
+379	homework	[ˈhomˌwɝk]	作業	[名詞]	I do my homework.	我要寫作業。
+380	paper	[ˈpepɚ]	紙	[名詞]	Give me a piece of paper.	請給我一張紙。
+381	pencil	[ˈpɛnsəl]	鉛筆	[名詞]	I sharpen my pencil.	我要削鉛筆。
+382	ruler	[ˈrulɚ]	尺	[名詞]	I use a ruler.	我用尺量長度。
+383	picture	[ˈpɪktʃɚ]	圖片/圖畫	[名詞]	This picture is beautiful.	這張圖很漂亮。
+384	question	[ˈkwɛstʃən]	問題	[名詞]	I have a question.	我有一個問題。
+385	story	[ˈstorɪ]	故事	[名詞]	Grandpa tells a story.	爺爺講一個故事。
+386	ask	[æsk]	問	[動詞]	I ask a question.	我問一個問題。
+387	answer	[ˈænsɚ]	回答	[動詞]	Please answer the question.	請回答這個問題。
+388	draw	[drɔ]	畫畫	[動詞]	I draw a cat.	我畫一隻貓。
+389	listen	[ˈlɪsən]	聽	[動詞]	Listen to the teacher.	請聽老師講。
+390	read	[rid]	讀/看	[動詞]	I read a story.	我讀一個故事。
+391	say	[se]	說	[動詞]	Please say your name.	請說出你的名字。
+392	spell	[spɛl]	拼字	[動詞]	I can spell my name.	我會拼我的名字。
+393	study	[ˈstʌdɪ]	讀書	[動詞]	We study English.	我們學英文。
+394	write	[raɪt]	寫	[動詞]	Write your name.	寫下你的名字。
+395	big	[bɪg]	大的	[形容詞]	The box is big.	這個箱子很大。
+396	small	[smɔl]	小的	[形容詞]	The ant is small.	這隻螞蟻很小。
+397	long	[lɔŋ]	長的	[形容詞]	The rope is long.	這條繩子很長。
+398	short	[ʃɔrt]	矮的/短的	[形容詞]	The girl is short.	那個女孩很矮。
+399	heavy	[ˈhɛvɪ]	重的	[形容詞]	The bag is heavy.	這個包包很重。
+400	light	[laɪt]	輕的	[形容詞]	The bag is light.	這個包很輕。
+401	high	[haɪ]	高的	[形容詞]	The wall is high.	這面牆很高。
+402	low	[lo]	低的	[形容詞]	The chair is low.	這張椅子很低。
+403	sport	[spɔrt]	運動	[名詞]	Sport is fun.	運動很好玩。
+404	ball	[bɔl]	球	[名詞]	This is a ball.	這是一顆球。
+405	baseball	[ˈbesˌbɔl]	棒球	[名詞]	We play baseball.	我們打棒球。
+406	basketball	[ˈbæskɪtˌbɔl]	籃球	[名詞]	He plays basketball.	他打籃球。
+407	soccer	[ˈsɑkɚ]	足球	[名詞]	They play soccer.	他們踢足球。
+408	doll	[dɔl]	洋娃娃	[名詞]	The doll is pretty.	那個洋娃娃很漂亮。
+409	drum	[drʌm]	鼓	[名詞]	I play the drum.	我打鼓。
+410	game	[gem]	遊戲	[名詞]	This game is fun.	這個遊戲很好玩。
+411	kite	[kaɪt]	風箏	[名詞]	The kite flies high.	風箏飛很高。
+412	movie	[ˈmuvɪ]	電影	[名詞]	We watch a movie.	我們看電影。
+413	piano	[piˈæno]	鋼琴	[名詞]	She plays the piano.	她彈鋼琴。
+414	song	[sɔŋ]	歌曲	[名詞]	This song is nice.	這首歌很好聽。
+415	toy	[tɔɪ]	玩具	[名詞]	That toy is new.	那個玩具是新的。
+416	trip	[trɪp]	旅行	[名詞]	We go on a trip.	我們去旅行。
+417	climb	[klaɪm]	爬	[動詞]	We climb the hill.	我們爬小山。
+418	dance	[dæns]	跳舞	[動詞]	They dance to music.	他們跟著音樂跳舞。
+419	fish	[fɪʃ]	釣魚	[動詞]	We fish at the lake.	我們在湖邊釣魚。
+420	kick	[kɪk]	踢	[動詞]	He kicks the ball.	他踢球。
+421	play	[ple]	玩	[動詞]	I play with my friends.	我和朋友一起玩。
+422	run	[rʌn]	跑步	[動詞]	I run fast.	我跑得很快。
+423	sing	[sɪŋ]	唱歌	[動詞]	She sings well.	她唱得很好。
+424	swim	[swɪm]	游泳	[動詞]	They swim in the pool.	他們在泳池裡游泳。
+425	win	[wɪn]	贏	[動詞]	We will win the game.	我們會贏得比賽。
+426	chopsticks	[ˈtʃɑpˌstɪks]	筷子	[名詞]	I eat noodles with chopsticks.	我用筷子吃麵。
+427	spoon	[spun]	湯匙	[名詞]	Use a spoon for soup.	喝湯要用湯匙。
+428	knife	[naɪf]	刀子	[名詞]	Be careful with the knife.	用刀子要小心。
+429	fork	[fɔrk]	叉子	[名詞]	Use a fork to eat salad.	用叉子吃沙拉。
+430	cup	[kʌp]	杯子	[名詞]	This cup is blue.	這個杯子是藍色的。
+431	dish	[dɪʃ]	盤子	[名詞]	The dish is on the table.	盤子在桌上。
+432	glass	[glæs]	玻璃杯	[名詞]	The glass is full.	玻璃杯裝滿了。
+433	airplane	[ˈɛrˌplen]	飛機	[名詞]	We take an airplane.	我們搭飛機。
+434	bicycle	[ˈbaɪˌsɪkəl]	腳踏車	[名詞]	I ride a bicycle.	我騎腳踏車。
+435	boat	[bot]	小船	[名詞]	The boat is on the lake.	小船在湖上。
+436	ship	[ʃɪp]	大船/船	[名詞]	The ship is big.	那艘船很大。
+437	bus	[bʌs]	公車	[名詞]	We go by bus.	我們搭公車去。
+438	car	[kɑr]	汽車	[名詞]	This car is red.	這台車是紅色的。
+439	motorcycle	[ˈmoʊtɚˌsaɪkəl]	機車	[名詞]	He rides a motorcycle.	他騎機車。
+440	MRT	[ˌɛm ɑr ˌti]	捷運	[名詞]	We take the MRT.	我們搭捷運。
+441	taxi	[ˈtæksɪ]	計程車	[名詞]	We take a taxi.	我們搭計程車。
+442	train	[tren]	火車	[名詞]	The train is fast.	火車很快。
+443	truck	[trʌk]	卡車	[名詞]	The truck is heavy.	卡車很重。
+444	fast	[fæst]	快的	[形容詞]	The cheetah is fast.	獵豹很快。
+445	slow	[slo]	慢的	[形容詞]	The turtle is slow.	烏龜很慢。
+446	drive	[draɪv]	開(車)	[動詞]	Dad drives a car.	爸爸開車。
+447	fly	[flaɪ]	飛/搭飛機	[動詞]	The plane can fly high.	飛機可以飛很高。
+448	ride	[raɪd]	騎/乘坐	[動詞]	I ride a bicycle.	我騎腳踏車。
+449	turn	[tɝn]	轉彎	[動詞]	Turn left at the corner.	在轉角向左轉。
+450	goodbye	[gʊdˈbaɪ]	再見	[感嘆詞]	Goodbye, see you tomorrow.	再見，明天見。
+451	hello	[hɛˈlo]	哈囉/你好	[感嘆詞]	Hello, my name is Tom.	哈囉，我叫湯姆。
+452	please	[pliz]	請	[名詞]	Please sit down.	請坐。
+453	at	[æt]	在...（地點/時間）	[介系詞]	We meet at school.	我們在學校見面。
+454	in	[ɪn]	在...裡面	[介系詞]	The cat is in the box.	貓在盒子裡。
+455	out	[aʊt]	向外	[介系詞]	We go out to play.	我們出去玩。
+456	by	[baɪ]	藉由/乘坐（交通工具）	[介系詞]	I go to school by bus.	我搭公車上學。
+457	outside	[ˌaʊtˈsaɪd]	在...外面	[介系詞]	The dog is outside.	狗在外面。
+458	inside	[ˌɪnˈsaɪd]	在...裡面	[介系詞]	The bird is inside the cage.	鳥在籠子裡。
+459	next to	[ˈnɛkst tu]	在...旁邊	[介系詞]	The school is next to the park.	學校在公園旁邊。
+460	on	[ɑn]	在...上面	[介系詞]	The book is on the desk.	書在桌上。
+461	over	[ˈovɚ]	在...上方/越過	[介系詞]	The plane flies over the city.	飛機從城市上空飛過。
+462	under	[ˈʌndɚ]	在...下面	[介系詞]	The ball is under the chair.	球在椅子下面。
+463	near	[nɪr]	在...附近	[介系詞]	My home is near the lake.	我家在湖的附近。
+464	before	[bɪˈfor]	在...之前	[介系詞]	Wash your hands before lunch.	午餐前請洗手。
+465	after	[ˈæftɚ]	在...之後	[介系詞]	We play after class.	下課後我們玩。
+466	in front of	[ɪn ˈfrʌnt əv]	在...前面	[介系詞]	The car is in front of the house.	車子在房子前面。
+467	behind	[bɪˈhaɪnd]	在...後面	[介系詞]	The tree is behind the house.	樹在房子後面。
+468	same	[sem]	相同的	[形容詞]	These bags are the same.	這兩個包包是一樣的。
+469	different	[ˈdɪfərənt]	不同的	[形容詞]	The two cats are different.	這兩隻貓不一樣。
+470	easy	[ˈizɪ]	容易的	[形容詞]	This test is easy.	這次考試很簡單。
+471	hard	[hɑrd]	困難的/硬的	[形容詞]	The math is hard.	這題數學很難。
+472	fine	[faɪn]	好的	[形容詞]	Everything is fine.	一切都很好。
+473	fun	[fʌn]	有趣的	[形容詞]	The game is fun.	這個遊戲很好玩。
+474	great	[gret]	很棒的	[形容詞]	You did a great job!	你做得很棒！
+475	hot	[hɑt]	熱的	[形容詞]	The soup is hot.	湯很熱。
+476	new	[nju]	新的	[形容詞]	This is a new bike.	這是一台新腳踏車。
+477	OK	[oˈke]	可以/好的	[形容詞]	It is OK.	可以的。
+478	only	[ˈonlɪ]	僅有的	[形容詞]	This is my only pen.	這是我唯一的一支筆。
+479	noisy	[ˈnɔɪzɪ]	吵的	[形容詞]	The class is noisy.	班上很吵。
+480	quiet	[ˈkwaɪət]	安靜的	[形容詞]	The library is quiet.	圖書館很安靜。
+481	ready	[ˈrɛdɪ]	準備好的	[形容詞]	I am ready.	我準備好了。
+482	right	[raɪt]	正確的	[形容詞]	Your answer is right.	你的答案是對的。
+483	wrong	[rɔŋ]	錯的	[形容詞]	That is the wrong way.	那是錯的路。
+484	sorry	[ˈsɑrɪ]	對不起	[形容詞]	I am sorry.	對不起。
+485	sure	[ʃʊr]	確定的/當然	[形容詞]	I am sure.	我很確定。
+486	dry	[draɪ]	乾的	[形容詞]	The towel is dry.	毛巾是乾的。
+487	wet	[wɛt]	濕的	[形容詞]	The floor is wet.	地板是濕的。
+488	sweet	[swit]	甜的	[形容詞]	The cake is sweet.	蛋糕很甜。
+489	again	[əˈgɛn]	再一次	[副詞]	Please say it again.	請再說一次。
+490	always	[ˈɔlˌwez]	總是	[副詞]	She always smiles.	她總是微笑。
+491	maybe	[ˈmeˌbɪ]	也許	[副詞]	Maybe it will rain.	也許會下雨。
+492	never	[ˈnɛvɚ]	從不	[副詞]	I never lie.	我從不說謊。
+493	no	[no]	不/不是	[副詞]	No, thank you.	不用，謝謝。
+494	not	[nɑt]	不	[副詞]	I am not late.	我沒有遲到。
+495	only	[ˈonlɪ]	僅僅	[副詞]	I only have a pen.	我只有一支筆。
+496	really	[ˈrɪəlɪ]	真的	[副詞]	I really like it.	我真的很喜歡。
+497	so	[so]	如此/所以	[副詞]	I am so happy.	我好開心。
+498	still	[stɪl]	仍然	[副詞]	He is still here.	他還在這裡。
+499	sure	[ʃʊr]	確定的/當然	[副詞]	I am sure.	我很確定。
+500	then	[ðɛn]	然後	[副詞]	Then we go home.	然後我們回家。
+501	together	[təˈgɛðɚ]	一起	[副詞]	We walk together.	我們一起走。
+502	too	[tu]	也/太	[副詞]	Me too.	我也是。
+503	very	[ˈvɛrɪ]	非常	[副詞]	I am very tired.	我很累。
+504	yes	[jɛs]	是的	[副詞]	Yes, I understand.	是的，我懂了。
+

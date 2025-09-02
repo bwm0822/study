@@ -9,28 +9,31 @@
     body{background:#212529;color:#f8f9fa}
     .container-narrow{max-width:980px}
     .navbar{border-bottom:1px solid rgba(255,255,255,.15)}
-    .table thead th{position:sticky; top:0; z-index:1; background:#1b1f22}
     tr.group-start td{border-top-width:2px !important}
-    th.col-word{width:220px}
-    th.col-ex{width:auto}
-    th.col-idx{width:72px}
-    td.small-muted{color:#adb5bd;font-size:.9rem}
-    .input-group .form-control.is-invalid{border-color:#dc3545}
 
-    td[data-say]{cursor:pointer;transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease}
-    td[data-say]:hover{background-color:rgba(255,255,255,.06)}
-    td[data-say]:active{transform:scale(1.03)}
-    @media (prefers-reduced-motion: reduce){ td[data-say]{transition:none} }
-    td[data-say].speaking{outline:2px solid var(--bs-primary); box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
+    /* 兩欄表格（無表頭） */
+    .table{table-layout:fixed}
+    .idx-cell{width:72px;cursor:pointer;user-select:none}
 
-    /* 編號欄位：整格可點；★ 只在標註時顯示 */
-    td.idx-cell{cursor:pointer; user-select:none}
+    /* 次要文字 */
+    .small-muted{color:#adb5bd;font-size:.9rem}
+
+    /* 可發音效果（英語） */
+    [data-say]{cursor:pointer;transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease}
+    [data-say]:hover{background-color:rgba(255,255,255,.06)}
+    [data-say]:active{transform:scale(1.03)}
+    @media (prefers-reduced-motion: reduce){[data-say]{transition:none}}
+    .speaking{outline:2px solid var(--bs-primary);box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
+
+    /* 左欄索引＋★ */
     .idx-wrap{display:flex;flex-direction:column;align-items:center;gap:.25rem}
-    .idx-star{
-      font-size:18px;
-      line-height:1;
-      color:#fff !important; /* ← 讓星星永遠是白色 */
-    }
+    .idx-star{font-size:18px;line-height:1;color:#fff !important}
+
+    /* 文字排版 */
+    .word-line b{font-size:1.05rem}
+    .kk{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:0 .5rem;opacity:.95}
+
+    .input-group .form-control.is-invalid{border-color:#dc3545}
   </style>
 </head>
 <body>
@@ -73,16 +76,9 @@
       </div>
     </nav>
 
-    <!-- 表格 -->
+    <!-- 兩欄表格（無表頭；每筆三行） -->
     <div class="table-responsive">
       <table id="voca" class="table table-dark table-hover align-middle mb-3">
-        <thead>
-          <tr>
-            <th class="col-idx">#</th>
-            <th class="col-word">單字 / 中文 / 詞性</th>
-            <th class="col-ex">例句（英 / 中）</th>
-          </tr>
-        </thead>
         <tbody></tbody>
       </table>
     </div>
@@ -113,28 +109,28 @@
     const $starCount = document.getElementById('starCount');
 
     let voices = [];
-    let rows = [];       // 所有單字
-    let rowsStar = [];   // 本頁展示用（初始化為已標註；切頁時才清掉取消標註者）
+    let rows = [];       // 所有單字（從 voca.txt 讀入）
+    let rowsStar = [];   // 僅顯示已標註
     let rate = parseFloat(localStorage.getItem('tts.rate') || '1') || 1;
     let currentPage = parseInt(localStorage.getItem('voca.review.currentPage') || '1', 10) || 1;
 
-    // ---- 解析 voca.txt ----
+    /* ====== 解析 voca.txt：7 欄 ======
+       #, word, KK, 中文, 詞性, 例句EN, 例句ZH
+    ================================== */
     function parseTSV(txt){
       return txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n')
         .map(l=>l.trim()).filter(l=>l && !l.startsWith('#'))
         .map(line=>{
-          const parts=line.split('\t');
-          const [idx,en,zh,pos,exEn,exZh] = [
-            parts[0]||'', parts[1]||'', parts[2]||'',
-            (parts[3]||''), (parts[4]||parts[3]||''), (parts[5]||'')
+          const p=line.split('\t');
+          const [idx,word,kk,zh,pos,exEn,exZh] = [
+            p[0]||'', p[1]||'', p[2]||'',
+            p[3]||'', p[4]||'', p[5]||'', p[6]||''
           ];
-          let _pos = pos, _exEn = exEn, _exZh = exZh;
-          if (parts.length===4){ _pos=''; _exEn=parts[3]; _exZh=''; }
-          return {idx,en,zh,pos:_pos,exEn:_exEn,exZh:_exZh};
+          return { idx, word, kk, zh, pos, exEn, exZh };
         });
     }
 
-    // ---- 語音 ----
+    /* ====== 語音 ====== */
     function loadVoices(){ voices = speechSynthesis.getVoices(); populateVoiceSelects(); }
     function populateVoiceSelects(){
       if (!voices.length) return;
@@ -159,7 +155,6 @@
     loadVoices();
     if('onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged=loadVoices;
 
-    // ---- TTS ----
     function getVoiceByValue(val){
       if(!val) return null;
       const [name,lang]=val.split('||');
@@ -181,7 +176,7 @@
       speechSynthesis.speak(u);
     }
 
-    // ---- 標註存取 ----
+    /* ====== 標註存取 ====== */
     function loadStars(){
       try{
         const arr = JSON.parse(localStorage.getItem('voca.stars') || '[]');
@@ -190,10 +185,7 @@
     }
     function saveStars(list){
       const nums=[], strs=[];
-      for(const v of list){
-        const n=Number(v);
-        if(!Number.isNaN(n)) nums.push(n); else strs.push(String(v));
-      }
+      for(const v of list){ const n=Number(v); if(!Number.isNaN(n)) nums.push(n); else strs.push(String(v)); }
       nums.sort((a,b)=>a-b); strs.sort();
       const merged=[...nums.map(n=>String(n)), ...strs];
       localStorage.setItem('voca.stars', JSON.stringify(merged));
@@ -203,15 +195,12 @@
     function isStarred(idx){ return getStarsSet().has(String(idx)); }
     function updateStarCount(){ $starCount.textContent = `★ ${loadStars().length}`; }
 
-    // ---- rowsStar 初始化 & 清除未標註列 ----
+    /* ====== 以星號建立 rowsStar，並在切頁時清掉未標註 ====== */
     function buildInitialStarRows(){
       const set = getStarsSet();
       rowsStar = rows.filter(r => set.has(String(r.idx)));
       const nums=[],strs=[];
-      for(const r of rowsStar){
-        const n = Number(r.idx);
-        if(!Number.isNaN(n)) nums.push(r); else strs.push(r);
-      }
+      for(const r of rowsStar){ const n=Number(r.idx); if(!Number.isNaN(n)) nums.push(r); else strs.push(r); }
       nums.sort((a,b)=>Number(a.idx)-Number(b.idx));
       strs.sort((a,b)=>String(a.idx).localeCompare(String(b.idx)));
       rowsStar = [...nums, ...strs];
@@ -221,21 +210,18 @@
       rowsStar = rowsStar.filter(r => set.has(String(r.idx)));
     }
 
-    // ---- 分頁（切頁時才清掉已取消標註）----
     function savePage(){ localStorage.setItem('voca.review.currentPage', String(currentPage)); }
     function goPage(p){
       const totalPages = Math.ceil(rowsStar.length / pageSize) || 1;
       const nextPage = Math.min(Math.max(1, p), totalPages || 1);
-      if (nextPage !== currentPage){
-        purgeUnstarredFromRowsStar(); // 切頁才清理
-      }
+      if (nextPage !== currentPage){ purgeUnstarredFromRowsStar(); }
       currentPage = Math.min(Math.max(1, nextPage), Math.ceil(rowsStar.length / pageSize) || 1);
       savePage();
       render();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ---- 渲染 ----
+    /* ====== 渲染：兩欄、每筆三行 ====== */
     function render(){
       $tbody.innerHTML='';
       const totalPages = Math.ceil(rowsStar.length / pageSize) || 1;
@@ -256,9 +242,10 @@
 
       const start=(currentPage-1)*pageSize;
       const pageRows=rowsStar.slice(start,start+pageSize);
-      const starSet = getStarsSet(); // 依當前狀態決定是否顯示★
+      const starSet = getStarsSet();
 
       for(const r of pageRows){
+        // 第 1 行：左(#/★)、右( word [KK] 中文 [詞性] ) —— 點單字會發音
         const tr1=document.createElement('tr');
         tr1.className='group-start';
 
@@ -280,35 +267,30 @@
         idxWrap.append(idxText,starSpan);
         tdIdx.appendChild(idxWrap);
 
-        const tdEn=document.createElement('td');
-        tdEn.innerHTML=`<b>${r.en}</b>`;
-        tdEn.setAttribute('data-say', r.en);
-        tdEn.setAttribute('data-lang','en');
+        const tdMain=document.createElement('td');
+        tdMain.className='word-line';
+        tdMain.setAttribute('data-say', r.word);
+        tdMain.setAttribute('data-lang','en');
+        tdMain.innerHTML = `<b>${escapeHTML(r.word)}</b> <span class="kk">${escapeHTML(r.kk)}</span> <span>${escapeHTML(r.zh)}</span> <span class="small-muted">${escapeHTML(r.pos)}</span>`;
 
+        tr1.append(tdIdx, tdMain);
+
+        // 第 2 行：右(英文例句，可點發音)
+        const tr2=document.createElement('tr');
         const tdExEn=document.createElement('td');
         tdExEn.textContent = r.exEn || '';
         if (r.exEn){
           tdExEn.setAttribute('data-say', r.exEn);
           tdExEn.setAttribute('data-lang','en');
         }
-        tr1.append(tdIdx, tdEn, tdExEn);
+        tr2.append(tdExEn);
 
-        const tr2=document.createElement('tr');
-        const tdZh=document.createElement('td');
-        tdZh.className='small-muted';
-        tdZh.textContent=r.zh;
+        // 第 3 行：右(中文例句)
+        const tr3=document.createElement('tr');
         const tdExZh=document.createElement('td');
         tdExZh.className='small-muted';
-        tdExZh.textContent=r.exZh || '';
-        tr2.append(tdZh, tdExZh);
-
-        const tr3=document.createElement('tr');
-        const tdPos=document.createElement('td');
-        tdPos.className='small-muted';
-        tdPos.textContent=r.pos || '';
-        const tdEmpty=document.createElement('td');
-        tdEmpty.textContent='';
-        tr3.append(tdPos, tdEmpty);
+        tdExZh.textContent = r.exZh || '';
+        tr3.append(tdExZh);
 
         $tbody.append(tr1, tr2, tr3);
       }
@@ -318,6 +300,9 @@
       updateStarCount();
     }
 
+    function escapeHTML(s){return (s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+    /* ====== 分頁/快速鍵 ====== */
     function renderPagination(totalPages){
       $pagination.innerHTML='';
       const add=(label,page,disabled=false,active=false)=>{
@@ -375,14 +360,14 @@
       }
     }
 
-    // ---- 載入資料 ----
+    /* ====== 載入資料 ====== */
     async function loadData(){
       try{
         const res = await fetch('content/voca.txt?c='+Date.now());
         if(!res.ok) throw new Error('HTTP '+res.status);
         const text = await res.text();
         rows = parseTSV(text);
-        buildInitialStarRows();  // 以當下標註建立列表
+        buildInitialStarRows();
         const totalPages = Math.ceil(rowsStar.length/pageSize) || 1;
         if (currentPage > totalPages) currentPage = totalPages || 1;
         if (currentPage < 1) currentPage = 1;
@@ -392,8 +377,8 @@
       }
     }
 
-    // ---- 事件 ----
-    // 點「編號欄位」→ 只切星號與計數，不立刻移除列；切頁時才清掉
+    /* ====== 事件 ====== */
+    // 左欄：點一下切換★（不立刻移除列；切頁時才清）
     document.getElementById('voca').addEventListener('click', ev=>{
       const idxCell = ev.target.closest('td.idx-cell');
       if (idxCell){
@@ -407,25 +392,23 @@
         ev.stopPropagation();
         return;
       }
-      // 英文發音
-      const td = ev.target.closest('td[data-say]');
-      if(!td) return;
-      const text = td.getAttribute('data-say')||td.textContent||'';
-      if (td.getAttribute('data-lang')!=='en') return;
-      td.classList.add('speaking');
-      speak(text, EN_LANG, ()=>td.classList.remove('speaking'));
+      // 右欄：按「單字」或「英文例句」會發音（只播英文）
+      const el = ev.target.closest('[data-say]');
+      if(!el) return;
+      const text = el.getAttribute('data-say')||el.textContent||'';
+      const lang = (el.getAttribute('data-lang')||'').toLowerCase().startsWith('en')?EN_LANG:ZH_LANG;
+      if (lang!==EN_LANG) return;
+      el.classList.add('speaking');
+      speak(text, EN_LANG, ()=>el.classList.remove('speaking'));
     });
 
-    // 返回
     document.getElementById('backBtn').addEventListener('click', ()=>history.back());
-
-    // 清除標註 → 立刻清除資料＋畫面（變空）
     document.getElementById('clearStarsBtn').addEventListener('click', ()=>{
       if (!confirm('確定要清除所有標註嗎？')) return;
       localStorage.setItem('voca.stars', '[]');
       rowsStar = [];
       currentPage = 1;
-      render(); // 立刻進入空狀態
+      render();
     });
 
     // 語音設定
@@ -445,6 +428,7 @@
   </script>
 </body>
 </html>
+
 
 
 
