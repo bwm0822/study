@@ -264,14 +264,15 @@
         tdMain.className='word-line';
         tdMain.setAttribute('data-say', r.word);
         tdMain.setAttribute('data-lang','en');
-        tdMain.innerHTML = `<b>${escapeHTML(r.word)}</b> <span class="kk">${escapeHTML(r.kk)}</span> <span>${escapeHTML(r.zh)}</span> <span class="small-muted">${escapeHTML(r.pos)}</span>`;
+        tdMain.innerHTML = `<b>${escapeHTML(r.word)}</b> <span class="kk small-muted">${escapeHTML(r.kk)}</span> <span class="small">${escapeHTML(r.zh)}</span> <span class="small-muted">${escapeHTML(r.pos)}</span>`;
 
         tr1.append(tdIdx, tdMain);
 
         // 第 2 行：右(英文例句，可點發音)
         const tr2=document.createElement('tr');
         const tdExEn=document.createElement('td');
-        tdExEn.textContent = r.exEn || '';
+        // tdExEn.textContent = r.exEn || '';
+        tdExEn.innerHTML = `<span class="small-muted">${r.exEn || ''}</span>`;
         if (r.exEn){
           tdExEn.setAttribute('data-say', r.exEn);
           tdExEn.setAttribute('data-lang','en');
@@ -281,8 +282,9 @@
         // 第 3 行：右(中文例句)
         const tr3=document.createElement('tr');
         const tdExZh=document.createElement('td');
-        tdExZh.className='small-muted';
-        tdExZh.textContent = r.exZh || '';
+        // tdExZh.className='small-muted';
+        // tdExZh.textContent = r.exZh || '';
+        tdExZh.innerHTML = `<span class="small-muted">${r.exZh || ''}</span>`;
         tr3.append(tdExZh);
 
         $tbody.append(tr1, tr2, tr3);
@@ -345,7 +347,7 @@
         qp.appendChild(makeBtn('>>', ()=>goPage(currentPage+1)));
       }else if(currentPage>=totalPages){
         qp.appendChild(makeBtn('<<', ()=>goPage(currentPage-1)));
-        qp.appendChild(makeBtn('last', null, true, true));
+        qp.appendChild(makeBtn(String(totalPages), null, true, true));
       }else{
         qp.appendChild(makeBtn('<<', ()=>goPage(currentPage-1)));
         qp.appendChild(makeBtn(String(currentPage), null, true, true));
