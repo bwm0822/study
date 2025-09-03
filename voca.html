@@ -35,9 +35,34 @@
     .kk{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; margin:0 .5rem; opacity:.95}
 
     .input-group .form-control.is-invalid{border-color:#dc3545}
-
-    /* 語音控制列：同一列時讓滑桿不會太長 */
     .range-inline{width:260px;min-width:180px}
+
+    /* 🔍 搜尋下拉選單樣式 */
+    .search-wrap{position:relative;}
+    .search-menu{
+      position:absolute; left:0; right:0; top:100%;
+      z-index:1000; display:none;
+      max-height:260px; overflow:auto;
+      background:#1b1f22; border:1px solid rgba(255,255,255,.12);
+      border-radius:.5rem; margin-top:.25rem;
+    }
+    .search-menu.show{display:block}
+    .search-item{display:block; width:100%; text-align:left; padding:.35rem .75rem; border:0; background:transparent; color:#f8f9fa}
+    .search-item:hover{background:rgba(255,255,255,.06)}
+    .search-empty{padding:.5rem .75rem; color:#adb5bd}
+    .search-word{font-weight:600}
+    .search-zh{margin-left:.5rem; color:#adb5bd}
+
+    /* 頂部工具列：右側群組靠右；可換行後仍靠右 */
+    #topBar{ gap:.5rem; }
+    .right-tools{ min-width:220px; margin-left:auto; } /* ms-auto 的 CSS 等價寫法，確保靠右 */
+
+    /* 縮小欄位寬度（頁碼＋搜尋） */
+    .jump-group{ width:120px; }                         /* 頁碼輸入更窄 */
+    /* .search-flex{ width:clamp(140px, 28vw, 240px); }    搜尋欄更窄且彈性 */
+    .search-flex{ width:160px; }
+    .search-wrap .input-group-text{ padding:.2rem .45rem; font-size:.85rem; }
+    #searchClear{ padding:.2rem .45rem; }
   </style>
 </head>
 <body>
@@ -53,7 +78,7 @@
   </nav>
 
   <main class="container container-narrow my-3">
-    <!-- 語音控制列（英文語音 + 語速在同一列） -->
+    <!-- 語音控制列 -->
     <div class="card mb-3 bg-dark text-light border-secondary">
       <div class="card-body">
         <div class="d-flex align-items-center flex-wrap gap-3">
@@ -66,12 +91,30 @@
       </div>
     </div>
 
-    <!-- 分頁控制（上方） -->
-    <nav class="mb-2 d-flex justify-content-center align-items-center gap-2 flex-wrap">
-      <ul id="pagination" class="pagination mb-0"></ul>
-      <div class="input-group input-group-sm" style="width:170px">
-        <input id="pageJump" type="number" class="form-control bg-dark text-light border-secondary" min="1" placeholder="直接輸入頁碼">
-        <button id="pageGo" class="btn btn-outline-light">Go</button>
+    <!-- 分頁（左） + 頁碼輸入與搜尋（右，靠右對齊；可換行後仍靠右） -->
+    <nav id="topBar" class="mb-2 d-flex align-items-center flex-wrap">
+      <!-- 左側：分頁按鈕 -->
+      <ul id="pagination" class="pagination mb-2 mb-lg-0"></ul>
+
+      <!-- 右側：輸入頁碼 + 搜尋 -->
+      <div class="right-tools d-flex align-items-center flex-wrap gap-2 justify-content-end">
+        <!-- 頁碼輸入（縮小寬度） -->
+        <div class="input-group input-group-sm jump-group">
+          <input id="pageJump" type="number" class="form-control bg-dark text-light border-secondary" min="1" placeholder="頁碼">
+          <button id="pageGo" class="btn btn-outline-light">Go</button>
+        </div>
+
+        <!-- 🔍 搜尋（縮小寬度） -->
+        <div class="search-flex">
+          <div class="search-wrap w-100">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-dark text-light border-secondary">&#x1F50D;&#xFE0E;</span>
+              <input id="searchInput" type="text" class="form-control bg-dark text-light border-secondary" placeholder="" autocomplete="off">
+              <button id="searchClear" class="btn btn-outline-light" title="清除">×</button>
+            </div>
+            <div id="searchMenu" class="search-menu"></div>
+          </div>
+        </div>
       </div>
     </nav>
 
@@ -98,6 +141,13 @@
     const $rate = document.getElementById('rate');
     const $rateVal = document.getElementById('rateVal');
 
+    // 🔍 搜尋相關
+    const $searchInput = document.getElementById('searchInput');
+    const $searchMenu  = document.getElementById('searchMenu');
+    const $searchClear = document.getElementById('searchClear');
+    let searchIndex = [];        // {key, word, zh, i, idxValue}
+    let highlightIdxValue = null; // 跳頁後要高亮的 idx（第一欄）
+
     let voices = [];
     let rows = [];
     let rate = parseFloat(localStorage.getItem('tts.rate') || '1') || 1;
@@ -110,11 +160,8 @@
     if (!isNaN(urlPage)  && urlPage  > 0) currentPage = urlPage;
     else if (!isNaN(savedPage) && savedPage > 0) currentPage = savedPage;
 
-    /* ====== 語音：只處理英文 ====== */
-    function loadVoices(){
-      voices = speechSynthesis.getVoices();
-      populateEnVoices();
-    }
+    /* ====== 語音 ====== */
+    function loadVoices(){ voices = speechSynthesis.getVoices(); populateEnVoices(); }
     function populateEnVoices(){
       if (!voices.length) return;
       const enList = voices
@@ -171,7 +218,11 @@
       currentPage = Math.min(Math.max(1, p), totalPages);
       savePage();
       render();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // 只有不是搜尋跳轉時才捲到頁首，避免蓋掉目標捲動
+      if (highlightIdxValue == null) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
 
     /* ====== 星號（標註） ====== */
@@ -209,7 +260,7 @@
       return txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n')
         .map(l=>l.trim()).filter(l=>l && !l.startsWith('#'))
         .map(line=>{
-          const parts=line.split('\t');
+          const parts=line.split('\t').map(p=>(p??'').trim());
           const [idx, word, kk, zh, pos, exEn, exZh] = [
             parts[0]||'', parts[1]||'', parts[2]||'',
             parts[3]||'', parts[4]||'', parts[5]||'', parts[6]||''
@@ -265,7 +316,6 @@
         // 第 2 行：英文例句
         const tr2=document.createElement('tr');
         const tdExEn=document.createElement('td');
-        // tdExEn.textContent = exEn || '';
         tdExEn.innerHTML = `<span class="small-muted">${exEn || ''}</span>`;
         if (r.exEn){
           tdExEn.setAttribute('data-say', r.exEn);
@@ -276,8 +326,6 @@
         // 第 3 行：中文例句
         const tr3=document.createElement('tr');
         const tdExZh=document.createElement('td');
-        // tdExZh.className='small-muted';
-        // tdExZh.textContent = exZh || '';
         tdExZh.innerHTML = `<span class="small-muted">${exZh || ''}</span>`;
         tr3.append(tdExZh);
 
@@ -286,6 +334,20 @@
 
       renderPagination();
       renderQuickPager();
+
+      // 🔍 若剛從搜尋跳來：高亮並捲到中間（等排版完成再捲）
+      if (highlightIdxValue != null){
+        const selector = `td.idx-cell[data-idx="${CSS.escape(String(highlightIdxValue))}"]`;
+        const cell = document.querySelector(selector);
+        if (cell){
+          cell.classList.add('speaking');
+          requestAnimationFrame(() => {
+            cell.scrollIntoView({ behavior:'smooth', block:'center' });
+          });
+          setTimeout(()=>cell.classList.remove('speaking'), 900);
+        }
+        highlightIdxValue = null;
+      }
     }
 
     /* ====== 分頁 UI ====== */
@@ -427,6 +489,63 @@
       if (!isNaN(p) && p !== currentPage) { currentPage = p; render(); }
     });
 
+    /* ====== 🔍 搜尋 ====== */
+    function buildSearchIndex(){
+      searchIndex = rows.map((r,i)=>({
+        key: (r.word||'').toLowerCase(),
+        word: r.word || '',
+        zh: r.zh || '',
+        i,
+        idxValue: r.idx
+      }));
+    }
+
+    function showSearchMenu(items){
+      $searchMenu.innerHTML = '';
+      if (!items.length){
+        const empty = document.createElement('div');
+        empty.className='search-empty';
+        empty.textContent='沒有符合的單字';
+        $searchMenu.appendChild(empty);
+      }else{
+        for(const it of items){
+          const btn = document.createElement('button');
+          btn.className='search-item';
+          btn.type='button';
+          btn.dataset.i = String(it.i);
+          btn.dataset.idxValue = String(it.idxValue ?? '');
+          btn.innerHTML = `<span class="search-word">${escapeHTML(it.word)}</span><span class="search-zh">${escapeHTML(it.zh)}</span>`;
+          btn.addEventListener('click', ()=>{
+            const i = Number(btn.dataset.i);
+            if (!Number.isInteger(i) || i < 0 || i >= rows.length) { hideSearchMenu(); return; }
+            const page = Math.floor(i / pageSize) + 1;   // 用 rows 的索引換頁
+            highlightIdxValue = rows[i].idx;             // 指定要高亮的 idx
+
+            hideSearchMenu();
+            $searchInput.blur();
+            goPage(page);
+          });
+          $searchMenu.appendChild(btn);
+        }
+      }
+      $searchMenu.classList.add('show');
+    }
+    function hideSearchMenu(){ $searchMenu.classList.remove('show'); }
+
+    // 搜尋事件：只列出以字首開頭的單字
+    $searchInput.addEventListener('input', ()=>{
+      const q = ($searchInput.value || '').trim().toLowerCase();
+      if (!q){ hideSearchMenu(); return; }
+      const matches = searchIndex
+        .filter(it => it.key.startsWith(q))
+        .sort((a,b)=> a.word.localeCompare(b.word,'en',{sensitivity:'base'}));
+      showSearchMenu(matches.slice(0,30));
+    });
+    $searchInput.addEventListener('focus', ()=>{ $searchInput.dispatchEvent(new Event('input')); });
+    $searchInput.addEventListener('keydown', (e)=>{ if (e.key === 'Escape'){ hideSearchMenu(); $searchInput.blur(); }});
+    $searchClear.addEventListener('click', ()=>{ $searchInput.value=''; hideSearchMenu(); $searchInput.focus(); });
+    document.addEventListener('click', (e)=>{ if (!e.target.closest('.search-wrap')) hideSearchMenu(); });
+
     // 初始化
     (function init(){
       $rate.value=rate.toFixed(2);
@@ -440,6 +559,7 @@
         if(!res.ok) throw new Error('HTTP '+res.status);
         const text=await res.text();
         rows=parseTSV(text);
+        buildSearchIndex(); // 🔍 讀入資料後建立搜尋索引
 
         const totalPages=Math.ceil(rows.length/pageSize)||1;
         if (currentPage>totalPages) currentPage=totalPages;
@@ -452,6 +572,7 @@
   </script>
 </body>
 </html>
+
 
 
 
