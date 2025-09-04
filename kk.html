@@ -2,189 +2,508 @@
 <html lang="zh-Hant" data-bs-theme="dark">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KK 音標</title>
-  <!-- Bootstrap 5.3 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body {background:#212529; color:#f8f9fa;}
-    .tile {
-      min-height:60px;
-      font-size:24px;
-      font-weight:700;
-      padding:.5rem;
-      transition: transform 0.1s ease, background-color 0.2s ease;
+    :root{
+      /* ★ 全站統一欄寬（總和 100%）— 加大字母欄、縮小音標欄 */
+      --col-w-letters: 28%;
+      --col-w-symbol : 18%;
+      --col-w-desc   : 22%;
+      --col-w-words  : 32%;
+      --navbar-h     : 56px; /* navbar 高度，供滾動定位 */
     }
-    .tile.playing {
-      outline:2px solid var(--bs-primary);
-      box-shadow:0 0 0 .25rem rgba(var(--bs-primary-rgb),.25) inset;
+
+    html{scroll-behavior:smooth}
+    body{background:#212529;color:#f8f9fa}
+    .navbar{border-bottom:1px solid rgba(255,255,255,.15)}
+
+    /* ---- TTS 控制欄（外框 + 同一列 + 白字） ---- */
+    .tts-card{border:1px solid rgba(255,255,255,.25)}
+    .tts-bar{display:flex;align-items:center;gap:.8rem;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap}
+    .range-inline{width:280px;min-width:200px}
+    .tts-select{min-width:260px}
+
+    /* ---- 外框只包表格，不含大小標題 ---- */
+    .table-frame{border:1px solid rgba(255,255,255,.2);border-radius:.6rem;overflow:hidden}
+    .table-frame .table{margin-bottom:0}
+
+    /* 每個小節自己的表格，固定版面以對齊欄位 */
+    .section-table{table-layout:fixed;width:100%}
+    .section-table thead th{position:sticky;top:0;z-index:1;background:#1b1f22}
+
+    /* 大小標題（不在外框內、無 hover），並預留滾動定位空間 */
+    .h1-title{color:#fff;font-weight:700;font-size:1.05rem;margin:1rem 0 .4rem; scroll-margin-top:calc(var(--navbar-h) + 10px)}
+    .h2-title{color:#ced4da;font-weight:600;font-size:.95rem;margin:.5rem 0 .6rem; scroll-margin-top:calc(var(--navbar-h) + 10px)}
+    .h1-title,.h2-title{user-select:text}
+
+    /* 統一欄寬（所有表格共用） */
+    .col-letters{width:var(--col-w-letters)}
+    .col-symbol {width:var(--col-w-symbol)}
+    .col-desc   {width:var(--col-w-desc)}
+    .col-words  {width:var(--col-w-words)}
+
+    /* 防止內容溢出重疊（超出以省略號） */
+    .section-table th,
+    .section-table td{overflow:hidden;text-overflow:ellipsis}
+
+    /* 欄位內容樣式 */
+    td.letters{white-space:nowrap}
+    td.symbol{white-space:nowrap}            /* 音標不換行 */
+    td.desc{color:#adb5bd;white-space:normal;word-break:break-word}
+    td.words{white-space:normal;word-break:break-word}
+
+    /* 互動（只在表格內作用） */
+    td[data-play], .say-token{
+      cursor:pointer;transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease
     }
-    .tile.btn:hover {
-      background-color: rgba(255,255,255,.15);
-    }
-    .tile.btn:active {
-      transform: scale(1.1);
+    td[data-play]:hover, .say-token:hover{background-color:rgba(255,255,255,.06)}
+    td[data-play]:active, .say-token:active{transform:scale(1.03)}
+    .playing{outline:2px solid var(--bs-primary);box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
+    .word-group{display:flex;flex-wrap:wrap;gap:.35rem .6rem}
+
+    /* 章節目錄下拉（右上角） */
+    .dropdown-menu-dark{--bs-dropdown-bg:#1f2428;--bs-dropdown-link-active-bg:#0d6efd}
+    .dropdown-menu{max-height:70vh; overflow:auto}
+    .toc-h2{padding-left:1.5rem}
+
+    /* 小螢幕時再給字母欄多一點空間 */
+    @media (max-width: 576px){
+      :root{
+        --col-w-letters: 32%;
+        --col-w-symbol : 17%;
+        --col-w-desc   : 21%;
+        --col-w-words  : 30%;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- 導覽列（暗色） -->
   <nav class="navbar navbar-dark bg-dark">
-    <div class="container container-narrow d-flex align-items-center">
-      <!-- 左邊區塊：返回 + 標題 -->
-      <div class="d-flex align-items-center">
-        <button class="btn btn-outline-light btn-sm me-3" onclick="history.back()">返回</button>
-        <span class="h5 mb-0 text-white">KK 音標</span>
-      </div>
+    <div class="container d-flex align-items-center">
+      <button id="backBtn" class="btn btn-outline-light btn-sm">返回</button>
+      <span class="navbar-brand ms-3 mb-0 h1">KK 音標</span>
 
-      <!-- 右邊區塊：狀態徽章 -->
-      <span id="status" class="badge text-bg-secondary ms-auto">尚未載入</span>
+      <!-- 右側：章節目錄 Dropdown（不改網址） -->
+      <div class="dropdown ms-auto">
+        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button"
+                id="tocDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          章節目錄
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="tocDropdown" id="tocMenu"></ul>
+      </div>
     </div>
   </nav>
 
-  <div class="container py-3">
-    
-    <div id="error" class="alert alert-danger d-none" role="alert"></div>
+  <main class="container py-3">
+    <!-- ★ 英文語音 / 語速 控制列（同一列、白字、外框，設定可儲存） -->
+    <div class="card tts-card mb-3 bg-dark text-white">
+      <div class="card-body py-2">
+        <div class="tts-bar">
+          <span class="me-1">英文語音：</span>
+          <select id="selEn" class="form-select form-select-sm w-auto tts-select bg-dark text-white border-secondary"></select>
 
-    <div class="row g-3">
-      <div class="col-12">
-        <h2 class="h6 mb-2">母音 Vowels（17）</h2>
-        <div id="gridV" class="row g-2" aria-live="polite"></div>
-      </div>
-      <div class="col-12">
-        <h2 class="h6 mb-2">子音 Consonants（24）</h2>
-        <div id="gridC" class="row g-2" aria-live="polite"></div>
+          <span class="ms-3 me-1">語速 :</span>
+          <span id="rateVal" class="me-2">1.00</span>
+          <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00" />
+        </div>
       </div>
     </div>
-  </div>
+
+    <div id="content"></div> <!-- 大/小標題 + 多個表格外框都插在這 -->
+    <audio id="player" preload="auto"></audio>
+  </main>
+
+  <!-- Bootstrap JS（啟用 dropdown） -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-  const DEFAULT_URL = 'audio/kk.mp3';
-  const VOWELS = ['i','ɪ','e','ɛ','æ','ɑ','ɔ','o','u','ʊ','ʌ','ə','ɚ','ɝ','aɪ','aʊ','ɔɪ'];
-  const CONSONANTS = ['p','b','t','d','k','g','f','v','θ','ð','s','z','ʃ','ʒ','tʃ','dʒ','h','m','n','ŋ','l','r','w','j'];
-  const SEGMENTS = {
-    'i':{start:60+47,dur:0.5},
-    'ɪ':{start:60+51,dur:0.5},
-    'e':{start:60+55,dur:0.5},
-    'ɛ':{start:60+55,dur:0.5},
-    'æ':{start:60+59,dur:0.5},
-    'ɑ':{start:120+3,dur:0.5},
-    'ɔ':{start:120+7,dur:0.5},
+    // ====== 返回鍵 ======
+    document.getElementById('backBtn').addEventListener('click', ()=>history.back());
 
+    // ====== TTS 控制（UI + 永續存取） ======
+    const selEn   = document.getElementById('selEn');
+    const rateEl  = document.getElementById('rate');
+    const rateVal = document.getElementById('rateVal');
+    let voices = [];
 
-    'o':{start:4.90,dur:0.60},
-    'u':{start:5.60,dur:0.60},
-    'ʊ':{start:6.30,dur:0.60},
-    'ʌ':{start:7.00,dur:0.60},
-
-    'ə':{start:120+10.5,dur:0.5},
-    'ɚ':{start:8.40,dur:0.60},
-
-    'ɝ':{start:9.10,dur:0.60},
-    'aɪ':{start:9.80,dur:0.70},
-    'aʊ':{start:10.60,dur:0.70},
-    'ɔɪ':{start:11.40,dur:0.70},
-
-    'p':{start:12.30,dur:0.50},
-    'b':{start:13.50,dur:0.50},
-    't':{start:15.50,dur:0.50},
-    'd':{start:19.00,dur:0.50},
-    'k':{start:23.00,dur:0.50},
-    'g':{start:26.50,dur:0.50},
-    'f':{start:30.00,dur:0.50},
-    'v':{start:34.00,dur:0.50},
-    'θ':{start:38.50,dur:0.50},
-    'ð':{start:17.70,dur:0.55},
-    's':{start:18.30,dur:0.50},
-    'z':{start:18.90,dur:0.50},
-    'ʃ':{start:19.50,dur:0.55},
-    'ʒ':{start:20.15,dur:0.55},
-    'tʃ':{start:20.85,dur:0.55},
-    'dʒ':{start:21.50,dur:0.55},
-    'h':{start:22.15,dur:0.45},
-    'm':{start:22.65,dur:0.55},
-    'n':{start:23.25,dur:0.55},
-    'ŋ':{start:23.85,dur:0.55},
-    'l':{start:24.45,dur:0.60},
-    'r':{start:25.10,dur:0.60},
-    'w':{start:25.75,dur:0.55},
-    'j':{start:26.35,dur:0.55},
-  };
-
-  const gridV=document.getElementById('gridV');
-  const gridC=document.getElementById('gridC');
-  const statusEl=document.getElementById('status');
-  const errorEl=document.getElementById('error');
-
-  function tile(sym){
-    const col=document.createElement('div');
-    col.className='col-3 col-sm-2 col-md-1';
-    const btn=document.createElement('button');
-    btn.className='tile btn btn-outline-light w-100';
-    btn.type='button'; btn.textContent=sym; btn.disabled=true;
-    btn.addEventListener('click',()=>playSymbol(sym,{tile:btn}));
-    col.appendChild(btn);
-    return col;
-  }
-  function renderTiles(){
-    gridV.innerHTML=''; gridC.innerHTML='';
-    VOWELS.forEach(s=>gridV.appendChild(tile(s)));
-    CONSONANTS.forEach(s=>gridC.appendChild(tile(s)));
-  }
-  renderTiles();
-
-  let ctx,audioBuffer=null,currentSrc=null,currentGain=null;
-  function getAC(){return window.AudioContext||window.webkitAudioContext;}
-  async function ensureCtx(){if(!ctx){const AC=getAC();ctx=new AC();} if(ctx.state==='suspended')await ctx.resume(); return ctx;}
-  function decodeWithFallback(context,arr){return new Promise((res,rej)=>{try{const p=context.decodeAudioData(arr,res,rej);if(p&&typeof p.then==='function'){p.then(res).catch(rej);}}catch(e){rej(e);}});}
-
-  async function loadDefault(){
-    try{
-      await ensureCtx();
-      statusEl.className='badge text-bg-warning'; statusEl.textContent='載入中…';
-      const res=await fetch(DEFAULT_URL,{cache:'no-store'});
-      if(!res.ok) throw new Error('下載失敗：HTTP '+res.status+'：'+DEFAULT_URL);
-      const arr=await res.arrayBuffer();
-      audioBuffer=await decodeWithFallback(ctx,arr);
-      statusEl.className='badge text-bg-success';
-      statusEl.textContent=`已載入 ✓ ${audioBuffer.duration.toFixed(2)}s @ ${audioBuffer.sampleRate}Hz`;
-      document.querySelectorAll('.tile').forEach(b=> b.disabled=false);
-    }catch(e){
-      console.error(e);
-      audioBuffer=null;
-      statusEl.className='badge text-bg-danger'; statusEl.textContent='載入失敗';
-      errorEl.textContent='錯誤：'+e.message; errorEl.classList.remove('d-none');
-      document.querySelectorAll('.tile').forEach(b=> b.disabled=true);
+    function populateVoices(){
+      voices = speechSynthesis.getVoices() || [];
+      const list = voices
+        .filter(v => v.lang && /^en/i.test(v.lang))
+        .sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'en'));
+      const saved = localStorage.getItem('tts.enVoice');
+      selEn.innerHTML = '';
+      list.forEach(v=>{
+        const opt=document.createElement('option');
+        opt.value = v.name + '||' + v.lang;
+        opt.textContent = `${v.name} (${v.lang})${v.default?' ★':''}`;
+        selEn.appendChild(opt);
+      });
+      if (saved && [...selEn.options].some(o=>o.value===saved)) selEn.value = saved;
+      else if (list.length) selEn.value = list[0].value;
     }
-  }
+    function getSavedVoice(){
+      const saved = localStorage.getItem('tts.enVoice');
+      if (!saved) return (voices.find(v=>/^en/i.test(v.lang)) || null);
+      const [name,lang] = saved.split('||');
+      return voices.find(v=>v.name===name&&v.lang===lang) || voices.find(v=>/^en/i.test(v.lang)) || null;
+    }
+    function getSavedRate(){
+      const r = parseFloat(localStorage.getItem('tts.rate') || '1');
+      return isNaN(r) ? 1 : r;
+    }
 
-  function stop(){
-    if(currentSrc){ try{ currentSrc.stop(); }catch(_){} }
-    if(currentGain){ try{ currentGain.disconnect(); }catch(_){} }
-    currentSrc=null; currentGain=null;
-    document.querySelectorAll('.tile.playing').forEach(el=>el.classList.remove('playing'));
-  }
+    (function initRate(){
+      const r = getSavedRate();
+      rateEl.value = r.toFixed(2);
+      rateVal.textContent = r.toFixed(2);
+    })();
+    rateEl.addEventListener('input', ()=>{
+      const r = parseFloat(rateEl.value) || 1;
+      rateVal.textContent = r.toFixed(2);
+      localStorage.setItem('tts.rate', r);
+    });
+    selEn.addEventListener('change', ()=> localStorage.setItem('tts.enVoice', selEn.value));
 
-  function clamp(val,min,max){return Math.max(min,Math.min(max,val));}
-  function playSymbol(sym,{tile=null}={}){
-    if(!audioBuffer){alert('音檔尚未載入');return;}
-    const seg=SEGMENTS[sym]; if(!seg){alert('未找到分段設定：'+sym);return;}
-    stop();
-    const start=clamp(seg.start,0,Math.max(0,audioBuffer.duration-0.01));
-    const dur=Math.max(0.02,Math.min(seg.dur,audioBuffer.duration-start));
-    const src=ctx.createBufferSource(); src.buffer=audioBuffer;
-    src.playbackRate.value=1.0;
-    const gain=ctx.createGain(); gain.gain.setValueAtTime(1,ctx.currentTime);
-    src.connect(gain).connect(ctx.destination);
-    const now=ctx.currentTime; gain.gain.setValueAtTime(1,now+dur-0.03); gain.gain.linearRampToValueAtTime(0.0001,now+dur);
-    src.start(0,start,dur); currentSrc=src; currentGain=gain;
-    if(tile){tile.classList.add('playing'); src.onended=()=>tile.classList.remove('playing');}
-  }
+    populateVoices();
+    if ('onvoiceschanged' in speechSynthesis){
+      speechSynthesis.onvoiceschanged = populateVoices;
+    } else {
+      setTimeout(populateVoices, 400);
+    }
 
-  window.addEventListener('pointerdown',async()=>{try{await ensureCtx();}catch(_){}} ,{once:true});
-  loadDefault();
+    // ====== 常數（內容解析） ======
+    const TXT_URL    = 'content/kk.txt';   // Tab：字母/音標/mp3/start/end/發音/單字範例
+    const AUDIO_BASE = 'content/audio/';
+
+    const content  = document.getElementById('content');
+    const tocMenu  = document.getElementById('tocMenu');
+    const player   = document.getElementById('player');
+
+    // ====== 讀取檔案 ======
+    fetch(TXT_URL + '?c=' + Date.now())
+      .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+      .then(txt => {
+        const items = parseAll(txt); // [{type:'h1'|'h2'|'row'}...]
+        render(items);
+      })
+      .catch(err => {
+        console.warn('讀取失敗，使用示例資料：', err);
+        const demo =
+`<1>（一）母音音標
+<2>單母音
+字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
+a\t[ æ ]\tkk.mp3\t0\t1.1\t短音的ㄟ\tcat, hat
+i\t[ ɪ ]\tkk.mp3\t1.2\t2.2\t短音的ㄧ\tit, ink
+
+<2>雙母音
+字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
+ai\t[ aɪ ]\tkk.mp3\t2.3\t3.6\tㄞ\tbike, time
+
+<1>（二）子音音標
+<2>有聲子音
+字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
+b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad
+
+<2>無聲子音
+字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
+p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen, pie`;
+        const items = parseAll(demo);
+        render(items);
+      });
+
+    // ====== 解析：任意位置的 <1>/<2> 與資料列 ======
+    function parseAll(txt){
+      const rawLines = txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n');
+      const lines = rawLines.map(l => l.replace(/\s+$/,''));
+      const items = [];
+      for (const lineRaw of lines){
+        const line = lineRaw.trim();
+        if (!line) continue;
+
+        const m1 = line.match(/^\s*<\s*1\s*>\s*(.+)$/);
+        if (m1){ items.push({type:'h1', text: m1[1].trim()}); continue; }
+
+        const m2 = line.match(/^\s*<\s*2\s*>\s*(.+)$/);
+        if (m2){ items.push({type:'h2', text: m2[1].trim()}); continue; }
+
+        if (!line.includes('\t')) continue; // 非標題、無 Tab → 略過
+
+        const cols = splitCols(line);
+        if (isHeaderRow(cols)) continue;    // 忽略來源 7 欄表頭
+
+        while (cols.length < 7) cols.push('');
+        const [letters, symbol, mp3, start, end, desc, word] = cols;
+        if (!(letters||symbol||mp3||start||end||desc||word)) continue;
+
+        items.push({
+          type:'row',
+          letters: (letters||'').trim(),
+          symbol:  (symbol||'').trim(),
+          mp3:     (mp3||'').trim(),
+          start:   parseFloat((start||'').trim()),
+          end:     parseFloat((end||'').trim()),
+          desc:    (desc||'').trim(),
+          word:    (word||'').trim(),
+        });
+      }
+      return items;
+    }
+
+    // ---- 輔助：拆欄、表頭判斷（需命中 >=2 欄名才算表頭） ----
+    function splitCols(line){
+      return (line || '').split('\t').map(s => (s ?? '').trim());
+    }
+    function normalizeKey(s){
+      return (s || '')
+        .replace(/[／/]/g,'/')
+        .replace(/\s+/g,'')
+        .toLowerCase();
+    }
+    const HEADER_KEYS = new Set([
+      '字母/字母組合','音標','mp3','start','end','發音','單字範例','單字','例字'
+    ]);
+    function isHeaderRow(cols){
+      if (!cols || !cols.length) return false;
+      const norm = cols.map(normalizeKey);
+      const hits = norm.filter(c => HEADER_KEYS.has(c)).length;
+      return hits >= 2;
+    }
+
+    // ====== 建一個新小節表格（獨立外框 + 統一欄寬） ======
+    function createSectionTable(){
+      const frame = document.createElement('div');
+      frame.className = 'table-frame mb-3';
+
+      const wrap = document.createElement('div');
+      wrap.className = 'table-responsive m-0';
+      frame.appendChild(wrap);
+
+      const table = document.createElement('table');
+      table.className = 'table table-dark table-hover align-middle section-table';
+      table.innerHTML = `
+        <colgroup>
+          <col class="col-letters"><col class="col-symbol"><col class="col-desc"><col class="col-words">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>字母／字母組合</th>
+            <th>音標</th>
+            <th>發音</th>
+            <th>單字範例</th>
+          </tr>
+        </thead>
+        <tbody></tbody>`;
+      wrap.appendChild(table);
+
+      content.appendChild(frame);
+      return table.querySelector('tbody');
+    }
+
+    // ====== 繪製（大標題/小標題在外；每個小標題後有自己的表格外框） ======
+    function render(items){
+      content.innerHTML = '';
+      tocMenu.innerHTML = '';
+      let currentTbody = null;
+      const tocItems = [];
+      let h1Count = 0, h2Count = 0;
+
+      items.forEach(it=>{
+        if (it.type === 'h1'){
+          const h = document.createElement('div');
+          h.className = 'h1-title';
+          const id = `h1-${++h1Count}`;
+          h.id = id;
+          h.textContent = it.text || '';
+          content.appendChild(h);
+          tocItems.push({id, text: it.text || '', level: 1});
+          currentTbody = null;
+          return;
+        }
+        if (it.type === 'h2'){
+          const h = document.createElement('div');
+          h.className = 'h2-title';
+          const id = `h2-${++h2Count}`;
+          h.id = id;
+          h.textContent = it.text || '';
+          content.appendChild(h);
+          tocItems.push({id, text: it.text || '', level: 2});
+          currentTbody = createSectionTable();
+          return;
+        }
+        if (it.type === 'row'){
+          if (!currentTbody){
+            currentTbody = createSectionTable();
+          }
+          currentTbody.appendChild(buildDataRow(it));
+        }
+      });
+
+      buildTOC(tocItems);
+    }
+
+    // ====== 章節目錄（不改變網址；用 button 平滑捲動） ======
+    function buildTOC(items){
+      tocMenu.innerHTML = '';
+      if (!items.length){
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="dropdown-item-text text-secondary">（無章節）</span>`;
+        tocMenu.appendChild(li);
+        return;
+      }
+      items.forEach(({id, text, level})=>{
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'dropdown-item' + (level === 2 ? ' toc-h2' : '');
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+          const el = document.getElementById(id);
+          if (el){
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          const ddEl = document.getElementById('tocDropdown');
+          const dropdown = bootstrap.Dropdown.getInstance(ddEl) || new bootstrap.Dropdown(ddEl);
+          dropdown.hide();
+        });
+        li.appendChild(btn);
+        tocMenu.appendChild(li);
+      });
+    }
+
+    // 建立資料列
+    function buildDataRow(r){
+      const tr = document.createElement('tr');
+
+      const tdLetters = document.createElement('td');
+      tdLetters.className = 'letters';
+      tdLetters.textContent = r.letters || '';
+      tr.appendChild(tdLetters);
+
+      const tdSymbol = document.createElement('td');
+      tdSymbol.className = 'symbol';
+      tdSymbol.innerHTML = `<b>${escapeHTML(r.symbol || '')}</b>`;
+      const src = resolveAudio(r.mp3);
+      if (r.symbol && src && Number.isFinite(r.start) && Number.isFinite(r.end) && r.end > r.start){
+        tdSymbol.dataset.playSrc   = src;
+        tdSymbol.dataset.playStart = String(r.start);
+        tdSymbol.dataset.playEnd   = String(r.end);
+        tdSymbol.setAttribute('data-play','');
+        tdSymbol.addEventListener('click', onPlayCell);
+      }
+      tr.appendChild(tdSymbol);
+
+      const tdDesc = document.createElement('td');
+      tdDesc.className = 'desc';
+      tdDesc.textContent = r.desc || '';
+      tr.appendChild(tdDesc);
+
+      const tdWord = document.createElement('td');
+      tdWord.className = 'words';
+      tdWord.appendChild(renderWordTokens(r.word || ''));
+      tr.appendChild(tdWord);
+
+      return tr;
+    }
+
+    // ====== 音標分段播放 ======
+    let endTimer = null;
+    let lastOnTimeUpdate = null;
+    let currentPlayingEl = null;
+
+    function onPlayCell(e){
+      stopAll();
+      const td = e.currentTarget;
+      const src   = td.dataset.playSrc;
+      const start = parseFloat(td.dataset.playStart);
+      const end   = parseFloat(td.dataset.playEnd);
+      if (!src || !Number.isFinite(start) || !Number.isFinite(end) || end<=start) return;
+
+      currentPlayingEl = td;
+      td.classList.add('playing');
+
+      const go = ()=>{
+        const seekAndPlay = ()=>{
+          try{ player.currentTime = start; }catch{}
+          player.play().catch(()=>{});
+          lastOnTimeUpdate = ()=>{
+            if (player.currentTime >= end - 0.02){
+              stopPlayback();
+            }
+          };
+          player.addEventListener('timeupdate', lastOnTimeUpdate);
+          const dur = Math.max(0, (end - start) * 1000);
+          endTimer = setTimeout(stopPlayback, dur + 60);
+        };
+        if (player.readyState >= 1) seekAndPlay();
+        else player.addEventListener('loadedmetadata', seekAndPlay, {once:true});
+      };
+
+      if (player.src !== new URL(src, location.href).href){
+        player.pause();
+        player.src = src;
+        go();
+      }else{
+        go();
+      }
+    }
+
+    function stopPlayback(){
+      try{ player.pause(); }catch{}
+      if (currentPlayingEl){ currentPlayingEl.classList.remove('playing'); currentPlayingEl = null; }
+      if (lastOnTimeUpdate){ player.removeEventListener('timeupdate', lastOnTimeUpdate); lastOnTimeUpdate = null; }
+      clearTimeout(endTimer); endTimer = null;
+    }
+
+    // ====== 單字範例：token 化與 TTS ======
+    function splitWords(s){
+      const unified = s.replace(/[ \u3000]/g,' ').replace(/[，、；;／/|]/g, ',');
+      return unified.split(',').map(t => t.trim()).filter(t => t);
+    }
+    function renderWordTokens(s){
+      const group = document.createElement('div');
+      group.className = 'word-group';
+      const tokens = splitWords(s);
+      tokens.forEach(tok=>{
+        const span = document.createElement('span');
+        span.className = 'say-token px-1 rounded';
+        span.textContent = tok;
+        span.addEventListener('click', ()=> sayToken(span, tok));
+        group.appendChild(span);
+      });
+      return group;
+    }
+
+    // ====== TTS（讀取 UI 設定） ======
+    function sayToken(el, text){
+      stopAll();
+      if (!text) return;
+      const u = new SpeechSynthesisUtterance(text);
+      const v = getSavedVoice();
+      if (v) u.voice = v;
+      u.lang = v?.lang || 'en-US';
+      u.rate = getSavedRate();
+      u.pitch=1; u.volume=1;
+
+      el.classList.add('playing');
+      u.onend = ()=> el.classList.remove('playing');
+      u.onerror = ()=> el.classList.remove('playing');
+
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }
+
+    // ====== 共用 ======
+    function stopAll(){ stopPlayback(); try{ speechSynthesis.cancel(); }catch{} }
+    function escapeHTML(s){return (s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+    function resolveAudio(mp3){
+      if (!mp3) return '';
+      if (/^(https?:)?\/\//i.test(mp3) || mp3.startsWith('/')) return mp3;
+      return AUDIO_BASE + mp3;
+    }
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
 
