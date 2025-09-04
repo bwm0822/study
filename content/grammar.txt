@@ -1,5 +1,5 @@
 with 的用法:
-    1. 跟 ... 一起
+    1. 跟...一起
         He lives with his mother. 
         他跟他的媽媽住在一起。
         He goes to school with his sister. 
@@ -20,18 +20,18 @@ with 的用法:
         他用大杯子喝果汁。
 
 時間段的用法:
-    1. 在早上
-        I eat breakfast in the morning. 
+    1. [in the morning] {在早上}
+        I eat breakfast in the morning.
         我早上吃早餐。
-    2. 在中午   
+    2. [at noon]    {在中午}
         I have lunch at noon.
         我中午吃午餐。
-    3. 在下午 
+    3. [in the afternoon]   {在下午}
         I play basketball in the afternoon.
         我下午打籃球。
-    4. 在傍晚   
+    4. [in the evening] {在傍晚}
         I have dinner in the evening.
         我傍晚吃晚餐。
-    5. 在晚上 
+    5. [at night]   {在晚上}
         I go to bed at night.
         我晚上睡覺。
