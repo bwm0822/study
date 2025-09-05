@@ -8,6 +8,14 @@
   <style>
     body { background:#212529; color:#f8f9fa; }
 
+    /* 標題欄：右下角序號 */
+    .title-bar{ position:relative; padding-bottom:.5rem; margin-bottom:1.5rem; }
+    .title-bar h1{ margin:0; text-align:center; }
+    .title-bar .serial{
+      position:absolute; right:0; bottom:0;
+      color:#adb5bd; font-size:.9rem; line-height:1;
+    }
+
     /* list-group-item 暗色風格 */
     .list-group-item {
       background:#2a2f33;
@@ -27,9 +35,11 @@
 </head>
 <body>
   <div class="container py-4">
-    <!-- 用外層置中 -->
-    <div class="text-center">
-      <h1 class="mb-4">學習網</h1>
+
+    <!-- 標題欄（置中標題 + 右下序號） -->
+    <div class="title-bar">
+      <h1>學習網</h1>
+      <span class="serial">2025.09.06</span>
     </div>
 
     <ul class="list-group">
