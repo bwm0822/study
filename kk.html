@@ -45,8 +45,7 @@
     .col-words  {width:var(--col-w-words)}
 
     /* 防止內容溢出重疊（超出以省略號） */
-    .section-table th,
-    .section-table td{overflow:hidden;text-overflow:ellipsis}
+    .section-table th, .section-table td{overflow:hidden;text-overflow:ellipsis}
 
     /* 欄位內容樣式 */
     td.letters{white-space:nowrap}
@@ -61,7 +60,31 @@
     td[data-play]:hover, .say-token:hover{background-color:rgba(255,255,255,.06)}
     td[data-play]:active, .say-token:active{transform:scale(1.03)}
     .playing{outline:2px solid var(--bs-primary);box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
-    .word-group{display:flex;flex-wrap:wrap;gap:.35rem .6rem}
+
+    /* ====== 單字範例欄位：一組(字+[])之間保留 gap；組內超貼 ====== */
+    .word-group{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.35rem .6rem;          /* 組 與 組 之間 */
+    }
+    .pair{
+      display:inline-flex;
+      align-items:baseline;
+      column-gap:.08rem;         /* 組內：英文字 與 [] 的距離（可依喜好調到 0） */
+    }
+    .pair .say-token{
+      display:inline-block;
+      padding:0 .1rem;
+      border-radius:.25rem;
+    }
+    .pair .note{
+      display:inline;
+      color:#6c757d;
+      font-size:.9rem;
+      cursor:default;
+      padding:0;
+    }
+    .pair .note:hover,.pair .note:active{background:transparent;transform:none}
 
     /* 章節目錄下拉（右上角） */
     .dropdown-menu-dark{--bs-dropdown-bg:#1f2428;--bs-dropdown-link-active-bg:#0d6efd}
@@ -195,21 +218,21 @@
 `<1>（一）母音音標
 <2>單母音
 字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
-a\t[ æ ]\tkk.mp3\t0\t1.1\t短音的ㄟ\tcat, hat
-i\t[ ɪ ]\tkk.mp3\t1.2\t2.2\t短音的ㄧ\tit, ink
+a\t[ æ ]\tkk.mp3\t0\t1.1\t短音的ㄟ\tcat [n.], hat
+i\t[ ɪ ]\tkk.mp3\t1.2\t2.2\t短音的ㄧ\tit, ink [短音]
 
 <2>雙母音
 字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
-ai\t[ aɪ ]\tkk.mp3\t2.3\t3.6\tㄞ\tbike, time
+ai\t[ aɪ ]\tkk.mp3\t2.3\t3.6\tㄞ\tbike [名詞], time
 
 <1>（二）子音音標
 <2>有聲子音
 字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
-b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad
+b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]
 
 <2>無聲子音
 字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
-p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen, pie`;
+p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
         const items = parseAll(demo);
         render(items);
       });
@@ -373,7 +396,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen, pie`;
       });
     }
 
-    // 建立資料列
+    // ====== 資料列 ======
     function buildDataRow(r){
       const tr = document.createElement('tr');
 
@@ -457,23 +480,77 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen, pie`;
       clearTimeout(endTimer); endTimer = null;
     }
 
-    // ====== 單字範例：token 化與 TTS ======
+    // ====== 單字範例：把「英文字 + 後面 []」視為同一組 .pair ======
     function splitWords(s){
       const unified = s.replace(/[ \u3000]/g,' ').replace(/[，、；;／/|]/g, ',');
       return unified.split(',').map(t => t.trim()).filter(t => t);
     }
+
     function renderWordTokens(s){
       const group = document.createElement('div');
       group.className = 'word-group';
-      const tokens = splitWords(s);
-      tokens.forEach(tok=>{
-        const span = document.createElement('span');
-        span.className = 'say-token px-1 rounded';
-        span.textContent = tok;
-        span.addEventListener('click', ()=> sayToken(span, tok));
-        group.appendChild(span);
+      const segments = splitWords(s); // 以逗號分段
+      segments.forEach(seg=>{
+        tokenizeSegmentIntoPairs(seg, group);
       });
       return group;
+    }
+
+    /**
+     * 將一個片段（例："coat [n.]"、"bird blue [adj.]"、"[短音]"）拆成多個 .pair
+     * 規則：
+     *   - 每個英文字先生成一個 .pair（內含 .say-token）
+     *   - 之後若遇到 [] 註記，就接到「最後一個 .pair」裡
+     *   - 若開頭就是 []（沒有前字），則單獨成一個只含 .note 的 .pair
+     */
+    function tokenizeSegmentIntoPairs(segment, groupEl){
+      const tokenRe = /\[[^\]]*\]/g;
+      let lastIndex = 0, m;
+      const tokens = [];
+
+      while ((m = tokenRe.exec(segment)) !== null){
+        if (m.index > lastIndex){
+          tokens.push({type:'text', value: segment.slice(lastIndex, m.index)});
+        }
+        tokens.push({type:'note', value: m[0]}); // 含方括號
+        lastIndex = m.index + m[0].length;
+      }
+      if (lastIndex < segment.length){
+        tokens.push({type:'text', value: segment.slice(lastIndex)});
+      }
+
+      let lastPair = null;
+      for (const tk of tokens){
+        if (tk.type === 'text'){
+          tk.value.split(/\s+/).map(w=>w.trim()).filter(Boolean).forEach(w=>{
+            const pair = document.createElement('span');
+            pair.className = 'pair';
+
+            const word = document.createElement('span');
+            word.className = 'say-token';
+            word.textContent = w;
+            word.addEventListener('click', ()=> sayToken(word, w));
+
+            pair.appendChild(word);
+            groupEl.appendChild(pair);
+            lastPair = pair; // 讓接下來的 [] 可以掛到這一組
+          });
+        }else if (tk.type === 'note'){
+          const note = document.createElement('span');
+          note.className = 'note';
+          note.textContent = tk.value;
+
+          if (lastPair){
+            lastPair.appendChild(note);
+          }else{
+            const pair = document.createElement('span');
+            pair.className = 'pair';
+            pair.appendChild(note);
+            groupEl.appendChild(pair);
+            lastPair = pair;
+          }
+        }
+      }
     }
 
     // ====== TTS（讀取 UI 設定） ======
@@ -506,4 +583,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen, pie`;
   </script>
 </body>
 </html>
+
+
+
 
