@@ -1,3 +1,10 @@
+###################################################################
+# 根據 doc/table.xlsx 的 kk sheet
+# 擷取每個音標的 mp3 片段，合併並存到 ../audio/kk.mp3
+# 把 doc/table.xlsx 的 kk sheet 的 mp3 / start / end 欄位
+# 用 kk.mp3 及相對應的 start / end 取代
+# 並存於 ./output/kk.xlsx 及 ../content/kk.txt 
+###################################################################
 # merge.py
 from __future__ import annotations
 import sys
