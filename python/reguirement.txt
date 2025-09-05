@@ -1,0 +1,7 @@
+# 安裝相關套件
+pip install pandas openpyxl pydub audioop-lts
+
+# 系統需安裝 ffmpeg 並在 PATH
+執行 ffmpeg --version
+看得到版本或路徑就代表已安裝且在 PATH；顯示「找不到指令」就尚未安裝或未加入 PATH。
+
