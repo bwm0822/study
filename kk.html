@@ -9,8 +9,8 @@
     :root{
       /* ★ 全站統一欄寬（總和 100%）— 加大字母欄、縮小音標欄 */
       --col-w-letters: 28%;
-      --col-w-symbol : 18%;
-      --col-w-desc   : 22%;
+      --col-w-symbol : 10%;
+      --col-w-desc   : 30%;
       --col-w-words  : 32%;
       --navbar-h     : 56px; /* navbar 高度，供滾動定位 */
     }
@@ -72,8 +72,8 @@
     @media (max-width: 576px){
       :root{
         --col-w-letters: 32%;
-        --col-w-symbol : 17%;
-        --col-w-desc   : 21%;
+        --col-w-symbol : 10%;
+        --col-w-desc   : 28%;
         --col-w-words  : 30%;
       }
     }
@@ -176,7 +176,7 @@
 
     // ====== 常數（內容解析） ======
     const TXT_URL    = 'content/kk.txt';   // Tab：字母/音標/mp3/start/end/發音/單字範例
-    const AUDIO_BASE = 'content/audio/';
+    const AUDIO_BASE = 'audio/';
 
     const content  = document.getElementById('content');
     const tocMenu  = document.getElementById('tocMenu');
