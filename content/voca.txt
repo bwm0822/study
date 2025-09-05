@@ -1,3 +1,4 @@
+#	word	KK音標	中文	詞性	例句(EN)	例句(ZH)
 1	a	[ə]	一個	[冠詞]	I see a cat.	我看到一隻貓。
 2	an	[æn]	一個(母音開頭)	[冠詞]	She has an apple.	她有一顆蘋果。
 3	the	[ðə]/[ði]	這/那	[冠詞]	The sun is bright.	太陽很明亮。
@@ -502,4 +503,26 @@
 502	too	[tu]	也/太	[副詞]	Me too.	我也是。
 503	very	[ˈvɛrɪ]	非常	[副詞]	I am very tired.	我很累。
 504	yes	[jɛs]	是的	[副詞]	Yes, I understand.	是的，我懂了。
+						
+505	part	[pɑrt]	部分	[名詞]	This is an important part of the story.	這是故事中的重要部分。
+506	sit	[sɪt]	坐	[動詞]	Please sit on the chair.	請坐在椅子上。
+507	stand	[stænd]	站立	[動詞]	They stand in a line.	他們排成一列站著。
+508	front	[frʌnt]	前面	[名詞]	The school is in front of the park.	學校在公園前面。
+509	each	[itʃ]	每一個	[代名詞]	Each student has a book.	每個學生都有一本書。
+510	strange	[strendʒ]	奇怪的	[形容詞]	This is a strange sound.	這是一個奇怪的聲音。
+511	bright	[braɪt]	明亮的	[形容詞]	The sun is very bright today.	今天太陽很明亮。
+512	strong	[strɔŋ]	強壯的	[形容詞]	He is a strong boy.	他是一個強壯的男孩。
+513	weak	[wik]	虛弱的	[形容詞]	The baby is too weak to walk.	這嬰兒太虛弱，還不能走。
+514	playground	[ˈpleɪˌɡraʊnd]	遊樂場	[名詞]	The kids are playing in the playground.	孩子們正在遊樂場玩耍。
+515	safe	[sef]	安全的	[形容詞]	The children are safe at home.	孩子們在家裡很安全。
+516	use	[juz]	使用	[動詞]	I use a pen to write.	我用筆寫字。
+517	about	[əˈbaʊt]	關於	[介系詞]	This book is about animals.	這本書是關於動物的。
+518	also	[ˈɔlˌso]	也	[副詞]	She can sing and also dance.	她會唱歌，也會跳舞。
+519	cover	[ˈkʌvɚ]	蓋住	[動詞]	Please cover the box.	請把箱子蓋起來。
+520	wing	[wɪŋ]	翅膀	[名詞]	The bird spreads its wings.	那隻鳥展開翅膀。
+521	everywhere	[ˈɛvriˌwɛr]	到處	[副詞]	Flowers are everywhere in spring.	春天到處都是花。
+522	these	[ðiz]	這些	[代名詞]	These apples are sweet.	這些蘋果很甜。
+523	those	[ðoz]	那些	[代名詞]	Those books are mine.	那些書是我的。
+524	flower	[ˈflaʊ.ɚ]	花	[名詞]	The flower is very beautiful.	這朵花很美麗。
+
 

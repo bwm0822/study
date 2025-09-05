@@ -58,3 +58,10 @@ s、c、sc	[ s ]	kk.mp3	75.0	76.0	發ㄙ音	see [si]、city [ˋsɪtɪ]、school 
 th	[ θ ]	kk.mp3	77.0	78.0	上下齒輕咬舌尖，不振動聲帶吹氣，發音接近ㄙ	health [hɛlθ]
 c、s、sh、tion	[ ʃ ]	kk.mp3	79.0	80.0	舌面輕觸上顎吹氣，發音接近ㄕ、ㄒ	special [ˋspɛʃəl]、sure [ʃʊr]、fish [fɪʃ]、action [ˋækʃən]
 ch、tch、ture	[ tʃ ]	kk.mp3	81.0	82.0	舌面頂住上顎，堵住氣流後發聲，與 / ʃ / 口型相同，發音接近ㄔ、ㄑ	lunch [lʌntʃ]、catch [kætʃ]、adventure [ədˋvɛntʃɚ]
+						
+<2>常見子音組合						
+						
+字母／字母組合	音標	mp3	start	end	發音	單字範例
+tr	[ t r ]	kk.mp3	83.0	84.0	發音接近「測樂」	tree [tri]、truck [trʌk]、train [tren]
+dr	[ d r ]	kk.mp3	85.0	86.0	發音接近「居樂」	drink [drɪŋk]、drive [draɪv]、draw [drɔ]
+ts	[ t s ]	kk.mp3	87.0	88.0	發音接近ㄘ	pets [pɛts]、students [ˈstuːdənts]

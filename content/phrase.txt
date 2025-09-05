@@ -1,0 +1,101 @@
+#	片語	中譯	例句(EN)	例句(ZH)
+1	get up	起床	I get up at seven every day.	我每天七點起床。
+2	go to school	去上學	We go to school by bus.	我們搭公車去上學。
+3	go home	回家	He goes home after school.	他放學後回家。
+4	go to bed	上床睡覺	She goes to bed at nine.	她九點上床睡覺。
+5	have breakfast	吃早餐	I have breakfast with my family.	我和家人一起吃早餐。
+6	have lunch	吃午餐	We have lunch at school.	我們在學校吃午餐。
+7	have dinner	吃晚餐	My family has dinner at six.	我家六點吃晚餐。
+8	go shopping	去購物	Mom and I go shopping on Sunday.	媽媽和我星期天去購物。
+9	play games	玩遊戲	The kids play games in the park.	孩子們在公園玩遊戲。
+10	watch TV	看電視	I watch TV after homework.	我寫完功課後看電視。
+11	do homework	做作業	He does homework in his room.	他在房間裡做作業。
+12	take a bath	洗澡	I take a bath every night.	我每天晚上洗澡。
+13	brush teeth	刷牙	She brushes her teeth before bed.	她睡覺前刷牙。
+14	wash hands	洗手	Wash your hands before eating.	吃飯前要洗手。
+15	drink water	喝水	I drink water when I am thirsty.	我口渴的時候喝水。
+16	read books	讀書	He likes to read books in the library.	他喜歡在圖書館讀書。
+17	take a picture	拍照	Let’s take a picture together.	我們一起拍照吧。
+18	play the piano	彈鋼琴	She can play the piano well.	她很會彈鋼琴。
+19	ride a bike	騎腳踏車	I ride a bike in the park.	我在公園騎腳踏車。
+20	fly a kite	放風箏	They fly a kite on a sunny day.	他們在晴天放風箏。
+21	get dressed	穿衣服	I get dressed after I wash my face.	我洗臉後穿衣服。
+22	wash face	洗臉	He washes his face in the morning.	他早上洗臉。
+23	comb hair	梳頭髮	She combs her hair before school.	她上學前梳頭髮。
+24	feed the dog	餵狗	I feed the dog every evening.	我每天晚上餵狗。
+25	sweep the floor	掃地	Dad sweeps the floor in the living room.	爸爸在客廳掃地。
+26	clean the room	打掃房間	I clean my room on Saturday.	我星期六打掃房間。
+27	make the bed	整理床鋪	He makes the bed after getting up.	他起床後整理床鋪。
+28	do the dishes	洗碗	Mom does the dishes after dinner.	媽媽晚餐後洗碗。
+29	go to the park	去公園	We go to the park on Sunday.	我們星期天去公園。
+30	take a walk	散步	Grandma takes a walk every evening.	奶奶每天晚上散步。
+31	play basketball	打籃球	The boys play basketball after school.	男孩們放學後打籃球。
+32	play soccer	踢足球	They play soccer on the playground.	他們在操場踢足球。
+33	jump rope	跳繩	The girls jump rope at school.	女孩們在學校跳繩。
+34	sing songs	唱歌	We sing songs in music class.	我們在音樂課唱歌。
+35	dance to music	跳舞	The kids dance to music happily.	孩子們開心地跳舞。
+36	draw pictures	畫圖	I like to draw pictures of animals.	我喜歡畫動物的圖。
+37	write a letter	寫信	She writes a letter to her friend.	她寫信給朋友。
+38	send an email	寄電子郵件	I send an email to my teacher.	我寄電子郵件給老師。
+39	wait for the bus	等公車	We wait for the bus at the stop.	我們在站牌等公車。
+40	take a bus	搭公車	I take a bus to school.	我搭公車去上學。
+41	ride a scooter	騎機車	My dad rides a scooter to work.	我爸爸騎機車上班。
+42	drive a car	開車	Mom drives a car to the store.	媽媽開車去商店。
+43	cross the street	過馬路	Look left and right before you cross the street.	過馬路前要左右看。
+44	go swimming	去游泳	We go swimming in summer.	我們夏天去游泳。
+45	play in the sand	玩沙子	The kids play in the sand at the beach.	孩子們在沙灘玩沙。
+46	build a snowman	堆雪人	We build a snowman in winter.	我們冬天堆雪人。
+47	open the window	打開窗戶	Please open the window.	請打開窗戶。
+48	close the door	關門	Close the door, please.	請關上門。
+49	turn on the light	開燈	It’s dark. Turn on the light.	天黑了，請開燈。
+50	turn off the TV	關電視	Turn off the TV and do your homework.	關掉電視去寫功課。
+51	take off shoes	脫鞋子	Please take off your shoes at the door.	請在門口脫鞋子。
+52	put on a coat	穿上外套	It’s cold. Put on a coat.	天冷了，穿上外套。
+53	catch a ball	接球	He can catch a ball very well.	他很會接球。
+54	throw a ball	丟球	Throw the ball to me.	把球丟給我。
+55	kick a ball	踢球	They kick a ball on the playground.	他們在操場踢球。
+56	clap hands	拍手	The kids clap hands after the song.	孩子們唱完歌後拍手。
+57	shake hands	握手	We shake hands to say hello.	我們握手打招呼。
+58	wave hands	揮手	She waves her hands to her friend.	她向朋友揮手。
+59	open a book	打開書	Open a book and start reading.	打開書開始讀。
+60	close a book	關書	Close your book, please.	請把書關上。
+61	borrow a book	借書	I borrow a book from the library.	我從圖書館借了一本書。
+62	return a book	還書	She returns a book to the library.	她把書還給圖書館。
+63	listen to music	聽音樂	He listens to music every night.	他每天晚上聽音樂。
+64	listen to the teacher	聽老師	Listen to the teacher carefully.	要仔細聽老師的話。
+65	answer a question	回答問題	He answers a question in class.	他在課堂上回答問題。
+66	ask a question	問問題	She asks a question about the story.	她問了一個關於故事的問題。
+67	raise your hand	舉手	Please raise your hand before you speak.	發言前請舉手。
+68	wash clothes	洗衣服	Mom washes clothes on Saturday.	媽媽星期六洗衣服。
+69	fold clothes	摺衣服	I fold my clothes after washing.	我洗完衣服後摺好。
+70	wear shoes	穿鞋子	Wear your shoes before you go out.	出門前要穿鞋子。
+71	take medicine	吃藥	He takes medicine when he is sick.	他生病時吃藥。
+72	see a doctor	看醫生	I see a doctor when I feel bad.	我不舒服時去看醫生。
+73	catch a cold	感冒	She catches a cold in winter.	她冬天感冒了。
+74	brush hair	梳頭髮	He brushes his hair in the morning.	他早上梳頭髮。
+75	cut hair	剪頭髮	She cuts her hair short.	她把頭髮剪短。
+76	open a bag	打開包包	Open your bag and take out the book.	打開你的包包拿出書。
+77	carry a bag	提包	She carries a bag to school.	她提著包去上學。
+78	pack a bag	收拾包包	I pack my bag before school.	我上學前收拾書包。
+79	wash dishes	洗碗盤	I wash dishes after dinner.	我晚餐後洗碗盤。
+80	cut an apple	切蘋果	Mom cuts an apple for me.	媽媽幫我切蘋果。
+81	eat an apple	吃蘋果	He eats an apple every day.	他每天吃一顆蘋果。
+82	drink milk	喝牛奶	I drink milk in the morning.	我早上喝牛奶。
+83	eat rice	吃飯	We eat rice for dinner.	我們晚餐吃米飯。
+84	cook rice	煮飯	Dad cooks rice in the kitchen.	爸爸在廚房煮飯。
+85	make soup	煮湯	Grandma makes soup for lunch.	奶奶煮湯當午餐。
+86	eat vegetables	吃蔬菜	Eat vegetables every day.	每天要吃蔬菜。
+87	peel a banana	剝香蕉	She peels a banana for the baby.	她幫寶寶剝香蕉。
+88	open the fridge	打開冰箱	Open the fridge and take out the milk.	打開冰箱拿出牛奶。
+89	close the fridge	關冰箱	Close the fridge after use.	用完要關冰箱。
+90	open the door	開門	He opens the door for his mom.	他幫媽媽開門。
+91	ring the bell	按門鈴	Please ring the bell before you come in.	進來前請按門鈴。
+92	answer the phone	接電話	She answers the phone quickly.	她很快接起電話。
+93	make a call	打電話	I make a call to my friend.	我打電話給朋友。
+94	take a photo	拍照	He takes a photo of the cat.	他拍了那隻貓的照片。
+95	look at the sky	看天空	Look at the sky. It is blue.	看天空，它是藍色的。
+96	look at the stars	看星星	We look at the stars at night.	我們晚上看星星。
+97	look at the moon	看月亮	The kids look at the moon together.	孩子們一起看月亮。
+98	point at the board	指黑板	The teacher points at the board.	老師指著黑板。
+99	write on the board	在黑板上寫字	He writes his name on the board.	他在黑板上寫名字。
+
