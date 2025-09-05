@@ -3,42 +3,32 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>片語</title>
+  <title>常用生活片語</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    /* 全站暗色 */
     body{background:#212529;color:#f8f9fa}
     .container-narrow{max-width:980px}
     .navbar{border-bottom:1px solid rgba(255,255,255,.15)}
 
-    /* 表格（無表頭） */
     .table{table-layout:fixed}
-    .idx-cell{width:72px;cursor:default;user-select:none}
+    .idx-cell{width:72px;cursor:pointer;user-select:none}
     tr.group-start td{border-top-width:2px !important}
-
-    /* 次要文字 */
     .small-muted{color:#adb5bd;font-size:.9rem}
 
-    /* 可發音效果（英語） */
     [data-say]{cursor:pointer;transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease}
     [data-say]:hover{background-color:rgba(255,255,255,.06)}
     [data-say]:active{transform:scale(1.03)}
     @media (prefers-reduced-motion: reduce){ [data-say]{transition:none} }
     .speaking{ outline:2px solid var(--bs-primary); box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2) }
 
-    /* 文字排版 */
     .word-line b{font-size:1.05rem}
-
     .range-inline{width:260px;min-width:180px}
 
-    /* 🔍 搜尋下拉選單樣式 */
     .search-wrap{position:relative;}
     .search-menu{
       position:absolute; left:0; right:0; top:100%;
-      z-index:1000; display:none;
-      max-height:260px; overflow:auto;
-      background:#1b1f22; border:1px solid rgba(255,255,255,.12);
-      border-radius:.5rem; margin-top:.25rem;
+      z-index:1000; display:none; max-height:260px; overflow:auto;
+      background:#1b1f22; border:1px solid rgba(255,255,255,.12); border-radius:.5rem; margin-top:.25rem;
     }
     .search-menu.show{display:block}
     .search-item{display:block;width:100%;text-align:left;padding:.35rem .75rem;border:0;background:transparent;color:#f8f9fa}
@@ -47,15 +37,19 @@
     .search-word{font-weight:600}
     .search-zh{margin-left:.5rem;color:#adb5bd}
 
-    /* 頂部工具列：右側群組靠右；可換行後仍靠右 */
     #topBar{ gap:.5rem; }
-    .right-tools{ min-width:220px; margin-left:auto; }
+    .right-tools{ min-width:300px; margin-left:auto; }
 
-    /* 縮小欄位寬度（頁碼＋搜尋） */
+    #toggleStarFilterBtn{min-width:40px}
+    .star-icon{font-size:1rem;line-height:1}
+
     .jump-group{ width:120px; }
     .search-flex{ width:160px; }
     .search-wrap .input-group-text{ padding:.2rem .45rem; font-size:.85rem; }
     #searchClear{ padding:.2rem .45rem; }
+
+    .idx-wrap{display:flex;flex-direction:column;align-items:center;gap:.25rem}
+    .idx-star{font-size:18px;line-height:1;color:#ff9800 !important}
   </style>
 </head>
 <body>
@@ -63,7 +57,10 @@
   <nav class="navbar navbar-dark bg-dark">
     <div class="container container-narrow d-flex align-items-center">
       <button id="backBtn" class="btn btn-outline-light btn-sm">返回</button>
-      <span class="navbar-brand ms-3 mb-0 h1 me-auto">片語</span>
+      <span class="navbar-brand ms-3 mb-0 h1">常用生活片語</span>
+      <div class="ms-auto d-flex gap-2">
+        <button id="clearStarsBtn" class="btn btn-outline-warning btn-sm">清除標註</button>
+      </div>
     </div>
   </nav>
 
@@ -74,27 +71,29 @@
         <div class="d-flex align-items-center flex-wrap gap-3">
           <label class="form-label mb-0">英文語音</label>
           <select id="selEn" class="form-select form-select-sm w-auto bg-dark text-light border-secondary"></select>
-
           <label for="rate" class="form-label mb-0">語速：<span id="rateVal">1.00</span></label>
           <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00">
         </div>
       </div>
     </div>
 
-    <!-- 分頁（左） + 頁碼輸入與搜尋（右） -->
+    <!-- 分頁 + 右側工具（切換標註 / 頁碼 / 搜尋） -->
     <nav id="topBar" class="mb-2 d-flex align-items-center flex-wrap">
-      <!-- 左側：分頁按鈕 -->
       <ul id="pagination" class="pagination mb-2 mb-lg-0"></ul>
 
-      <!-- 右側：輸入頁碼 + 搜尋 -->
       <div class="right-tools d-flex align-items-center flex-wrap gap-2 justify-content-end">
+        <!-- 切換標註顯示 -->
+        <button id="toggleStarFilterBtn" class="btn btn-outline-warning btn-sm" type="button" title="顯示所有項目">
+          <span id="toggleStarIcon" class="star-icon">☆</span>
+        </button>
+
         <!-- 頁碼輸入 -->
         <div class="input-group input-group-sm jump-group">
           <input id="pageJump" type="number" class="form-control bg-dark text-light border-secondary" min="1" placeholder="頁碼">
           <button id="pageGo" class="btn btn-outline-light">Go</button>
         </div>
 
-        <!-- 🔍 搜尋 -->
+        <!-- 搜尋 -->
         <div class="search-flex">
           <div class="search-wrap w-100">
             <div class="input-group input-group-sm">
@@ -108,14 +107,14 @@
       </div>
     </nav>
 
-    <!-- 兩欄表格（每筆三行；無表頭） -->
+    <!-- 表格 -->
     <div class="table-responsive">
       <table id="phr" class="table table-dark table-hover align-middle mb-3">
         <tbody></tbody>
       </table>
     </div>
 
-    <!-- 下方快速換頁 -->
+    <!-- 快速換頁 -->
     <nav class="mt-2">
       <div id="quickPager" class="d-flex justify-content-center align-items-center gap-2 flex-wrap"></div>
     </nav>
@@ -131,16 +130,21 @@
     const $rate = document.getElementById('rate');
     const $rateVal = document.getElementById('rateVal');
 
-    // 🔍 搜尋相關
     const $searchInput = document.getElementById('searchInput');
     const $searchMenu  = document.getElementById('searchMenu');
     const $searchClear = document.getElementById('searchClear');
-    let searchIndex = [];        // {key, phrase, zh, i, idxValue}
-    let highlightIdxValue = null;
+
+    const $toggleStarBtn  = document.getElementById('toggleStarFilterBtn');
+    const $toggleStarIcon = document.getElementById('toggleStarIcon');
 
     let voices = [];
     let rows = [];
     let rate = parseFloat(localStorage.getItem('phr.rate') || '1') || 1;
+    let searchIndex = [];
+    let highlightIdxValue = null;
+
+    // 🔄【改動】切換標註狀態不存 localStorage，每次載入預設為 false
+    let starOnly = false;
 
     // 起始頁（URL > localStorage）
     let currentPage = 1;
@@ -149,6 +153,26 @@
     const savedPage = parseInt(localStorage.getItem('phr.currentPage') || '', 10);
     if (!isNaN(urlPage)  && urlPage  > 0) currentPage = urlPage;
     else if (!isNaN(savedPage) && savedPage > 0) currentPage = savedPage;
+
+    /* ====== 智慧返回 ====== */
+    function smartBack(){
+      if (history.length > 1) {
+        history.back();
+        setTimeout(() => {
+          if (document.visibilityState !== 'hidden') {
+            const parent = location.pathname.replace(/[^/]*$/, '');
+            location.href = parent || '/';
+          }
+        }, 500);
+        return;
+      }
+      const parent = location.pathname.replace(/[^/]*$/, '');
+      location.href = parent || '/';
+    }
+    document.getElementById('backBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      smartBack();
+    });
 
     /* ====== 語音 ====== */
     function loadVoices(){ voices = speechSynthesis.getVoices(); populateEnVoices(); }
@@ -204,7 +228,7 @@
       }catch(e){}
     }
     function goPage(p){
-      const totalPages = Math.ceil(rows.length / pageSize) || 1;
+      const totalPages = Math.ceil(getWorkingRows().length / pageSize) || 1;
       currentPage = Math.min(Math.max(1, p), totalPages);
       savePage();
       render();
@@ -213,8 +237,37 @@
       }
     }
 
+    /* ====== 標註（★） ====== */
+    function loadStars(){
+      try{
+        const arr = JSON.parse(localStorage.getItem('phr.stars') || '[]');
+        return Array.isArray(arr) ? arr : [];
+      }catch(e){ return []; }
+    }
+    function saveStars(list){
+      const nums = [], strs = [];
+      for(const v of list){
+        const n = Number(v);
+        if (!Number.isNaN(n)) nums.push(n);
+        else strs.push(String(v));
+      }
+      nums.sort((a,b)=>a-b);
+      strs.sort();
+      const merged = [...nums.map(n=>String(n)), ...strs];
+      localStorage.setItem('phr.stars', JSON.stringify(merged));
+      return merged;
+    }
+    function getStarsSet(){ return new Set(loadStars()); }
+    function isStarred(idx){ return getStarsSet().has(String(idx)); }
+    function toggleStar(idx){
+      idx = String(idx);
+      const set = getStarsSet();
+      if(set.has(idx)) set.delete(idx); else set.add(idx);
+      saveStars([...set]);
+    }
+    function clearAllStars(){ localStorage.setItem('phr.stars','[]'); }
+
     /* ====== 解析 phrase.txt（5 欄） ====== */
-    // 格式：
     // #   片語   中譯   例句(EN)   例句(ZH)
     function parseTSV(txt){
       return txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n')
@@ -229,11 +282,36 @@
         });
     }
 
-    /* ====== 渲染：兩欄（左：索引，右：內容），每筆三行 ====== */
+    /* ====== 搜尋索引 ====== */
+    function buildSearchIndex(){
+      searchIndex = rows.map((r,i)=>({
+        key: (r.phrase||'').toLowerCase(),
+        phrase: r.phrase || '',
+        zh: r.zh || '',
+        i,
+        idxValue: r.idx
+      }));
+    }
+
+    /* ====== 工作資料（只看標註/全部） ====== */
+    function getWorkingRows(){
+      if (!starOnly) return rows;
+      const stars = getStarsSet();
+      return rows.filter(r => stars.has(String(r.idx)));
+    }
+
+    /* ====== 渲染 ====== */
     function render(){
       $tbody.innerHTML='';
+      const working = getWorkingRows();
+
+      const totalPages = Math.ceil(working.length / pageSize) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
       const start=(currentPage-1)*pageSize;
-      const pageRows=rows.slice(start,start+pageSize);
+      const pageRows=working.slice(start,start+pageSize);
+      const starSet = getStarsSet();
 
       for(const r of pageRows){
         const idx = escapeHTML(r.idx);
@@ -242,24 +320,32 @@
         const exEn= escapeHTML(r.exEn);
         const exZh= escapeHTML(r.exZh);
 
-        // 第 1 行：# | phrase 中文
         const tr1=document.createElement('tr');
         tr1.className='group-start';
 
         const tdIdx=document.createElement('td');
         tdIdx.rowSpan=3;
         tdIdx.className='text-secondary small text-center align-middle idx-cell';
-        tdIdx.textContent = idx;
+        tdIdx.dataset.idx = r.idx;
+
+        const idxWrap = document.createElement('div');
+        idxWrap.className = 'idx-wrap';
+        const idxText = document.createElement('div');
+        idxText.textContent = idx;
+        const starSpan = document.createElement('div');
+        starSpan.className = 'idx-star';
+        starSpan.textContent = '★';
+        starSpan.hidden = !starSet.has(String(r.idx));
+        idxWrap.append(idxText, starSpan);
+        tdIdx.appendChild(idxWrap);
 
         const tdMain=document.createElement('td');
-        tdMain.className='word-line';
-        tdMain.setAttribute('data-say', r.phrase);   // 點「片語」→ 英文發音
+        tdMain.className='word-line text-start';
+        tdMain.setAttribute('data-say', r.phrase);
         tdMain.setAttribute('data-lang','en');
         tdMain.innerHTML = `<b>${phrase}</b> <span class="small">${zh}</span>`;
-
         tr1.append(tdIdx, tdMain);
 
-        // 第 2 行：英文例句
         const tr2=document.createElement('tr');
         const tdExEn=document.createElement('td');
         tdExEn.innerHTML = `<span class="small-muted">${exEn || ''}</span>`;
@@ -269,7 +355,6 @@
         }
         tr2.append(tdExEn);
 
-        // 第 3 行：中文例句
         const tr3=document.createElement('tr');
         const tdExZh=document.createElement('td');
         tdExZh.innerHTML = `<span class="small-muted">${exZh || ''}</span>`;
@@ -280,16 +365,13 @@
 
       renderPagination();
       renderQuickPager();
+      updateToggleStarUI();
 
-      // 🔍 若剛從搜尋跳來：高亮並捲到中間
       if (highlightIdxValue != null){
-        const cells = [...document.querySelectorAll('#phr td.idx-cell')];
-        const cell = cells.find(td => (td.textContent||'').trim() === String(highlightIdxValue));
+        const cell = document.querySelector(`#phr td.idx-cell[data-idx="${CSS.escape(String(highlightIdxValue))}"]`);
         if (cell){
           cell.classList.add('speaking');
-          requestAnimationFrame(() => {
-            cell.scrollIntoView({ behavior:'smooth', block:'center' });
-          });
+          requestAnimationFrame(() => cell.scrollIntoView({ behavior:'smooth', block:'center' }));
           setTimeout(()=>cell.classList.remove('speaking'), 900);
         }
         highlightIdxValue = null;
@@ -298,7 +380,7 @@
 
     /* ====== 分頁 UI ====== */
     function renderPagination(){
-      const totalPages = Math.ceil(rows.length / pageSize) || 1;
+      const totalPages = Math.ceil(getWorkingRows().length / pageSize) || 1;
       $pagination.innerHTML = '';
 
       const add = (label, page, disabled=false, active=false) => {
@@ -362,7 +444,7 @@
     }
 
     function renderQuickPager(){
-      const totalPages = Math.ceil(rows.length / pageSize) || 1;
+      const totalPages = Math.ceil(getWorkingRows().length / pageSize) || 1;
       const qp = document.getElementById('quickPager');
       qp.innerHTML = '';
       if (totalPages <= 1) return;
@@ -393,7 +475,22 @@
 
     /* ====== 事件 ====== */
     document.getElementById('phr').addEventListener('click',ev=>{
-      // A) 若帶 data-say 且為英文 → 發音
+      // A) 左欄：切換標註
+      const idxCell = ev.target.closest('td.idx-cell');
+      if (idxCell){
+        const idx = idxCell.dataset.idx;
+        toggleStar(idx);
+        if (starOnly){
+          render(); // starOnly 時取消星號要立即把該筆移除
+        }else{
+          const star = idxCell.querySelector('.idx-star');
+          if (star) star.hidden = !isStarred(idx);
+        }
+        ev.stopPropagation();
+        return;
+      }
+
+      // B) 其他：英文發音
       const el = ev.target.closest('[data-say]');
       if(!el) return;
       const isEn = (el.getAttribute('data-lang')||'').toLowerCase().startsWith('en');
@@ -403,7 +500,13 @@
       speakEn(text, ()=>el.classList.remove('speaking'));
     });
 
-    document.getElementById('backBtn').addEventListener('click',()=>history.back());
+    // 右上角：清除標註
+    document.getElementById('clearStarsBtn').addEventListener('click',()=>{
+      if (!confirm('確定要清除所有標註嗎？')) return;
+      clearAllStars();
+      if (starOnly) currentPage = 1; // 避免只看標註時清空變成空頁
+      render();
+    });
 
     // 語音設定
     $selEn.addEventListener('change',()=>localStorage.setItem('tts.enVoice',$selEn.value));
@@ -413,23 +516,35 @@
       localStorage.setItem('phr.rate',rate);
     });
 
-    // 支援瀏覽器前進/後退：依網址 ?page 重新渲染
+    // 切換只顯示標註 / 顯示全部（不寫入 localStorage）
+    function updateToggleStarUI(){
+      if (starOnly){
+        $toggleStarBtn.classList.remove('btn-outline-warning');
+        $toggleStarBtn.classList.add('btn-warning');
+        $toggleStarIcon.textContent = '★';
+        $toggleStarBtn.title = '只顯示標註（點擊切換顯示全部）';
+      }else{
+        $toggleStarBtn.classList.add('btn-outline-warning');
+        $toggleStarBtn.classList.remove('btn-warning');
+        $toggleStarIcon.textContent = '☆';
+        $toggleStarBtn.title = '顯示所有項目（點擊切換只顯示標註）';
+      }
+    }
+    $toggleStarBtn.addEventListener('click', ()=>{
+      starOnly = !starOnly;
+      const totalPages = Math.ceil(getWorkingRows().length / pageSize) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+      render();
+    });
+
+    // 前進/後退：依網址 ?page 重新渲染
     window.addEventListener('popstate', () => {
       const p = parseInt(new URLSearchParams(location.search).get('page'), 10);
       if (!isNaN(p) && p !== currentPage) { currentPage = p; render(); }
     });
 
     /* ====== 🔍 搜尋 ====== */
-    function buildSearchIndex(){
-      searchIndex = rows.map((r,i)=>({
-        key: (r.phrase||'').toLowerCase(),
-        phrase: r.phrase || '',
-        zh: r.zh || '',
-        i,
-        idxValue: r.idx
-      }));
-    }
-
     function showSearchMenu(items){
       $searchMenu.innerHTML = '';
       if (!items.length){
@@ -448,6 +563,9 @@
           btn.addEventListener('click', ()=>{
             const i = Number(btn.dataset.i);
             if (!Number.isInteger(i) || i < 0 || i >= rows.length) { hideSearchMenu(); return; }
+            // 搜尋於「全部資料」；為保證可見，切回顯示全部，但不儲存
+            starOnly = false;
+
             const page = Math.floor(i / pageSize) + 1;
             highlightIdxValue = rows[i].idx;
 
@@ -461,8 +579,6 @@
       $searchMenu.classList.add('show');
     }
     function hideSearchMenu(){ $searchMenu.classList.remove('show'); }
-
-    // 搜尋事件：只列出以字首開頭的片語
     $searchInput.addEventListener('input', ()=>{
       const q = ($searchInput.value || '').trim().toLowerCase();
       if (!q){ hideSearchMenu(); return; }
@@ -476,10 +592,11 @@
     $searchClear.addEventListener('click', ()=>{ $searchInput.value=''; hideSearchMenu(); $searchInput.focus(); });
     document.addEventListener('click', (e)=>{ if (!e.target.closest('.search-wrap')) hideSearchMenu(); });
 
-    // 初始化
+    /* ====== 初始化 ====== */
     (function init(){
       $rate.value=rate.toFixed(2);
       $rateVal.textContent=rate.toFixed(2);
+      updateToggleStarUI();
       loadData();
     })();
 
@@ -491,14 +608,23 @@
         rows=parseTSV(text);
         buildSearchIndex();
 
-        const totalPages=Math.ceil(rows.length/pageSize)||1;
+        const totalPages=Math.ceil(getWorkingRows().length/pageSize)||1;
         if (currentPage>totalPages) currentPage=totalPages;
         if (currentPage<1) currentPage=1;
         savePage();
 
         render();
-      }catch(err){alert('讀取失敗：'+err.message);}
+      }catch(err){
+        console.error(err);
+        alert('讀取失敗：'+err.message);
+      }
     }
   </script>
 </body>
 </html>
+
+
+
+
+
+
