@@ -3,81 +3,60 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>基本語法</title>
+  <title>基本語法（角括號標記版）</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body{background:#212529;color:#f8f9fa}
     .navbar{border-bottom:1px solid rgba(255,255,255,.15)}
     .anchor{scroll-margin-top:80px}
 
-    /* 控制欄卡片（外框） */
     .control-card{background:#1b1f22}
     .control-row{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
     .control-row .group{display:flex;align-items:center;gap:.5rem}
     .control-row label,.control-row span,.control-row select{color:#fff}
     .range-inline{width:260px;min-width:200px}
 
-    /* 縮排（依 Tab） */
     :root{--indent:1.25rem}
     .depth-0{padding-left:0}
     .depth-1{padding-left:calc(var(--indent)*1)}
     .depth-2{padding-left:calc(var(--indent)*2)}
-    .depth-3{padding-left:calc(var(--indent)*3)}
-    .depth-4{padding-left:calc(var(--indent)*4)}
     .line{padding:.18rem 0;border-left:1px solid rgba(255,255,255,.06)}
     .depth-0.line{border-left:none}
-
-    /* 項目更明顯縮排＋更緊的行距 */
     .line.depth-1.item{padding-left:calc(var(--indent)*1.4)!important;padding-top:.12rem;padding-bottom:.12rem}
 
-    /* 章節整體外框：把標題與內文（項目、範例）一起包住 */
-    .section{margin:2rem 0} /* 章節與章節之間較大間距（約兩列） */
-    .section-card{
-      background:#1b1f22;border:1px solid rgba(255,255,255,.2);
-      border-radius:.75rem; padding:.75rem .9rem;
-    }
+    .section{margin:2rem 0}
+    .section-card{background:#1b1f22;border:1px solid rgba(255,255,255,.2);
+      border-radius:.75rem; padding:.75rem .9rem;}
     .section-header{margin-bottom:.45rem}
-    .section-title{
-      color:#fff;               /* 白色、無底色 */
-      font-weight:700;font-size:1rem;
-    }
+    .section-title{color:#fff;font-weight:700;font-size:1rem}
 
-    /* 點讀英文：hover 高亮、點擊動畫 */
     .say{cursor:pointer;display:inline-block;border-radius:.25rem;padding:0 .1rem;
          transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease}
     .say:hover{background-color:rgba(255,255,255,.08)}
     .say:active{transform:scale(1.03)}
     .say.speaking{outline:2px solid var(--bs-primary);box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
 
-    /* {} 與中文翻譯：灰色較小字 */
-    .muted{color:#adb5bd;font-size:.92em}
+    .muted{color:#adb5bd;font-size:.92em;cursor:default}
 
-    /* 英中成對（範例）：組內距小、組與組距更小 */
-    .example{margin:.28rem 0}
-    .pair{margin:.38rem 0}
-    .pair .en{display:block;margin:0}
-    .pair .zh{display:block;margin:.10rem 0 0}
+    /* 英中成對（基本為上下兩列） */
+    .pair{margin:.32rem 0}
+    .pair .en{display:block; margin:0}              /* 英文獨占一列 */
+    .pair .zh{display:block; margin:-0.2rem 0 0}     /* 中文換行顯示 */
+    /* .pair.tight{margin:.22rem 0}                    <+> 與上一列更緊 */
+    .pair + .pair{margin-top:.24rem}
 
-    /* 項目後接範例：再縮間距 */
-    .line.depth-1.item + .example,
-    .line.depth-1.item + .pair{ margin-top:.18rem }
-
-    /* 兩個範例之間：更緊 */
-    .example + .example,
-    .pair + .pair,
-    .example + .pair,
-    .pair + .example{ margin-top:.26rem }
+    /* 同一行寫成 <3>[EN] {ZH} 時：同列顯示 */
+    .pair.inline{display:flex; align-items:baseline; gap:.5rem; flex-wrap:wrap}
+    .pair.inline .en,.pair.inline .zh{display:inline; margin:0}
   </style>
 </head>
 <body>
-  <!-- 導覽列（右上角章節下拉） -->
   <nav class="navbar navbar-dark bg-dark sticky-top">
     <div class="container d-flex align-items-center">
       <button id="backBtn" class="btn btn-outline-light btn-sm">返回</button>
       <span class="navbar-brand ms-3 mb-0 h1">基本語法</span>
-
       <div class="dropdown ms-auto">
-        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
           章節選單
         </button>
         <ul id="chapterMenu" class="dropdown-menu dropdown-menu-end">
@@ -88,7 +67,6 @@
   </nav>
 
   <main class="container py-3">
-    <!-- 控制欄（外框；同一列；可儲存設定） -->
     <div class="card control-card border-secondary mb-3">
       <div class="card-body">
         <div class="control-row">
@@ -103,8 +81,6 @@
         </div>
       </div>
     </div>
-
-    <!-- 內容 -->
     <div id="content"></div>
   </main>
 
@@ -114,233 +90,258 @@
     document.getElementById('backBtn').addEventListener('click', ()=>history.back());
 
     // ===== 語音設定（可儲存） =====
-    const selEn   = document.getElementById('selEn');
-    const rateEl  = document.getElementById('rate');
-    const rateVal = document.getElementById('rateVal');
-
-    let voices = [];
-    const LS = { voice:'tts.enVoice', rate:'tts.rate' };
+    const selEn=document.getElementById('selEn');
+    const rateEl=document.getElementById('rate');
+    const rateVal=document.getElementById('rateVal');
+    let voices=[];
+    const LS={voice:'tts.enVoice',rate:'tts.rate'};
 
     function loadVoices(){
-      voices = speechSynthesis.getVoices();
-      const list = voices
-        .filter(v => v.lang && v.lang.toLowerCase().startsWith('en'))
+      voices=speechSynthesis.getVoices();
+      const list=voices.filter(v=>v.lang&&v.lang.toLowerCase().startsWith('en'))
         .sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'en'));
-      const saved = localStorage.getItem(LS.voice);
-      selEn.innerHTML = '';
+      const saved=localStorage.getItem(LS.voice);
+      selEn.innerHTML='';
       list.forEach(v=>{
         const opt=document.createElement('option');
         opt.value=v.name+'||'+v.lang;
         opt.textContent=`${v.name} (${v.lang})${v.default?' ★':''}`;
         selEn.appendChild(opt);
       });
-      if (saved && [...selEn.options].some(o=>o.value===saved)) selEn.value=saved;
-      else if (list.length) selEn.value=list[0].value;
+      if(saved&&[...selEn.options].some(o=>o.value===saved)) selEn.value=saved;
+      else if(list.length) selEn.value=list[0].value;
     }
-    function getVoice(val){
-      if(!val) return null;
-      const [name,lang]=val.split('||');
-      return voices.find(v=>v.name===name&&v.lang===lang) ||
-             voices.find(v=>v.lang===lang) || null;
-    }
-    function speakEn(text){
-      if(!text) return;
-      const u = new SpeechSynthesisUtterance(text);
-      const v = getVoice(selEn.value);
-      if (v) u.voice = v;
-      u.lang = v?.lang || 'en-US';
-      u.rate = parseFloat(rateEl.value)||1;
-      u.pitch=1; u.volume=1;
-      speechSynthesis.cancel();
-      speechSynthesis.speak(u);
-    }
-    selEn.addEventListener('change', ()=>localStorage.setItem(LS.voice, selEn.value));
-
-    const savedRate = parseFloat(localStorage.getItem(LS.rate) || '1');
-    rateEl.value = (isNaN(savedRate)?1:savedRate).toFixed(2);
-    rateVal.textContent = parseFloat(rateEl.value).toFixed(2);
-    rateEl.addEventListener('input', ()=>{
-      const r = parseFloat(rateEl.value)||1;
-      rateVal.textContent = r.toFixed(2);
-      localStorage.setItem(LS.rate, r.toFixed(2));
-    });
-    loadVoices();
-    if ('onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices;
+    function getVoice(val){if(!val)return null;const [n,l]=val.split('||');return voices.find(v=>v.name===n&&v.lang===l)||voices.find(v=>v.lang===l)||null;}
+    function speakEn(t){if(!t)return;const u=new SpeechSynthesisUtterance(t);const v=getVoice(selEn.value);if(v)u.voice=v;u.lang=v?.lang||'en-US';u.rate=parseFloat(rateEl.value)||1;u.pitch=1;u.volume=1;speechSynthesis.cancel();speechSynthesis.speak(u);}
+    selEn.addEventListener('change',()=>localStorage.setItem(LS.voice,selEn.value));
+    const savedRate=parseFloat(localStorage.getItem(LS.rate)||'1');rateEl.value=(isNaN(savedRate)?1:savedRate).toFixed(2);
+    rateVal.textContent=parseFloat(rateEl.value).toFixed(2);
+    rateEl.addEventListener('input',()=>{const r=parseFloat(rateEl.value)||1;rateVal.textContent=r.toFixed(2);localStorage.setItem(LS.rate,r.toFixed(2));});
+    loadVoices();if('onvoiceschanged' in speechSynthesis)speechSynthesis.onvoiceschanged=loadVoices;
 
     // ===== 內容處理 =====
-    const CONTENT_URL = 'content/grammar.txt';
-    const contentEl = document.getElementById('content');
-    const chapterMenu = document.getElementById('chapterMenu');
+    const CONTENT_URL='content/grammar.txt';
+    const contentEl=document.getElementById('content');
+    const chapterMenu=document.getElementById('chapterMenu');
+    const esc=s=>(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
-    const hasCJK = s => /[\u3400-\u9FFF]/.test(s);
-    const isEN   = s => /^[A-Za-z0-9 ,.'";:!?()\-]+$/.test(s.trim());
-    const esc = s => (s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+    function splitByBraces(s){
+      const out=[];let last=0,m;const re=/\{[^}]*\}/g;
+      while((m=re.exec(s))!==null){
+        if(m.index>last) out.push({type:'text',value:s.slice(last,m.index)});
+        out.push({type:'brace',value:m[0].slice(1,-1)});
+        last=m.index+m[0].length;
+      }
+      if(last<s.length) out.push({type:'text',value:s.slice(last)});
+      return out;
+    }
 
-    function getDepthAndText(raw){
-      const t = raw.match(/^(\t+)/); if (t) return {depth:t[1].length, text:raw.slice(t[1].length)};
-      const s = raw.match(/^( {1,})/); if (s){ const n=s[1].length; return {depth:Math.floor(n/4), text:raw.slice(n)}; }
-      return {depth:0, text:raw};
+    /* 一般行：先抽離 {} 再處理 [] 與 #URL#，最後把 {} 還原成灰字（{} 內絕不發音） */
+    function renderInlineTokens(rawText){
+      const src=rawText??'';
+      const braceStore=[];
+      let staged=src.replace(/\{[^}]*\}/g,m=>{
+        const i=braceStore.push(m.slice(1,-1))-1;
+        return `\uE000${i}\uE001`;
+      });
+
+      // 跳脫
+      staged=esc(staged);
+
+      // [] → 可點發音
+      staged=staged.replace(/\[([^\]]+)\]/g,(m,p1)=>{
+        const safe=esc(p1);
+        return `<span class="say" tabindex="0" data-say="${safe}">${safe}</span>`;
+      });
+
+      // #URL# → [參考連結]（新分頁開啟，不改 history）
+      staged=staged.replace(/#(https?:\/\/[^\s#]+)#/g,(m,url)=>{
+        const safe=esc(url);
+        return `<a href="${safe}" target="_blank" rel="noopener noreferrer">[參考連結]</a>`;
+      });
+
+      // 還原 {} → 灰字、不發音（同時支援 {} 內 #URL#）
+      staged=staged.replace(/\uE000(\d+)\uE001/g,(m,k)=>{
+        const inner=braceStore[Number(k)]??'';
+        const innerEsc=esc(inner).replace(/#(https?:\/\/[^\s#]+)#/g,(m2,u)=>`<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">[參考連結]</a>`);
+        return `<span class="muted">${innerEsc}</span>`;
+      });
+
+      return staged;
     }
 
     async function loadContent(){
       try{
-        const res = await fetch(CONTENT_URL + '?c=' + Date.now(), {cache:'no-store'});
+        const res=await fetch(CONTENT_URL+'?c='+Date.now(),{cache:'no-store'});
         if(!res.ok) throw new Error('HTTP '+res.status);
-        const txt = await res.text();
+        const txt=await res.text();
         render(txt);
       }catch(e){
-        console.warn('讀取失敗，使用示例內容：', e);
-        render(`with 的用法:
-\t跟...一起
-\t\tHe lives with his mother.
-\t\t他跟他的媽媽住在一起。
-\t\tHe goes to school with his sister.
-\t\t他跟的他姊姊一起上學。
-
-時間段的用法:
-\t[in the morning] {在早上}
-\t\tI eat brakfast in the morning.
-\t\t我早上吃早餐。
-\t[at noon] {在中午}
-\t\tI have lunch at noon.
-\t\t我中午吃午餐。`);
+        console.warn('讀取失敗',e);
       }
     }
 
     function render(text){
-      contentEl.innerHTML = '';
-      chapterMenu.innerHTML = '';
+      contentEl.innerHTML='';
+      chapterMenu.innerHTML='<li><h6 class="dropdown-header">章節</h6></li>';
+      const lines=text.replace(/\r\n/g,'\n').split('\n');
+      const startIdx=lines.findIndex(l=>/^\s*\[內容\]\s*$/.test(l));
+      const work=(startIdx===-1?[]:lines.slice(startIdx+1)).map(s=>s.replace(/\s+$/,'')).filter(s=>s);
+      let currentSectionBody=null,lastPairDiv=null;const chapters=[];
 
-      const rows = text.replace(/\r\n/g,'\n').split('\n').map((raw, idx)=>{
-        const line = raw.replace(/\s+$/,'');
-        if(!line) return null;
-        const {depth, text} = getDepthAndText(line);
-        return {idx, depth, text};
-      }).filter(Boolean);
+      for(let i=0;i<work.length;i++){
+        const m=work[i].match(/^\s*<([123+])>\s*(.*)$/); if(!m) continue;
+        const tag=m[1], textLine=m[2];
 
-      const chapters = [];
-      let currentSectionBody = null;
+        if(tag==='1'){ // 章節（支援 #URL#）
+          const rawTitle=textLine.replace(/\s*:\s*$/,'');
+          const titleHTML=esc(rawTitle).replace(/#(https?:\/\/[^\s#]+)#/g,(mm,url)=>`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">[參考連結]</a>`);
+          const plainTitle=rawTitle.replace(/#https?:\/\/[^\s#]+#/g,'').trim();
+          const id='sec-'+plainTitle.replace(/\s+/g,'-').replace(/[^\w\-一-龥]/g,'').toLowerCase()+'-'+i;
 
-      for(let i=0;i<rows.length;i++){
-        const {idx, depth, text} = rows[i];
-
-        // 章節（最外層且以 : 結尾）
-        if(depth===0 && /:\s*$/.test(text)){
-          const title = text.replace(/:\s*$/,'');
-          const id = 'sec-' + title.replace(/\s+/g,'-').replace(/[^\w\-一-龥]/g,'').toLowerCase() + '-' + idx;
-
-          const section = document.createElement('section');
-          section.className = 'section anchor';
-          section.id = id;
-
-          const card = document.createElement('div');
-          card.className = 'section-card';
-
-          const header = document.createElement('div');
-          header.className = 'section-header';
-          header.innerHTML = `<span class="section-title">${esc(title)}</span>`;
+          const section=document.createElement('section');
+          section.className='section anchor'; section.id=id;
+          const card=document.createElement('div'); card.className='section-card';
+          const header=document.createElement('div'); header.className='section-header';
+          header.innerHTML=`<span class="section-title">${titleHTML}</span>`;
           card.appendChild(header);
+          const body=document.createElement('div'); card.appendChild(body);
+          section.appendChild(card); contentEl.appendChild(section);
+          currentSectionBody=body; lastPairDiv=null;
 
-          const body = document.createElement('div');
-          card.appendChild(body);
-
-          section.appendChild(card);
-          contentEl.appendChild(section);
-          currentSectionBody = body;
-
-          chapters.push({id,title});
-          continue;
-        }
-
-        // 放到當前章節卡片內（若沒有章節則直接放根）
-        const parent = currentSectionBody || contentEl;
-
-        // 英中配對（同深度，英文行 + 中文行）
-        const next = rows[i+1];
-        if(next && next.depth===depth && isEN(text) && hasCJK(next.text) && !/\[.*\]/.test(text)){
-          const enHTML = esc(text);
-          const zhHTML = esc(next.text).replace(/\{([^}]+)\}/g,(m,p1)=>`<span class="muted">${esc(p1)}</span>`);
-          const pair = document.createElement('div');
-          pair.className = `pair example depth-${Math.min(depth,4)}`;
-          pair.innerHTML = `
-            <span class="en say" tabindex="0" data-say="${enHTML}">${enHTML}</span>
-            <span class="zh muted">${zhHTML}</span>
-          `;
-          parent.appendChild(pair);
-          i++; // 吃掉中文行
-          continue;
-        }
-
-        // 一般行（處理 [] 與 {}）
-        const line = document.createElement('div');
-        line.className = `line depth-${Math.min(depth,4)}`;
-
-        let inner = esc(text);
-        // {} -> 灰色小字
-        inner = inner.replace(/\{([^}]+)\}/g,(m,p1)=>`<span class="muted">${esc(p1)}</span>`);
-        // [] -> 可點發音（不顯示中括號）
-        inner = inner.replace(/\[([^\]]+)\]/g,(m,p1)=>{
-          const safe = esc(p1);
-          return `<span class="say" tabindex="0" data-say="${safe}">${safe}</span>`;
-        });
-        // 沒用 [] 的英文行 -> 整行可點讀（視為範例行）
-        if (isEN(text) && !/\[.*\]/.test(text)){
-          const safe = esc(text);
-          inner = `<span class="say" tabindex="0" data-say="${safe}">${safe}</span>`;
-          line.classList.add('example');
-        }
-        // 純中文（非配對） -> 灰色較小字
-        if (hasCJK(text) && !/\{.*\}/.test(text)){
-          inner = `<span class="muted">${inner}</span>`;
-        }
-        // depth-1 視為「項目」
-        if (depth===1) line.classList.add('item');
-
-        line.innerHTML = inner;
-        parent.appendChild(line);
-      }
-
-      // 右上角章節下拉
-      if(!chapters.length){
-        chapterMenu.innerHTML = '<li><h6 class="dropdown-header">沒有章節</h6></li>';
-      }else{
-        chapterMenu.innerHTML = '<li><h6 class="dropdown-header">章節</h6></li>';
-        chapters.forEach(ch=>{
-          const li = document.createElement('li');
-          li.innerHTML = `<a class="dropdown-item" href="#${ch.id}">${esc(ch.title)}</a>`;
+          chapters.push({id,title:plainTitle});
+          const li=document.createElement('li');
+          li.innerHTML=`<a class="dropdown-item" href="#${id}">${esc(plainTitle)}</a>`;
           chapterMenu.appendChild(li);
-        });
-        chapterMenu.querySelectorAll('a[href^="#"]').forEach(a=>{
-          a.addEventListener('click', (e)=>{
-            e.preventDefault();
-            const id = a.getAttribute('href').slice(1);
-            const target = document.getElementById(id);
-            if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+          continue;
+        }
+
+        const parent=currentSectionBody||contentEl;
+
+        if(tag==='2'){ // 項目
+          const div=document.createElement('div');
+          div.className='line depth-1 item';
+          div.innerHTML=renderInlineTokens(textLine);
+          parent.appendChild(div);
+          lastPairDiv=null;
+          continue;
+        }
+
+        if(tag==='3'){ // 英文範例：支援前置符號 + [EN] + 尾巴 {ZH}
+          // 允許前置符號（不發音），如： "■[at the bus stop] {在公車站}"
+          const m3=textLine.match(/^\s*([^\[]*)\[([^\]]+)\]\s*(.*)$/);
+          const prefix = m3 ? m3[1] : '';                                   // 例： "■"
+          const enCore = m3 ? m3[2] : textLine.replace(/^\s*\[|\]\s*$/g,''); // 例： "at the bus stop"
+          const tail   = m3 ? m3[3] : '';                                    // 例： " {在公車站}"
+          const sayText=enCore.replace(/\{[^}]*\}/g,'').replace(/\s+/g,' ').trim();
+
+          const pair=document.createElement('div');
+          pair.className='pair depth-2' + (tail.trim()? ' inline':'');
+
+          const en=document.createElement('span');
+          en.className='en';
+
+          // 前置符號：原樣保留，不發音
+          if(prefix){
+            const pre=document.createElement('span');
+            pre.textContent=prefix; // 不加 .say
+            en.appendChild(pre);
+          }
+
+          // 主體英文：將 {} 變灰字；其餘文本可點發音（朗讀整句 sayText）
+          splitByBraces(enCore).forEach(tok=>{
+            if(tok.type==='text' && tok.value){
+              const span=document.createElement('span');
+              span.className='say';
+              span.tabIndex=0;
+              span.setAttribute('data-say',sayText);
+              span.textContent=tok.value;
+              en.appendChild(span);
+            }else if(tok.type==='brace'){
+              const mm=document.createElement('span');
+              mm.className='muted';
+              // {} 內若含 #URL# → [參考連結]
+              const inner=tok.value.replace(/#(https?:\/\/[^\s#]+)#/g,(m2,u)=>`<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">[參考連結]</a>`);
+              mm.innerHTML=inner;
+              en.appendChild(mm);
+            }
           });
-        });
+
+          pair.appendChild(en);
+
+          // 同列尾巴（通常是 {中文}），顯示在右側（灰字）
+          if(tail && tail.trim()){
+            const zhInline=document.createElement('span');
+            zhInline.className='zh muted';
+            zhInline.innerHTML=renderInlineTokens(tail);
+            pair.appendChild(zhInline);
+          }
+
+          parent.appendChild(pair);
+          lastPairDiv=pair;
+          continue;
+        }
+
+        if(tag==='+'){ // 中文譯文：另起一列、間距更緊
+          if(lastPairDiv){
+            lastPairDiv.classList.add('tight');
+            const zh=document.createElement('span');
+            zh.className='zh muted';
+            zh.innerHTML=renderInlineTokens(textLine);
+            lastPairDiv.appendChild(zh);
+          }else{
+            const alone=document.createElement('div');
+            alone.className='pair depth-2 tight';
+            alone.innerHTML=`<span class="zh muted">${renderInlineTokens(textLine)}</span>`;
+            parent.appendChild(alone);
+            lastPairDiv=alone;
+          }
+          continue;
+        }
       }
 
-      // 綁定點讀
-      contentEl.querySelectorAll('.say').forEach(el=>{
-        el.addEventListener('click', ()=>{
-          el.classList.add('speaking');
-          speakEn(el.getAttribute('data-say')||el.textContent.trim());
-          setTimeout(()=>el.classList.remove('speaking'), 300);
-        });
-        el.addEventListener('keydown', e=>{
-          if(e.key==='Enter' || e.key===' '){
-            e.preventDefault();
-            el.click();
-          }
+      // 章節選單平滑卷動（不改網址）
+      chapterMenu.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click',e=>{
+          e.preventDefault();
+          const id=a.getAttribute('href').slice(1);
+          const t=document.getElementById(id);
+          if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
         });
       });
+
+      // 朗讀事件（只綁 .say）
+      contentEl.querySelectorAll('.say').forEach(el=>{
+        el.addEventListener('click',()=>{
+          el.classList.add('speaking');
+          const t=el.getAttribute('data-say')||el.textContent.trim();
+          speakEn(t);
+          setTimeout(()=>el.classList.remove('speaking'),300);
+        });
+        el.addEventListener('keydown',e=>{
+          if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}
+        });
+      });
+
+      // 灰字阻止冒泡，避免觸發父層朗讀
+      contentEl.querySelectorAll('.muted').forEach(el=>{
+        el.addEventListener('click',e=>e.stopPropagation());
+        el.addEventListener('mousedown',e=>e.stopPropagation());
+        el.addEventListener('touchstart',e=>e.stopPropagation());
+      });
+
+      if(!chapters.length){
+        chapterMenu.innerHTML='<li><h6 class="dropdown-header">沒有章節</h6></li>';
+      }
     }
 
-    // 啟動
     loadContent();
   </script>
 </body>
 </html>
+
+
+
 
 
 

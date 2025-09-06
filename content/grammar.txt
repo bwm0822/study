@@ -1,37 +1,102 @@
-with 的用法:
-    1. 跟．．．一起
-        He lives with his mother. 
-        他跟他的媽媽住在一起。
-        He goes to school with his sister. 
-        他跟他的姊姊一起上學。
-    2. 擁有
-        Tony is a boy with bright eyes.
-        東尼是一位擁有一雙明亮眼睛的男孩。
-        Abbie is a girl with a long hair.
-        艾比是一位擁有一頭長髮的女孩。
-        I read a book with a red cover.
-        我讀了一本紅色封面的書。
-        I see a bird with big wings.
-        我看到一隻長著大翅膀的鳥。
-    3. 用
-        He draws with a pencil.
-        他用鉛筆畫畫。
-        He drinks juice with a big cup.
-        他用大杯子喝果汁。
+內容解析規則，不會顯示出來:
+<1> 代表不要縮排
+<2> 縮排
+<3> 兩倍縮排
+<+> 兩倍縮排，跟上一列為一組，縮小行距
+[] 按下發音，有動畫效果
+{} 灰色小字，不發音
+#URL# 代表連結，顯示[參考連結]，按下後，開新頁面連到到URL，請不能影響返回鍵
 
-時間段的用法:
-    1. [in the morning] {在早上}
-        I eat breakfast in the morning.
-        我早上吃早餐。
-    2. [at noon]    {在中午}
-        I have lunch at noon.
-        我中午吃午餐。
-    3. [in the afternoon]   {在下午}
-        I play basketball in the afternoon.
-        我下午打籃球。
-    4. [in the evening] {在傍晚}
-        I have dinner in the evening.
-        我傍晚吃晚餐。
-    5. [at night]   {在晚上}
-        I go to bed at night.
-        我晚上睡覺。
+[內容]
+<1>with 的用法:#https://english.cool/with/#
+    <2>{1.} 跟．．．一起
+        <3>[He lives with his mother.] 
+        <+>{他跟他的媽媽住在一起。}
+        <3>[He goes to school with his sister.] 
+        <+>{他跟他的姊姊一起上學。}
+    <2>{2.} 擁有
+        <3>[Tony is a boy with bright eyes.]
+        <+>{東尼是一位擁有一雙明亮眼睛的男孩。}
+        <3>[Abbie is a girl with a long hair.]
+        <+>{艾比是一位擁有一頭長髮的女孩。}
+        <3>[I read a book with a red cover.]
+        <+>{我讀了一本紅色封面的書。}
+        <3>[I see a bird with big wings.]
+        <+>{我看到一隻長著大翅膀的鳥。}
+    <2>{3.} 用
+        <3>[He draws with a pencil.]
+        <+>{他用鉛筆畫畫。}
+        <3>[He drinks juice with a big cup.]
+        <+>{他用大杯子喝果汁。}
+
+<1>時間段的用法:
+    <2>{1.} [in the morning] {在早上}
+        <3>[I eat breakfast in the morning.]
+        <+>{我早上吃早餐。}
+    <2>{2.} [at noon]    {在中午}
+        <3>[I have lunch at noon.]
+        <+>{我中午吃午餐。}
+    <2>{3.} [in the afternoon]   {在下午}
+        <3>[I play basketball in the afternoon.]
+        <+>{我下午打籃球。}
+    <2>{4.} [in the evening] {在傍晚}
+        <3>[I have dinner in the evening.]
+        <+>{我傍晚吃晚餐。}
+    <2>{5.} [at night]   {在晚上}
+        <3>[I go to bed at night.]
+        <+>{我晚上睡覺。}
+
+<1>地方介系詞:#https://english.cool/places-prepositions/#
+    <2>[at] {在某個定點}
+        <3>[He is waiting for the bus at the bus stop.]
+        <+>{他在公車站等公車。}
+        <3>He stands at the door.  
+        <+>他站在在門口。
+        <3>[I will meet you at the train station.]
+        <+>{我會在車站和你見面。}
+        <3>[Please wait at the front desk.]
+        <+>{請在前方櫃檯稍等。}
+    <2>[in] {在大範圍的地點，如：國家、城市/在．．．內部，如：箱子、建築物}
+        <3>[I live in Taipei.]
+        <+>{我住在台北。}
+        <3>[There is a cat is in the box.]
+        <+>{這個箱子裡有一隻貓。}
+        <3>[What do you have in your mouth?]
+        <+>{你嘴巴裡面有什麼東西嗎？}
+    <2>[on] {在．．．上面}
+        <3>[The book is on the desk.]
+        <+>{書在桌上。}
+        <3>[There is a clock on the wall.]
+        <+>{牆上有一個鐘。}
+        <3>[A light is on the ceiling.]
+        <+>{天花板上有一盞燈。}
+        <3>[They live on an island.]
+        <+>{他們住在一座島上。}
+    <2>[above]  {在．．．上方(無接觸)}
+        <3>[The book is in the shelf above your head.]
+        <+>{那個書本在你頭上的櫃子裡。}
+    over 在．．．正上方
+    <2>[under] {在．．．正下方}
+        <3>[The cat likes to hide under the bed.]
+        <+>{那隻貓喜歡躲在這個張床底下。}
+    <2>[in front of] {在．．．前方}
+        <3>[He stands in front of me.]
+        <+>{他站在我面前。}
+    <2>[behind] {在．．．後方}
+        <3>Don’t stand behind the car. It’s dangerous.
+        <+>{不要站在那輛車後面，這樣很危險。}
+    <2>[by / beside / next to] {在．．．旁邊}
+        <3>[You can sit by me.]
+        <+>{你可以坐在我旁邊。}
+    <2>[near] {在．．．附近}
+        <3>[The movie theater is near my house.]
+        <+>{那間電影院在我家附近。}
+    <2>[between] {在．．．之間}
+        <3>[He is between the you and me.]
+        <+>{他在你和我之間。}
+    <2>[among] {在．．．之中}
+        <3>[I find my pencil among the books.]
+        <+>{我在那些書本中找到我的鉛筆。}
+        <3>[The teacher walked among the students.]
+        <+>{老師走在學生之間。}
+
