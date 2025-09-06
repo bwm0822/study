@@ -30,13 +30,13 @@
 29	some	[sʌm]	一些	[形容詞]	I have some candy.	我有一些糖果。
 30	every	[ˈɛvri]	每一個	[形容詞]	Every day I read.	我每天讀書。
 31	how	[haʊ]	如何	[疑問詞]	How are you?	你好嗎？
-32	what	[wʌt]	什麼	[疑問詞]	What is this?	這是什麼？
-33	when	[wɛn]	何時	[疑問詞]	When is lunch?	午餐是什麼時候？
-34	where	[wɛr]	在哪裡	[疑問詞]	Where is the book?	書在哪裡？
-35	which	[wɪtʃ]	哪一個	[疑問詞]	Which bag is yours?	哪一個包包是你的？
+32	what	[hwʌt]	什麼	[疑問詞]	What is this?	這是什麼？
+33	when	[hwɛn]	何時	[疑問詞]	When is lunch?	午餐是什麼時候？
+34	where	[hwɛr]	在哪裡	[疑問詞]	Where is the book?	書在哪裡？
+35	which	[hwɪtʃ]	哪一個	[疑問詞]	Which bag is yours?	哪一個包包是你的？
 36	who	[hu]	誰	[疑問詞]	Who is your teacher?	誰是你的老師？
 37	whose	[huz]	誰的	[疑問詞]	Whose pencil is this?	這是誰的鉛筆？
-38	why	[waɪ]	為什麼	[疑問詞]	Why are you late?	為什麼你遲到？
+38	why	[hwaɪ]	為什麼	[疑問詞]	Why are you late?	為什麼你遲到？
 39	and	[ænd]	和	[連接詞]	I like apples and bananas.	我喜歡蘋果和香蕉。
 40	but	[bʌt]	但是	[連接詞]	I am small but strong.	我很小，但很強壯。
 41	because	[bɪˈkɔz]	因為	[連接詞]	I stay home because it rains.	因為下雨，我待在家裡。
@@ -524,5 +524,4 @@
 522	these	[ðiz]	這些	[代名詞]	These apples are sweet.	這些蘋果很甜。
 523	those	[ðoz]	那些	[代名詞]	Those books are mine.	那些書是我的。
 524	flower	[ˈflaʊ.ɚ]	花	[名詞]	The flower is very beautiful.	這朵花很美麗。
-
-
+						

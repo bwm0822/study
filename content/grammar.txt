@@ -8,7 +8,7 @@
 #URL# 代表連結，顯示[參考連結]，按下後，開新頁面連到到URL，請不能影響返回鍵
 
 [內容]
-<1>with 的用法:#https://english.cool/with/#
+<1>with 的用法#https://english.cool/with/#
     <2>{1.} 跟．．．一起
         <3>[He lives with his mother.] 
         <+>{他跟他的媽媽住在一起。}
@@ -46,7 +46,7 @@
         <3>[I go to bed at night.]
         <+>{我晚上睡覺。}
 
-<1>地方介系詞:#https://english.cool/places-prepositions/#
+<1>地方介系詞#https://english.cool/places-prepositions/#
     <2>[at] {在某個定點}
         <3>[He is waiting for the bus at the bus stop.]
         <+>{他在公車站等公車。}
@@ -56,13 +56,22 @@
         <+>{我會在車站和你見面。}
         <3>[Please wait at the front desk.]
         <+>{請在前方櫃檯稍等。}
-    <2>[in] {在大範圍的地點，如：國家、城市/在．．．內部，如：箱子、建築物}
+    <2>[in] {在大範圍的地點，如：國家、城市 / 在．．．內部，如：箱子、建築物}
         <3>[I live in Taipei.]
         <+>{我住在台北。}
         <3>[There is a cat is in the box.]
         <+>{這個箱子裡有一隻貓。}
         <3>[What do you have in your mouth?]
         <+>{你嘴巴裡面有什麼東西嗎？}
+    <2>in {和} at {的差別？}at {是強調地點，}in {是強調空間}
+        <3>[I don’t like to work at my office. I prefer to work from home.]
+        <+>{我不喜歡在我的辦公室工作，我偏好在家工作。}
+        <3>[I don’t like to work in my office. It’s too small.]
+        <+>{我不喜歡在我的辦公室裡工作，空間太小了。}
+        <3>[We have dinner at the restaurant.]
+        <+>{我們在這家餐廳用晚餐。}
+        <3>[There are many people in the restaurant.]
+        <+>{這間餐廳裡有很多人。}
     <2>[on] {在．．．上面}
         <3>[The book is on the desk.]
         <+>{書在桌上。}
