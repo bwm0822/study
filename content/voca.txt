@@ -525,3 +525,17 @@
 523	those	[ðoz]	那些	[代名詞]	Those books are mine.	那些書是我的。
 524	flower	[ˈflaʊ.ɚ]	花	[名詞]	The flower is very beautiful.	這朵花很美麗。
 						
+525	paint	[pent]	油漆；繪畫	[動詞/名詞]	I want to paint the wall blue.	我想把牆漆成藍色。
+526	blanket	[ˋblæŋkɪt]	毯子	[名詞]	She covered herself with a warm blanket.	她蓋上一條暖和的毯子。
+527	carpet	[ˋkɑrpɪt]	地毯	[名詞]	The carpet in the living room is red.	客廳的地毯是紅色的。
+528	closet	[ˋklɑzɪt]	衣櫥；壁櫥	[名詞]	He keeps his clothes in the closet.	他把衣服放在衣櫥裡。
+529	pillow	[ˋpɪlo]	枕頭	[名詞]	I need a soft pillow to sleep well.	我需要一個軟枕頭才能睡得好。
+530	wallpaper	[ˋwɔl͵pepɚ]	壁紙	[名詞]	The wallpaper has a flower design.	這張壁紙有花朵的圖案。
+531	furniture	[ˋfɝnɪtʃɚ]	家具	[名詞]	We bought new furniture for the house.	我們為家裡買了新家具。
+532	rug	[rʌg]	小地毯	[名詞]	There is a rug near the door.	門口有一張小地毯。
+533	want	[wɑnt]	想要	[動詞]	I want a glass of water.	我想要一杯水。
+534	need	[nid]	需要	[動詞]	You need to finish your homework.	你需要完成作業。
+535	something	[ˋsʌmθɪŋ]	某物	[代名詞]	I have something to tell you.	我有件事要告訴你。
+536	hardwood	[ˋhɑrd͵wʊd]	硬木；實木	[名詞]	The floor is made of hardwood.	地板是硬木做的。
+537	dresser	[ˋdrɛsɚ]	梳妝台；衣櫃	[名詞]	She keeps her mirror on the dresser.	她把鏡子放在梳妝台上。
+538	expensive	[ɪkˋspɛnsɪv]	昂貴的	[形容詞]	This bag is too expensive for me.	這個包對我來說太貴了。

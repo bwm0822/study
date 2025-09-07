@@ -43,7 +43,7 @@ r、rr	[ r ]	kk.mp3	53.0	54.0	嘴唇微微噘起，舌尖上揚並振動聲帶�
 m、mm	[ m ]	kk.mp3	55.0	56.0	母音前發音接近ㄇ，母音後發音接近雙唇緊閉發 m	moon [mun]、community [kəˋmjunətɪ]
 n、nn	[ n ]	kk.mp3	57.0	58.0	舌尖頂住上齒齦，再從鼻腔發聲，母音前發音接近ㄋ，母音後發音接近ㄣ	clean [klin]、tennis [ˋtɛnɪs]
 ng、nk	[ ŋ ]	kk.mp3	59.0	60.0	舌尖平放，再從鼻腔發聲，發ㄣˋ音	long [lɔŋ]、thank [θæŋk]
-y	[ j ]	kk.mp3	61.0	62.0	發短音的ㄧㄦ˙	young [jʌŋ]
+y	[ j ]	kk.mp3	61.0	62.0	發短音的ㄧ˙	young [jʌŋ]
 w、wh、o	[ w ]	kk.mp3	63.0	64.0	發短音的ㄨ	world [wɝld]、who [hu]、one [wʌn]
 						
 <2>無聲子音						
