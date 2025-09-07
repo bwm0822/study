@@ -18,7 +18,19 @@
     td[data-say]:active{transform:scale(1.03)}
     td.speaking{outline:2px solid var(--bs-primary);box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
 
-    .range-inline{width:260px;min-width:180px}
+    /* 縮小語速 bar */
+    .range-inline{width:140px;min-width:110px}
+
+    /* 精簡搜尋：🔍︎[輸 入][x] */
+    .search-wrap{flex:0 1 240px}
+    .form-control-dark{background:#1b1f22;color:#e9ecef;border:1px solid rgba(255,255,255,.18)}
+    .form-control-dark::placeholder{color:#adb5bd}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.18);color:#e9ecef}
+    .btn-ghost:hover{background:rgba(255,255,255,.06)}
+    .search-icon{user-select:none}
+
+    /* 目標列高亮 */
+    tr.jump-highlight td{outline:2px solid var(--bs-primary); box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
   </style>
 </head>
 <body>
@@ -31,7 +43,7 @@
   </nav>
 
   <main class="container py-3">
-    <!-- 英文語音 + 語速（同一列） -->
+    <!-- 英文語音 + 語速 + 精簡搜尋（同一列） -->
     <div class="card mb-3 bg-dark text-light border-secondary">
       <div class="card-body">
         <div class="d-flex align-items-center flex-wrap gap-3">
@@ -40,6 +52,16 @@
 
           <label for="rate" class="form-label mb-0">語速：<span id="rateVal">1.00</span></label>
           <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00">
+
+          <!-- 🔍︎[輸 入][x] -->
+          <div class="search-wrap ms-auto">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text btn-ghost search-icon">&#x1F50D;&#xFE0E;</span>
+              <input id="q" type="search" class="form-control form-control-dark" placeholder="輸入" list="baseList" autocomplete="off">
+              <datalist id="baseList"></datalist>
+              <button id="clearQ" class="btn btn-ghost" type="button" title="清除">x</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -108,36 +130,34 @@
     loadVoices();
     if ('onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices;
 
-    // ====== 讀取 irregular.txt（單列型：中譯/原形/過去/過去分詞） ======
+    // ====== 表格資料 ======
     const theadRow = document.getElementById('theadRow');
     const tbody    = document.getElementById('tbody');
+
+    const baseIndex = new Map(); // base(lower) -> tr
+    let allRows = [];
 
     fetch('content/irregular.txt?c='+Date.now())
       .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
       .then(txt => {
-        const rows = parseTSV(txt); // 只回傳資料列（自動略過含「中譯」的表頭）
+        allRows = parseTSV(txt);
         buildThead(['中譯','原形動詞','過去式','過去分詞']);
-        render(rows);
-        loadInfo.textContent = `共 ${rows.length} 筆`;
+        render(allRows);
+        loadInfo.textContent = `共 ${allRows.length} 筆`;
       })
       .catch(err => loadInfo.textContent = '讀取失敗：' + err.message);
 
     function parseTSV(txt){
-      // 移除 BOM、CR，按行切割；移除純空白行
-      const lines = txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n')
-                       .filter(l => l.trim() !== '');
+      const lines = txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n').filter(l => l.trim() !== '');
       if (!lines.length) return [];
       const data = lines.map(line => line.split('\t').map(s=>s.trim()));
-      // 若第一列是表頭（含「中譯」），就去掉它
       const body = data[0].some(c => /中譯|原形|過去|過去分詞/.test(c)) ? data.slice(1) : data;
-      // 只保留前四欄
-      return body.map(cols => [cols[0]||'', cols[1]||'', cols[2]||'', cols[3]||''])
-                 .filter(row => row.some(v => v)); // 至少有一欄非空
+      return body.map(cols => [cols[0]||'', cols[1]||'', cols[2]||'', cols[3]||'']).filter(row => row.some(v => v));
     }
 
     function buildThead(header){
       theadRow.innerHTML='';
-      header.forEach((h)=>{
+      header.forEach(h=>{
         const th = document.createElement('th');
         th.textContent = h || '';
         theadRow.appendChild(th);
@@ -146,13 +166,12 @@
 
     function render(rows){
       tbody.innerHTML='';
+      baseIndex.clear();
       const frag = document.createDocumentFragment();
       rows.forEach(([cn, base, past, part])=>{
         const tr = document.createElement('tr');
 
-        const tdCN = document.createElement('td');
-        tdCN.textContent = cn;
-        tr.appendChild(tdCN);
+        const tdCN = document.createElement('td'); tdCN.textContent = cn; tr.appendChild(tdCN);
 
         const tdBase = document.createElement('td');
         tdBase.innerHTML = `<b>${escapeHTML(base)}</b>`;
@@ -172,6 +191,9 @@
         tdPart.addEventListener('click', onSpeakCell);
         tr.appendChild(tdPart);
 
+        const key = String(base||'').trim().toLowerCase();
+        if (key && !baseIndex.has(key)) baseIndex.set(key, tr);
+
         frag.appendChild(tr);
       });
       tbody.appendChild(frag);
@@ -187,9 +209,53 @@
     }
 
     function escapeHTML(s){return (s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+    // ====== 精簡搜尋（🔍︎[輸 入][x]；空字串不出選項） ======
+    const q = document.getElementById('q');
+    const baseList = document.getElementById('baseList');
+    const clearQ = document.getElementById('clearQ');
+
+    function filterDatalistToPrefix(prefix){
+      const p = String(prefix||'').toLowerCase();
+      baseList.innerHTML = '';
+      if (!p) return;
+      const all = Array.from(new Set(allRows.map(r => String(r[1]||'').trim()).filter(Boolean)));
+      const list = all.filter(b => b.toLowerCase().startsWith(p))
+                      .sort((a,b)=>a.localeCompare(b,'en',{sensitivity:'base'}));
+      list.forEach(b=>{
+        const opt = document.createElement('option');
+        opt.value = b;
+        baseList.appendChild(opt);
+      });
+    }
+
+    q.addEventListener('input', ()=> filterDatalistToPrefix(q.value));
+    q.addEventListener('change', ()=> jumpToBase(q.value));
+    q.addEventListener('keydown', ev=>{
+      if (ev.key==='Enter'){ev.preventDefault();jumpToBase(q.value);}
+    });
+    clearQ.addEventListener('click', ()=>{q.value='';baseList.innerHTML='';q.focus();});
+
+    function jumpToBase(val){
+      const raw = String(val||'').trim().toLowerCase();
+      if (!raw) return;
+      let tr = baseIndex.get(raw);
+      if (!tr){
+        const key = Array.from(baseIndex.keys()).find(k => k.startsWith(raw));
+        if (key) tr = baseIndex.get(key);
+      }
+      if (!tr) return;
+      tr.scrollIntoView({behavior:'smooth',block:'center'});
+      tr.classList.add('jump-highlight');
+      setTimeout(()=>tr.classList.remove('jump-highlight'),1200);
+    }
   </script>
 </body>
 </html>
+
+
+
+
 
 
 

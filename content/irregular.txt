@@ -1,4 +1,5 @@
 中譯	原形動詞	過去式	過去分詞
+吃	eat	ate	eaten
 打	hit	hit	hit
 握住	hold	held	held
 傷害	hurt	hurt	hurt
@@ -56,3 +57,4 @@
 穿戴	wear	wore	worn
 贏	win	won	won
 寫	write	wrote	written
+
