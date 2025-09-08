@@ -16,7 +16,7 @@ from pydub.utils import which
 
 # ========= 路徑（相對本檔）=========
 BASE = Path(__file__).resolve().parent
-EXCEL_PATH   = (BASE / "../doc/table.xlsx").resolve()
+EXCEL_PATH   = (BASE / "../doc/kk.xlsx").resolve()
 SHEET_NAME   = "kk"
 HEADER_ROW   = 5  # 第5列為欄名（1-based）
 

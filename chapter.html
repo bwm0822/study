@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh-Hant" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>基本語法</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{background:#212529;color:#f8f9fa}
+    .navbar{border-bottom:1px solid rgba(255,255,255,.15)}
+    .anchor{scroll-margin-top:80px}
+
+    /* 控制列：語音/語速各佔 1/3 */
+    .control-card{background:#1b1f22}
+    .control-row{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+    .control-row .group{display:flex;align-items:center;gap:.5rem;flex:1 1 33%}
+    .control-row label{white-space:nowrap;color:#fff}
+    .control-row select,.control-row input[type=range]{width:100%}
+    .range-val{display:inline-block;min-width:3.2rem;text-align:right;color:#fff}
+
+    :root{--indent:1.6rem}
+
+    /* 行樣式（縮排改由 JS 行內樣式 + !important 控制） */
+    .line{padding-top:.18rem;padding-bottom:.18rem;border-left:1px solid rgba(255,255,255,.06)}
+    /* <+> 與上一列更緊 */
+    .tight{margin-top:-.45rem !important; padding-top:0 !important;}
+
+    .section{margin:1.2rem 0}
+    .section-card{background:#1b1f22;border:1px solid rgba(255,255,255,.2);border-radius:.75rem;padding:.75rem .9rem;}
+    .section-header{margin-bottom:.45rem}
+    .section-title{color:#fff;font-weight:700;font-size:1rem}
+
+    .say{cursor:pointer;display:inline-block;border-radius:.25rem;padding:0 .1rem;
+         transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease}
+    .say:hover{background-color:rgba(255,255,255,.08)}
+    .say:active{transform:scale(1.03)}
+    .say.speaking{outline:2px solid var(--bs-primary);box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
+
+    .muted{color:#adb5bd;font-size:.92em;cursor:default}
+
+    .dropdown-menu{--bs-dropdown-bg:#1b1f22; --bs-dropdown-link-hover-bg:#2a2f33; --bs-dropdown-link-color:#e9ecef}
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark sticky-top">
+    <div class="container d-flex align-items-center">
+      <button id="backBtn" class="btn btn-outline-light btn-sm">返回</button>
+      <span id="pageTitle" class="navbar-brand ms-3 mb-0 h1">基本語法</span>
+      <div class="dropdown ms-auto">
+        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          章節選單
+        </button>
+        <ul id="chapterMenu" class="dropdown-menu dropdown-menu-end">
+          <li><h6 class="dropdown-header">尚未載入</h6></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-3">
+    <div class="card control-card border-secondary mb-3">
+      <div class="card-body">
+        <div class="control-row">
+          <div class="group">
+            <label for="selEn" class="form-label mb-0">語音</label>
+            <select id="selEn" class="form-select form-select-sm bg-dark text-light border-secondary"></select>
+          </div>
+          <div class="group">
+            <!-- 語速 [數值] [調整桿] -->
+            <label for="rate" class="form-label mb-0">語速</label><span id="rateVal">1.00</span>
+            <input id="rate" type="range" class="form-range" min="0.50" max="1.80" step="0.01" value="1.00">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="content"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // ===== 參數 =====
+    const params=new URLSearchParams(location.search);
+    const PATH=params.get('path') || 'content/grammar.txt';
+    const TITLE=params.get('title') || '基本語法';
+    document.title=TITLE;
+    document.getElementById('pageTitle').textContent=TITLE;
+
+    // ===== 返回鍵 =====
+    document.getElementById('backBtn').addEventListener('click', ()=>history.back());
+
+    // ===== 語音設定（記憶） =====
+    const selEn=document.getElementById('selEn');
+    const rateEl=document.getElementById('rate');
+    const rateVal=document.getElementById('rateVal');
+    let voices=[];
+    const LS={voice:'tts.enVoice',rate:'tts.rate'};
+
+    function loadVoices(){
+      voices=speechSynthesis.getVoices();
+      const list=voices.filter(v=>v.lang&&v.lang.toLowerCase().startsWith('en'))
+        .sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'en'));
+      const saved=localStorage.getItem(LS.voice);
+      selEn.innerHTML='';
+      list.forEach(v=>{
+        const opt=document.createElement('option');
+        opt.value=v.name+'||'+v.lang;
+        opt.textContent=`${v.name} (${v.lang})${v.default?' ★':''}`;
+        selEn.appendChild(opt);
+      });
+      if(saved&&[...selEn.options].some(o=>o.value===saved)) selEn.value=saved;
+      else if(list.length) selEn.value=list[0].value;
+    }
+    function getVoice(val){if(!val)return null;const [n,l]=val.split('||');return voices.find(v=>v.name===n&&v.lang===l)||voices.find(v=>v.lang===l)||null;}
+    function speakEn(t){
+      if(!t)return;
+      const u=new SpeechSynthesisUtterance(t);
+      const v=getVoice(selEn.value);
+      if(v)u.voice=v; u.lang=v?.lang||'en-US';
+      u.rate=parseFloat(rateEl.value)||1; u.pitch=1; u.volume=1;
+      speechSynthesis.cancel(); speechSynthesis.speak(u);
+    }
+    selEn.addEventListener('change',()=>localStorage.setItem(LS.voice,selEn.value));
+    const savedRate=parseFloat(localStorage.getItem(LS.rate)||'1');
+    rateEl.value=(isNaN(savedRate)?1:savedRate).toFixed(2);
+    rateVal.textContent=parseFloat(rateEl.value).toFixed(2);
+    rateEl.addEventListener('input',()=>{
+      const r=parseFloat(rateEl.value)||1;
+      rateVal.textContent=r.toFixed(2);
+      localStorage.setItem(LS.rate,r.toFixed(2));
+    });
+    loadVoices();
+    if('onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged=loadVoices;
+
+    // ===== DOM 參照與工具 =====
+    const contentEl=document.getElementById('content');
+    const chapterMenu=document.getElementById('chapterMenu');
+    const esc=s=>(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+    // 行內轉換：
+    // 1) {} → 灰字（裡面也支援 #URL# → [參考連結]）
+    // 2) [] → 可點發音（顯示內容，不顯示方括號）
+    // 3) 外層文字也支援 #URL# → [參考連結]
+    function renderInlineTokens(raw){
+      let s=esc(raw??'');
+
+      // {}：先處理，讓 {} 內也可有超連結
+      s=s.replace(/\{([^}]*)\}/g,(m,p1)=>{
+        let inner=esc(p1);
+        inner=inner.replace(/#(https?:\/\/[^\s#]+)#/g,(mm,url)=>{
+          const safe=esc(url);
+          return `<a href="${safe}" target="_blank" rel="noopener noreferrer">[參考連結]</a>`;
+        });
+        return `<span class="muted">${inner}</span>`;
+      });
+
+      // []：可點發音
+      s=s.replace(/\[([^\]]+)\]/g,(m,p1)=>{
+        const safe=esc(p1).replace(/\s+/g,' ').trim();
+        return `<span class="say" tabindex="0" data-say="${safe}">${safe}</span>`;
+      });
+
+      // 外層 #URL#：變成連結
+      s=s.replace(/#(https?:\/\/[^\s#]+)#/g,(m,url)=>{
+        const safe=esc(url);
+        return `<a href="${safe}" target="_blank" rel="noopener noreferrer">[參考連結]</a>`;
+      });
+
+      return s;
+    }
+
+    // 強制縮排（以 !important 寫入行內）
+    function setDepth(el, depth){
+      const val=`calc(var(--indent) * ${depth})`;
+      el.style.setProperty('margin-left', val, 'important');   // 整塊右移（含邊線）
+      el.style.setProperty('padding-left', '0', 'important');  // 避免其他規則影響視覺
+    }
+
+    async function loadContent(){
+      try{
+        const res=await fetch(PATH+'?c='+Date.now(),{cache:'no-store'});
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const txt=await res.text();
+        render(txt);
+      }catch(e){
+        // 讀檔失敗 → 內建示例（含 #URL#、[]、{}）
+        const demo =
+`註解
+[內容]
+<1>現在簡單式 #https://english.cool/grammar/#
+  <2>肯定句
+    <3>[I eat breakfast] {我吃早餐，參考 #https://example.com/a#}
+    <+>{中譯：我吃早餐，更多說明見 #https://example.com/b#}
+    <3>[She likes apples] {她喜歡蘋果}
+    <+>{中譯：她喜歡蘋果}
+  <2>否定句
+    <3>[I do not eat meat] {我不吃肉}
+    <+>{中譯：我不吃肉}
+<1>過去簡單式
+  <2>肯定句
+    <3>[I went to school] {我去上學了}
+    <+>{中譯：我去上學了}`;
+        render(demo);
+      }
+    }
+
+    function render(text){
+      contentEl.innerHTML='';
+      chapterMenu.innerHTML='<li><h6 class="dropdown-header">章節</h6></li>';
+
+      const lines=text.replace(/\r\n/g,'\n').split('\n');
+      const startIdx=lines.findIndex(l=>/^\s*\[內容\]\s*$/.test(l));
+      const work=(startIdx===-1?[]:lines.slice(startIdx+1)).map(s=>s.replace(/\s+$/,'')).filter(s=>s);
+
+      let currentSectionBody=null;
+
+      for(let i=0;i<work.length;i++){
+        const m=work[i].match(/^\s*<([123+])>\s*(.*)$/);
+        if(!m) continue;
+        const tag=m[1], textLine=m[2];
+
+        if(tag==='1'){ // 章節（外框）
+          const title=textLine.trim().replace(/\s*:\s*$/,'');
+          const id='sec-'+title.replace(/\s+/g,'-').replace(/[^\w\-一-龥]/g,'').toLowerCase()+'-'+i;
+
+          const section=document.createElement('section');
+          section.className='section anchor'; section.id=id;
+
+          const card=document.createElement('div'); card.className='section-card';
+          const header=document.createElement('div'); header.className='section-header';
+          header.innerHTML=`<span class="section-title">${renderInlineTokens(title)}</span>`;
+          const body=document.createElement('div');
+
+          card.appendChild(header); card.appendChild(body);
+          section.appendChild(card); contentEl.appendChild(section);
+
+          currentSectionBody=body;
+
+          const li=document.createElement('li');
+          li.innerHTML=`<a class="dropdown-item" href="#${id}">${esc(title.replace(/#https?:\/\/[^\s#]+#/g,'').trim())}</a>`;
+          chapterMenu.appendChild(li);
+          continue;
+        }
+
+        const parent=currentSectionBody||contentEl;
+
+        if(tag==='2'){ // 項目：一倍縮排
+          const div=document.createElement('div');
+          div.className='line';
+          div.innerHTML=renderInlineTokens(textLine);
+          setDepth(div, 1);
+          parent.appendChild(div);
+          continue;
+        }
+
+        if(tag==='3'){ // 範例：兩倍縮排
+          const div=document.createElement('div');
+          div.className='line';
+          div.innerHTML=renderInlineTokens(textLine);
+          setDepth(div, 2);
+          parent.appendChild(div);
+          continue;
+        }
+
+        if(tag==='+'){ // 中譯：兩倍縮排、與上一列更緊
+            const div=document.createElement('div');
+            div.className='line tight';
+            // 直接顯示，不加 muted → 保持正常字色
+            div.innerHTML=renderInlineTokens(textLine);
+            setDepth(div, 2);
+            parent.appendChild(div);
+            continue;
+        }
+      }
+
+      // 章節選單：平滑捲動、不改網址
+      chapterMenu.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click',e=>{
+          e.preventDefault();
+          const id=a.getAttribute('href').slice(1);
+          const t=document.getElementById(id);
+          if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+        });
+      });
+
+      // 朗讀綁定
+      contentEl.querySelectorAll('.say').forEach(el=>{
+        el.addEventListener('click',()=>{
+          el.classList.add('speaking');
+          const t=el.getAttribute('data-say')||el.textContent.trim();
+          speakEn(t);
+          setTimeout(()=>el.classList.remove('speaking'),300);
+        });
+        el.addEventListener('keydown',e=>{
+          if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}
+        });
+      });
+
+      // 灰字阻止冒泡
+      contentEl.querySelectorAll('.muted').forEach(el=>{
+        ['click','mousedown','touchstart'].forEach(ev=>el.addEventListener(ev,e=>e.stopPropagation()));
+      });
+    }
+
+    loadContent();
+  </script>
+</body>
+</html>
+
+
+
+
+

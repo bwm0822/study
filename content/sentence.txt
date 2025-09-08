@@ -1,0 +1,101 @@
+內容解析規則，不會顯示出來:
+<1> 代表不要縮排
+<2> 縮排
+<3> 兩倍縮排
+<+> 兩倍縮排，縮小跟上一列的間距
+[] 按下發音，有動畫效果
+{} 灰色小字，不發音
+#URL# 代表連結，顯示[參考連結]，按下後，開新頁面連到到URL，不能影響返回鍵
+
+[內容]
+<1>現在式
+	<2>肯定句 {( 主詞 + be動詞(am/is/are) + ... ) / ( 主詞 + 動詞 + ... )}
+		<3>[I am happy.]
+		<+>{我很開心。}
+		<3>[I eat apples.]
+		<+>{我吃蘋果。}
+	<2>否定句 {( 主詞 + be動詞(am/is/are) + not + ... ) / ( 主詞 + do/does + not + 原形動詞 + ... )}
+		<3>[I am not sad.]
+		<+>{我不難過。}
+		<3>[I do not eat apples.]
+		<+>{我不吃蘋果。}
+	<2>被動式 {( 主詞 + be動詞(am/is/are) + 過去分詞 )}
+		<3>[The apple is eaten.]
+		<+>{蘋果被吃。}
+		<3>[The homework is done.]
+		<+>{作業被做好。}
+	<2>疑問句 {( Be動詞(Am/Is/Are) + 主詞 + ...? ) / ( Do/Does + 主詞 + 原形動詞 + ...? )}
+		<3>[Are you happy?]
+		<+>{你開心嗎？}
+		<3>[Do you eat apples?]
+		<+>{你吃蘋果嗎？}
+	<2>疑問詞疑問句 {( 疑問詞 + be動詞(am/is/are) + 主詞 + ...? ) / ( 疑問詞 + do/does + 主詞 + 原形動詞 + ...? )}
+		<3>[Where are you?]
+		<+>{你在哪裡？}
+		<3>[What do you eat?]
+		<+>{你吃什麼？}
+<1>過去式
+	<2>肯定句 {( 主詞 + be動詞過去式(was/were) + ... ) / ( 主詞 + 動詞過去式 + ... )}
+		<3>[I was at school yesterday.]
+		<+>{我昨天在學校。}
+		<3>[I ate an apple yesterday.]
+		<+>{我昨天吃了一顆蘋果。}
+	<2>否定句 {( 主詞 + be動詞過去式(was/were) + not +... ) / ( 主詞 + did + not + 原形動詞 + ... )}
+		<3>[I was not at home yesterday.]
+		<+>{我昨天不在家。}
+		<3>[I did not eat an apple yesterday.]
+		<+>{我昨天沒有吃蘋果。}
+	<2>被動式 {( 主詞 + be動詞過去式(was/were) + 過去分詞 )}
+		<3>[The apple was eaten.]
+		<+>{蘋果被吃掉了。}
+		<3>[The homework was done.]
+		<+>{作業被做好了。}
+	<2>疑問句 {( Be動詞(Was/Were) + 主詞 + ...? ) / ( Did + 主詞 + 原形動詞 + ...? )}
+		<3>[Were you at school yesterday?]
+		<+>{你昨天在學校嗎？}
+		<3>[Did you eat an apple yesterday?]
+		<+>{你昨天有吃蘋果嗎？}
+	<2>疑問詞疑問句 {( 疑問詞 + be動詞(was/were) + 主詞 + ...? ) / ( 疑問詞 + did + 主詞 + 原形動詞 + ...? )}
+		<3>[Where were you yesterday?]
+		<+>{你昨天在哪裡？}
+		<3>[What did you eat yesterday?]
+		<+>{你昨天吃了什麼？}
+<1>未來式#https://english.cool/will-be-going-to/#
+	<2>肯定句
+	<+> {( 主詞 + will + be + ... )} / {( 主詞 + be動詞(am/is/are) + going to +... )} 
+	<+> {( 主詞 + will + 原形動詞 + ... )} / {( 主詞 + be動詞(am/is/are) + going to + 原形動詞 + ... )}
+		<3>[I will be happy tomorrow.] {/} [I am going to be happy tomorrow.]
+		<+>{我明天會很開心。}
+		<3>[I will eat an apple tomorrow.] {/} [I am going to eat an apple tomorrow.]
+		<+>{我明天會吃一顆蘋果。}
+	<2>否定句
+	<+> {( 主詞 + will + not + be + ... )} / {( 主詞 + be動詞(am/is/are) + not + going to +... )} 
+	<+> {( 主詞 + will + not + 原形動詞 + ... )} / {( 主詞 + be動詞(am/is/are) + not + going to + 原形動詞 + ... )}
+		<3>[I will not be sad tomorrow.] {/} [I am not going to be sad tomorrow.]
+		<+>{我明天不會難過。}
+		<3>[I will not eat an apple tomorrow.] {/} [I am not going to eat an apple tomorrow.]
+		<+>{我明天不會吃蘋果。}
+	<2>被動式 {( 主詞 + will + be + 過去分詞 + ... )} / {( 主詞 + be動詞(am/is/are) + going to + be + 過去分詞 + ... )}
+		<3>[The apple will be eaten.] {/} [The apple is going to be eaten.]
+		<+>{蘋果將被吃掉。}
+		<3>[The homework will be done.] {/} [The homework is going to be done.]
+		<+>{作業將會被做好。}
+	<2>疑問句
+	<+> {( Will + 主詞 + be + ... )} / {( Be動詞(Am/Is/Are) + 主詞 + going to +... )} 
+	<+> {( Will + 主詞 + 原形動詞 + ... )} / {( Be動詞(Am/Is/Are) + 主詞 + going to + 原形動詞 + ... )}
+		<3>[Will you be happy tomorrow?] {/} [Are you going to be happy tomorrow?]
+		<+>{你明天會開心嗎？}
+		<3>[Will you eat an apple tomorrow?] {/} [Are you going to eat an apple tomorrow?]
+		<+>{你明天會吃蘋果嗎？}
+	<2>疑問詞疑問句
+	<+> {( 疑問詞 + will + 主詞 + be + ... )} / {( 疑問詞 + be動詞(am/is/are) + 主詞 + going to + be + ... )} 
+	<+> {( 疑問詞 + will + 主詞 + 原形動詞 + ... )} / {( 疑問詞 + be動詞(am/is/are) + 主詞 + going to + 原形動詞 + ... )}
+		<3>[Where will you be tomorrow?] {/} [Where are you going to be tomorrow?]
+		<+>{你明天會在哪裡？}
+		<3>[What will you eat tomorrow?] {/} [What are you going to eat tomorrow?]
+		<+>{你明天會吃什麼？}
+
+
+
+
+

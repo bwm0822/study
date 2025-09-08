@@ -99,10 +99,3 @@
 98	point at the board	指黑板	The teacher points at the board.	老師指著黑板。
 99	write on the board	在黑板上寫字	He writes his name on the board.	他在黑板上寫名字。
 100	leave work	下班	I usually leave work at six o’clock.	我通常六點下班。
-				
-				
-				
-				
-				
-
-

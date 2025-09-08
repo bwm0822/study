@@ -81,7 +81,7 @@
     const fileName = file.replace(/\.[^/.]+$/, "");
     titleEl.textContent = file.includes("ans") ? "[解答] "+fileName : "[測驗] "+fileName;
 
-    fetch("content/" + encodeURIComponent(file))
+    fetch("content/exam/" + encodeURIComponent(file))
       .then(res => { if (!res.ok) throw new Error("HTTP " + res.status); return res.text(); })
       .then(txt => { outEl.textContent = txt; window.scrollTo({ top: 0, behavior: "instant" }); })
       .catch(err => { outEl.textContent = "讀取失敗：" + err.message; });
