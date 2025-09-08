@@ -539,3 +539,11 @@
 536	hardwood	[ˋhɑrd͵wʊd]	硬木；實木	[名詞]	The floor is made of hardwood.	地板是硬木做的。
 537	dresser	[ˋdrɛsɚ]	梳妝台；衣櫃	[名詞]	She keeps her mirror on the dresser.	她把鏡子放在梳妝台上。
 538	expensive	[ɪkˋspɛnsɪv]	昂貴的	[形容詞]	This bag is too expensive for me.	這個包對我來說太貴了。
+						
+539	cola	[ˋkolə]	可樂	[名詞]	I drink cola.	我喝可樂。
+540	lemonade	[͵lɛməˋned]	檸檬水	[名詞]	The lemonade is sweet.	檸檬水很甜。
+541	bubble tea	[ˋbʌbḷ ti]	珍珠奶茶	[名詞]	I like bubble tea.	我喜歡珍珠奶茶。
+542	hot chocolate	[hɑt ˋtʃɔkḷɪt]	熱可可	[名詞]	Hot chocolate is sweet.	熱可可很甜。
+543	soy milk	[ˋsɔɪ mɪlk]	豆漿	[名詞]	He drinks soy milk.	他喝豆漿。
+544	bubble	[ˋbʌbḷ]	氣泡；泡泡	[名詞]	The bubble pops.	泡泡破了。
+545	soy	[sɔɪ]	大豆；黃豆	[名詞]	Soy is a bean.	大豆是一種豆子。
