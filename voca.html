@@ -35,7 +35,7 @@
     .kk{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; margin:0 .5rem; opacity:.95}
 
     .input-group .form-control.is-invalid{border-color:#dc3545}
-    .range-inline{width:260px;min-width:180px}
+    .range-inline{width:100%}
 
     /* 🔍 搜尋下拉選單樣式 */
     .search-wrap{position:relative;}
@@ -55,14 +55,33 @@
 
     /* 頂部工具列：右側群組靠右；可換行後仍靠右 */
     #topBar{ gap:.5rem; }
-    .right-tools{ min-width:220px; margin-left:auto; } /* ms-auto 的 CSS 等價寫法，確保靠右 */
+    .right-tools{ min-width:220px; margin-left:auto; }
 
     /* 縮小欄位寬度（頁碼＋搜尋） */
-    .jump-group{ width:120px; }                         /* 頁碼輸入更窄 */
-    /* .search-flex{ width:clamp(140px, 28vw, 240px); }    搜尋欄更窄且彈性 */
+    .jump-group{ width:120px; }
     .search-flex{ width:160px; }
     .search-wrap .input-group-text{ padding:.2rem .45rem; font-size:.85rem; }
     #searchClear{ padding:.2rem .45rem; }
+
+    /* === 控制列：三等分（語音 / 語速 / 切換鈕） === */
+    .controls-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:.75rem;
+      align-items:center;
+    }
+    .ctrl-block{
+      background:#1b1f22;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:.5rem;
+      padding:.5rem .75rem;
+      min-height:48px;
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+    }
+    .ctrl-title{white-space:nowrap; margin:0}
+    .mode-btn{width:100%} /* 切換鈕佔滿其 1/3 區塊寬 */
   </style>
 </head>
 <body>
@@ -81,33 +100,37 @@
   </nav>
 
   <main class="container container-narrow my-3">
-    <!-- 語音控制列 -->
+    <!-- 語音控制列（語音/語速/切換鈕 各佔 1/3） -->
     <div class="card mb-3 bg-dark text-light border-secondary">
       <div class="card-body">
-        <div class="d-flex align-items-center flex-wrap gap-3">
-          <label class="form-label mb-0">語音</label>
-          <select id="selEn" class="form-select form-select-sm w-auto bg-dark text-light border-secondary"></select>
-
-          <span for="rate" class="form-label mb-0">語速</span><span id="rateVal">1.00</span>
-          <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00">
+        <div class="controls-grid">
+          <!-- 語音（1/3） -->
+          <div class="ctrl-block">
+            <label class="ctrl-title">語音</label>
+            <select id="selEn" class="form-select form-select-sm bg-dark text-light border-secondary"></select>
+          </div>
+          <!-- 語速（1/3） -->
+          <div class="ctrl-block">
+            <label for="rate" class="ctrl-title">語速</label>
+            <span id="rateVal" class="me-2">1.00</span>
+            <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00">
+          </div>
+          <!-- 模式切換（1/3）：單一切換鈕，只顯示目前模式，橘色字＋外框 -->
+          <div class="ctrl-block">
+            <button id="modeToggle" class="btn btn-outline-warning btn-sm mode-btn">正常</button>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 分頁（左） + 頁碼輸入與搜尋（右，靠右對齊；可換行後仍靠右） -->
+    <!-- 分頁（左） + 頁碼輸入與搜尋（右） -->
     <nav id="topBar" class="mb-2 d-flex align-items-center flex-wrap">
-      <!-- 左側：分頁按鈕 -->
       <ul id="pagination" class="pagination mb-2 mb-lg-0"></ul>
-
-      <!-- 右側：輸入頁碼 + 搜尋 -->
       <div class="right-tools d-flex align-items-center flex-wrap gap-2 justify-content-end">
-        <!-- 頁碼輸入（縮小寬度） -->
         <div class="input-group input-group-sm jump-group">
           <input id="pageJump" type="number" class="form-control bg-dark text-light border-secondary" min="1" placeholder="頁碼">
           <button id="pageGo" class="btn btn-outline-light">Go</button>
         </div>
-
-        <!-- 🔍 搜尋（縮小寬度） -->
         <div class="search-flex">
           <div class="search-wrap w-100">
             <div class="input-group input-group-sm">
@@ -143,6 +166,7 @@
     const $selEn = document.getElementById('selEn');
     const $rate = document.getElementById('rate');
     const $rateVal = document.getElementById('rateVal');
+    const $modeToggle = document.getElementById('modeToggle');
 
     // 🔍 搜尋相關
     const $searchInput = document.getElementById('searchInput');
@@ -154,6 +178,9 @@
     let voices = [];
     let rows = [];
     let rate = parseFloat(localStorage.getItem('tts.rate') || '1') || 1;
+
+    // 模式：false=正常（預設），true=精簡（不儲存）
+    let compactMode = false;
 
     // 起始頁（URL > localStorage）
     let currentPage = 1;
@@ -272,7 +299,7 @@
         });
     }
 
-    /* ====== 渲染：兩欄（左：索引+★，右：內容），每筆三行 ====== */
+    /* ====== 渲染：兩欄（左：索引+★，右：內容）====== */
     function render(){
       $tbody.innerHTML='';
       const start=(currentPage-1)*pageSize;
@@ -288,12 +315,11 @@
         const exEn= escapeHTML(r.exEn);
         const exZh= escapeHTML(r.exZh);
 
-        // 第 1 行：# | word [KK] 中文 [詞性]
         const tr1=document.createElement('tr');
         tr1.className='group-start';
 
+        // 左欄：編號 + ★（兩種模式共用）
         const tdIdx=document.createElement('td');
-        tdIdx.rowSpan=3;
         tdIdx.className='text-secondary small text-center align-middle idx-cell';
         tdIdx.dataset.idx = r.idx;
 
@@ -309,36 +335,48 @@
         tdIdx.appendChild(idxWrap);
 
         const tdMain=document.createElement('td');
-        tdMain.className='word-line';
-        tdMain.setAttribute('data-say', r.word);   // 點「單字」→ 英文發音
-        tdMain.setAttribute('data-lang','en');
-        tdMain.innerHTML = `<b>${word}</b> <span class="kk small-muted">${kk}</span> <span class="small">${zh}</span> <span class="small-muted">${pos}</span>`;
 
-        tr1.append(tdIdx, tdMain);
+        if (!compactMode){
+          /* 正常模式：三行 */
+          tdIdx.rowSpan=3;
 
-        // 第 2 行：英文例句
-        const tr2=document.createElement('tr');
-        const tdExEn=document.createElement('td');
-        tdExEn.innerHTML = `<span class="small-muted">${exEn || ''}</span>`;
-        if (r.exEn){
-          tdExEn.setAttribute('data-say', r.exEn);
-          tdExEn.setAttribute('data-lang','en');
+          tdMain.className='word-line';
+          tdMain.setAttribute('data-say', r.word);
+          tdMain.setAttribute('data-lang','en');
+          tdMain.innerHTML = `<b>${word}</b> <span class="kk small-muted">${kk}</span> <span class="small">${zh}</span> <span class="small-muted">${pos}</span>`;
+          tr1.append(tdIdx, tdMain);
+
+          // 第 2 行：英文例句
+          const tr2=document.createElement('tr');
+          const tdExEn=document.createElement('td');
+          tdExEn.innerHTML = `<span class="small-muted">${exEn || ''}</span>`;
+          if (r.exEn){
+            tdExEn.setAttribute('data-say', r.exEn);
+            tdExEn.setAttribute('data-lang','en');
+          }
+          tr2.append(tdExEn);
+
+          // 第 3 行：中文例句
+          const tr3=document.createElement('tr');
+          const tdExZh=document.createElement('td');
+          tdExZh.innerHTML = `<span class="small-muted">${exZh || ''}</span>`;
+          tr3.append(tdExZh);
+
+          $tbody.append(tr1, tr2, tr3);
+        } else {
+          /* 精簡模式：單行（只顯示 中文 + 詞性） */
+          tdIdx.rowSpan=1;
+          tdMain.className='word-line';
+          tdMain.innerHTML = `<span class="small">${zh}</span> <span class="small-muted">${pos}</span>`;
+          tr1.append(tdIdx, tdMain);
+          $tbody.append(tr1);
         }
-        tr2.append(tdExEn);
-
-        // 第 3 行：中文例句
-        const tr3=document.createElement('tr');
-        const tdExZh=document.createElement('td');
-        tdExZh.innerHTML = `<span class="small-muted">${exZh || ''}</span>`;
-        tr3.append(tdExZh);
-
-        $tbody.append(tr1, tr2, tr3);
       }
 
       renderPagination();
       renderQuickPager();
 
-      // 🔍 若剛從搜尋跳來：高亮並捲到中間（等排版完成再捲）
+      // 🔍 若剛從搜尋跳來：高亮並捲到中間
       if (highlightIdxValue != null){
         const selector = `td.idx-cell[data-idx="${CSS.escape(String(highlightIdxValue))}"]`;
         const cell = document.querySelector(selector);
@@ -453,7 +491,7 @@
       // A) 點左欄 → 切換標註（★）
       const idxCell = ev.target.closest('td.idx-cell');
       if (idxCell){
-        const idx = idxCell.dataset.idx;
+        const idx = idxCell.dataset.idx || idxCell.querySelector('.idx-wrap div')?.textContent || '';
         toggleStar(idx);
         const star = idxCell.querySelector('.idx-star');
         if (star) star.hidden = !isStarred(idx);
@@ -486,6 +524,13 @@
       localStorage.setItem('tts.rate',rate);
     });
 
+    // 模式切換（不儲存，預設正常）
+    $modeToggle.addEventListener('click', ()=>{
+      compactMode = !compactMode;
+      $modeToggle.textContent = compactMode ? '精簡' : '正常';
+      render();
+    });
+
     // 支援瀏覽器前進/後退：依網址 ?page 重新渲染
     window.addEventListener('popstate', () => {
       const p = parseInt(new URLSearchParams(location.search).get('page'), 10);
@@ -502,7 +547,6 @@
         idxValue: r.idx
       }));
     }
-
     function showSearchMenu(items){
       $searchMenu.innerHTML = '';
       if (!items.length){
@@ -521,8 +565,8 @@
           btn.addEventListener('click', ()=>{
             const i = Number(btn.dataset.i);
             if (!Number.isInteger(i) || i < 0 || i >= rows.length) { hideSearchMenu(); return; }
-            const page = Math.floor(i / pageSize) + 1;   // 用 rows 的索引換頁
-            highlightIdxValue = rows[i].idx;             // 指定要高亮的 idx
+            const page = Math.floor(i / pageSize) + 1;
+            highlightIdxValue = rows[i].idx;
 
             hideSearchMenu();
             $searchInput.blur();
@@ -534,8 +578,6 @@
       $searchMenu.classList.add('show');
     }
     function hideSearchMenu(){ $searchMenu.classList.remove('show'); }
-
-    // 搜尋事件：只列出以字首開頭的單字
     $searchInput.addEventListener('input', ()=>{
       const q = ($searchInput.value || '').trim().toLowerCase();
       if (!q){ hideSearchMenu(); return; }
@@ -562,7 +604,7 @@
         if(!res.ok) throw new Error('HTTP '+res.status);
         const text=await res.text();
         rows=parseTSV(text);
-        buildSearchIndex(); // 🔍 讀入資料後建立搜尋索引
+        buildSearchIndex();
 
         const totalPages=Math.ceil(rows.length/pageSize)||1;
         if (currentPage>totalPages) currentPage=totalPages;
@@ -575,6 +617,7 @@
   </script>
 </body>
 </html>
+
 
 
 
