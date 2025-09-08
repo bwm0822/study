@@ -64,15 +64,15 @@
 	<2>肯定句
 	<+> {( 主詞 + will + be + ... )} / {( 主詞 + be動詞(am/is/are) + going to +... )} 
 	<+> {( 主詞 + will + 原形動詞 + ... )} / {( 主詞 + be動詞(am/is/are) + going to + 原形動詞 + ... )}
-		<3>[I will be happy tomorrow.] {/} [I am going to be happy tomorrow.]
-		<+>{我明天會很開心。}
+		<3>[I will be here tomorrow.] {/} [I am going to be here tomorrow.]
+		<+>{我明天會在這裡。}
 		<3>[I will eat an apple tomorrow.] {/} [I am going to eat an apple tomorrow.]
 		<+>{我明天會吃一顆蘋果。}
 	<2>否定句
 	<+> {( 主詞 + will + not + be + ... )} / {( 主詞 + be動詞(am/is/are) + not + going to +... )} 
 	<+> {( 主詞 + will + not + 原形動詞 + ... )} / {( 主詞 + be動詞(am/is/are) + not + going to + 原形動詞 + ... )}
-		<3>[I will not be sad tomorrow.] {/} [I am not going to be sad tomorrow.]
-		<+>{我明天不會難過。}
+		<3>[I will not be here tomorrow.] {/} [I am not going to be here tomorrow.]
+		<+>{我明天不會在這裡。}
 		<3>[I will not eat an apple tomorrow.] {/} [I am not going to eat an apple tomorrow.]
 		<+>{我明天不會吃蘋果。}
 	<2>被動式 {( 主詞 + will + be + 過去分詞 + ... )} / {( 主詞 + be動詞(am/is/are) + going to + be + 過去分詞 + ... )}
@@ -83,8 +83,8 @@
 	<2>疑問句
 	<+> {( Will + 主詞 + be + ... )} / {( Be動詞(Am/Is/Are) + 主詞 + going to +... )} 
 	<+> {( Will + 主詞 + 原形動詞 + ... )} / {( Be動詞(Am/Is/Are) + 主詞 + going to + 原形動詞 + ... )}
-		<3>[Will you be happy tomorrow?] {/} [Are you going to be happy tomorrow?]
-		<+>{你明天會開心嗎？}
+		<3>[Will you be here tomorrow?] {/} [Are you going to be here tomorrow?]
+		<+>{你明天會在這裡嗎？}
 		<3>[Will you eat an apple tomorrow?] {/} [Are you going to eat an apple tomorrow?]
 		<+>{你明天會吃蘋果嗎？}
 	<2>疑問詞疑問句
