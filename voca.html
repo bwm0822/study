@@ -182,6 +182,75 @@
     // 模式：false=正常（預設），true=精簡（不儲存）
     let compactMode = false;
 
+    // ★ 新增：目前是否有臨時展開中的列（以 tr 的 data-expanded 標示）
+    function collapseExpanded(){
+      document.querySelectorAll('tr.group-start[data-expanded="1"]').forEach(tr1=>{
+        const i = Number(tr1.dataset.i);
+        const r = rows[i];
+        const tdIdx = tr1.querySelector('td.idx-cell');
+        const tdMain = tr1.querySelector('td:not(.idx-cell)');
+        // 移除臨時加入的第二、第三行
+        const tr2 = tr1.nextElementSibling;
+        const tr3 = tr2?.nextElementSibling;
+        if (tr2?.classList.contains('temp-row')) tr2.remove();
+        if (tr3?.classList.contains('temp-row')) tr3.remove();
+        if (tdIdx) tdIdx.rowSpan = 1;
+        if (tdMain){
+          tdMain.className = 'word-line';
+          tdMain.innerHTML = `<span class="small">${escapeHTML(r.zh)}</span> <span class="small-muted">${escapeHTML(r.pos)}</span>`;
+        }
+        tr1.removeAttribute('data-expanded');
+      });
+    }
+
+    // ★ 新增：在精簡模式下，按住某列時臨時展開為正常三行
+    function expandRowOnce(tr1){
+      if (!compactMode || !tr1 || tr1.dataset.expanded === '1') return;
+      const i = Number(tr1.dataset.i);
+      if (!Number.isInteger(i) || i < 0 || i >= rows.length) return;
+      const r = rows[i];
+
+      const idx = escapeHTML(r.idx);
+      const word = escapeHTML(r.word);
+      const kk = escapeHTML(r.kk);
+      const zh  = escapeHTML(r.zh);
+      const pos = escapeHTML(r.pos);
+      const exEn= escapeHTML(r.exEn);
+      const exZh= escapeHTML(r.exZh);
+
+      const tdIdx = tr1.querySelector('td.idx-cell');
+      const tdMain = tr1.querySelector('td:not(.idx-cell)');
+      if (!tdIdx || !tdMain) return;
+
+      // 調整第一行內容與 rowSpan
+      tdIdx.rowSpan = 3;
+      tdMain.className='word-line';
+      tdMain.setAttribute('data-say', r.word);
+      tdMain.setAttribute('data-lang','en');
+      tdMain.innerHTML = `<b>${word}</b> <span class="kk small-muted">${kk}</span> <span class="small">${zh}</span> <span class="small-muted">${pos}</span>`;
+
+      // 動態插入第 2、3 行
+      const tr2=document.createElement('tr');
+      tr2.className='temp-row';
+      const tdExEn=document.createElement('td');
+      tdExEn.innerHTML = `<span class="small-muted">${exEn || ''}</span>`;
+      if (r.exEn){
+        tdExEn.setAttribute('data-say', r.exEn);
+        tdExEn.setAttribute('data-lang','en');
+      }
+      tr2.append(tdExEn);
+
+      const tr3=document.createElement('tr');
+      tr3.className='temp-row';
+      const tdExZh=document.createElement('td');
+      tdExZh.innerHTML = `<span class="small-muted">${exZh || ''}</span>`;
+      tr3.append(tdExZh);
+
+      tr1.after(tr2);
+      tr2.after(tr3);
+      tr1.dataset.expanded = '1';
+    }
+
     // 起始頁（URL > localStorage）
     let currentPage = 1;
     const urlParams = new URLSearchParams(location.search);
@@ -306,7 +375,9 @@
       const pageRows=rows.slice(start,start+pageSize);
       const starSet = getStarsSet();
 
-      for(const r of pageRows){
+      pageRows.forEach((r, j)=>{
+        const globalIndex = start + j;
+
         const idx = escapeHTML(r.idx);
         const word= escapeHTML(r.word);
         const kk  = escapeHTML(r.kk);
@@ -317,6 +388,7 @@
 
         const tr1=document.createElement('tr');
         tr1.className='group-start';
+        tr1.dataset.i = String(globalIndex);   // ★ 新增：記住全域索引，供臨時展開使用
 
         // 左欄：編號 + ★（兩種模式共用）
         const tdIdx=document.createElement('td');
@@ -366,12 +438,24 @@
         } else {
           /* 精簡模式：單行（只顯示 中文 + 詞性） */
           tdIdx.rowSpan=1;
-          tdMain.className='word-line';
+          tdMain.className='word-line compact-main'; // ★ 標示 compact 主欄
           tdMain.innerHTML = `<span class="small">${zh}</span> <span class="small-muted">${pos}</span>`;
+
+          // ★ 新增：按住 → 臨時展開；放開 → 還原
+          const pressHandler = (ev)=>{
+            // 避免選字造成抖動
+            ev.preventDefault();
+            // 展開前先收回其他列
+            collapseExpanded();
+            expandRowOnce(tr1);
+          };
+          tdMain.addEventListener('mousedown', pressHandler);
+          tdMain.addEventListener('touchstart', pressHandler, {passive:true});
+
           tr1.append(tdIdx, tdMain);
           $tbody.append(tr1);
         }
-      }
+      });
 
       renderPagination();
       renderQuickPager();
@@ -499,7 +583,7 @@
         return;
       }
 
-      // B) 其他：若帶 data-say 且為英文 → 發音
+      // B) 其他：若帶 data-say 且為英文 → 發音（正常模式或臨時展開中）
       const el = ev.target.closest('[data-say]');
       if(!el) return;
       const isEn = (el.getAttribute('data-lang')||'').toLowerCase().startsWith('en');
@@ -526,10 +610,16 @@
 
     // 模式切換（不儲存，預設正常）
     $modeToggle.addEventListener('click', ()=>{
+      // 切換模式時，確保把臨時展開的列收回
+      collapseExpanded(); // ★ 新增
       compactMode = !compactMode;
       $modeToggle.textContent = compactMode ? '精簡' : '正常';
       render();
     });
+
+    // ★ 新增：全域放開手勢就收回臨時展開列（滑鼠與觸控）
+    document.addEventListener('mouseup', ()=>{ if (compactMode) collapseExpanded(); });
+    document.addEventListener('touchend', ()=>{ if (compactMode) collapseExpanded(); });
 
     // 支援瀏覽器前進/後退：依網址 ?page 重新渲染
     window.addEventListener('popstate', () => {
@@ -617,6 +707,7 @@
   </script>
 </body>
 </html>
+
 
 
 
