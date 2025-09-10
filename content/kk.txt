@@ -3,17 +3,17 @@
 <2>單母音						
 						
 字母／字母組合	音標	mp3	start	end	發音	單字範例
-i、y	[ ɪ ]	kk.mp3	0.0	1.0	發短音的ㄧ	it [ɪt]、his[hɪz]、twenty[ˋtwɛntɪ]
-ee、ea、ie、ei、ey、e_e	[ i ]	kk.mp3	2.0	3.0	發長音的ㄧ	feed [fid]、tea [ti]、relief [rɪˋlif]、ceiling [ˋsilɪŋ]、these [ðiz]
+i、y	[ ɪ ]	kk.mp3	0.0	1.0	發短音的ㄧ˙	it [ɪt]、his[hɪz]、twenty[ˋtwɛntɪ]
+ee、ea、ie、ei、ey、e_e	[ i ]	kk.mp3	2.0	3.0	發長音的ㄧˋ	feed [fid]、tea [ti]、relief [rɪˋlif]、ceiling [ˋsilɪŋ]、these [ðiz]
 a、e、ea	[ ɛ ]	kk.mp3	4.0	5.0	嘴形向左右拉，發短音的ㄝ	many [ˋmɛnɪ]、letter [ˋlɛtɚ]、pleasure [ˋplɛʒɚ]
 ai、ei、ay、ey、ea、a_e	[ e ]	kk.mp3	6.0	7.0	嘴形有 2 段變化，發長音的ㄟㄧ	plain [plen]、neighbor [ˋnebɚ]、play [ple]、prey [pre]、break [brek]、mate [met]
 a	[ æ ]	kk.mp3	8.0	9.0	嘴形往下張大，發ㄝˋ	mad [mæd]
 a、o	[ ɑ ]	kk.mp3	10.0	11.0	嘴形上下張大，發短音的ㄚ	wash [wɑʃ]、stop [stɑp]
 al、au、aw、ou	[ ɔ ]	kk.mp3	12.0	13.0	嘴形呈圓形，發短音的ㄛ	call [kɔl]、author [ˋɔθɚ]、law [lɔ]、bought [bɔt]
 oa、oe、ow、ough、o_e	[ o ]	kk.mp3	14.0	15.0	嘴形有 2 段變化，發長音的ㄡㄨ	coat [kot]、poet [ˋpoɪɪt]、flow [flo]、although [ɔlˋðo]、phone [fon]
-u、oo、ou	[ ʊ ]	kk.mp3	16.0	17.0	嘴形放鬆張開，發短音的ㄨ	full [fʊl]、book [bʊk]、could [kʊd]
-oo、ui、ue、ou、ew、u_e	[ u ]	kk.mp3	18.0	19.0	嘴形向前噘起，發長音的ㄨ	moon [mun]、suit [sut]、clue [klu]、through [θru]、chew [tʃu]、mute [mjut]
-u、o	[ ʌ ]	kk.mp3	20.0	21.0	嘴形放鬆張開，發短音ㄚˋ	bug [bʌg]、color [ˋkʌlɚ]
+u、oo、ou	[ ʊ ]	kk.mp3	16.0	17.0	嘴形放鬆張開，發短音的ㄨ˙	full [fʊl]、book [bʊk]、could [kʊd]
+oo、ui、ue、ou、ew、u_e	[ u ]	kk.mp3	18.0	19.0	嘴形向前噘起，發長音的ㄨˋ	moon [mun]、suit [sut]、clue [klu]、through [θru]、chew [tʃu]、mute [mjut]
+u、o	[ ʌ ]	kk.mp3	20.0	21.0	嘴形放鬆張開，發短音ㄜ	bug [bʌg]、color [ˋkʌlɚ]
 a、o、e	[ ə ]	kk.mp3	22.0	23.0	弱化音，發短音的ㄜ	ago [əˋgo]、together [təˋgɛðɚ]、calendar [ˋkæləndɚ]
 er、ar、or、ure	[ ɚ ]	kk.mp3	24.0	25.0	舌尖往後上方捲，發短音的ㄦ	better [ˋbɛtɚ]、familiar [fəˋmɪljɚ]、color [ˋkʌlɚ]、nature [ˋnetʃɚ]
 ir、er、ur、ear	[ ɝ ]	kk.mp3	26.0	27.0	舌尖往後上方捲，發長音的ㄦˋ	bird [bɝd]、her [hɝ]、turn [tɝn]、learn [lɝn]
@@ -44,7 +44,7 @@ m、mm	[ m ]	kk.mp3	55.0	56.0	母音前發音接近ㄇ，母音後發音接近�
 n、nn	[ n ]	kk.mp3	57.0	58.0	舌尖頂住上齒齦，再從鼻腔發聲，母音前發音接近ㄋ，母音後發音接近ㄣ	clean [klin]、tennis [ˋtɛnɪs]
 ng、nk	[ ŋ ]	kk.mp3	59.0	60.0	舌尖平放，再從鼻腔發聲，發ㄣˋ音	long [lɔŋ]、thank [θæŋk]
 y	[ j ]	kk.mp3	61.0	62.0	發短音的ㄧ˙	young [jʌŋ]
-w、wh、o	[ w ]	kk.mp3	63.0	64.0	發短音的ㄨ	world [wɝld]、who [hu]、one [wʌn]
+w、wh、o	[ w ]	kk.mp3	63.0	64.0	發短音的ㄨ	world [wɝld]、who [hwu]、one [wʌn]
 						
 <2>無聲子音						
 						
