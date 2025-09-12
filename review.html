@@ -246,69 +246,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    /* ====== ★ 臨時展開/收回（精簡模式） ====== */
-    function collapseExpanded(){
-      document.querySelectorAll('tr.group-start[data-expanded="1"]').forEach(tr1=>{
-        const i = Number(tr1.dataset.i);
-        if (!Number.isInteger(i)) return;
-        const r = rowsStar[i];
-        if (!r) return;
-
-        const tdIdx = tr1.querySelector('td.idx-cell');
-        const tdMain = tr1.querySelector('td:not(.idx-cell)');
-        const tr2 = tr1.nextElementSibling;
-        const tr3 = tr2?.nextElementSibling;
-
-        if (tr2?.classList.contains('temp-row')) tr2.remove();
-        if (tr3?.classList.contains('temp-row')) tr3.remove();
-        if (tdIdx) tdIdx.rowSpan = 1;
-        if (tdMain){
-          tdMain.className = 'word-line compact-main';
-          tdMain.removeAttribute('data-say');
-          tdMain.removeAttribute('data-lang');
-          tdMain.innerHTML = `<span class="small">${escapeHTML(r.zh)}</span> <span class="small-muted">${escapeHTML(r.pos)}</span>`;
-        }
-        tr1.removeAttribute('data-expanded');
-      });
-    }
-
-    function expandRowOnce(tr1){
-      if (!compactMode || !tr1 || tr1.dataset.expanded === '1') return;
-      const i = Number(tr1.dataset.i);
-      if (!Number.isInteger(i) || i < 0 || i >= rowsStar.length) return;
-      const r = rowsStar[i];
-
-      const tdIdx = tr1.querySelector('td.idx-cell');
-      const tdMain = tr1.querySelector('td:not(.idx-cell)');
-      if (!tdIdx || !tdMain) return;
-
-      tdIdx.rowSpan = 3;
-      tdMain.className='word-line';
-      tdMain.setAttribute('data-say', r.word);
-      tdMain.setAttribute('data-lang','en');
-      tdMain.innerHTML = `<b>${escapeHTML(r.word)}</b> <span class="kk small-muted">${escapeHTML(r.kk)}</span> <span class="small">${escapeHTML(r.zh)}</span> <span class="small-muted">${escapeHTML(r.pos)}</span>`;
-
-      const tr2=document.createElement('tr');
-      tr2.className='temp-row';
-      const tdExEn=document.createElement('td');
-      tdExEn.innerHTML = `<span class="small-muted">${escapeHTML(r.exEn) || ''}</span>`;
-      if (r.exEn){
-        tdExEn.setAttribute('data-say', r.exEn);
-        tdExEn.setAttribute('data-lang','en');
-      }
-      tr2.append(tdExEn);
-
-      const tr3=document.createElement('tr');
-      tr3.className='temp-row';
-      const tdExZh=document.createElement('td');
-      tdExZh.innerHTML = `<span class="small-muted">${escapeHTML(r.exZh) || ''}</span>`;
-      tr3.append(tdExZh);
-
-      tr1.after(tr2);
-      tr2.after(tr3);
-      tr1.dataset.expanded = '1';
-    }
-
     /* ====== 渲染 ====== */
     function render(){
       $tbody.innerHTML='';
@@ -332,12 +269,9 @@
       const pageRows=rowsStar.slice(start,start+pageSize);
       const starSet = getStarsSet();
 
-      pageRows.forEach((r, j)=>{
-        const globalIndex = start + j;
-
+      for(const r of pageRows){
         const tr1=document.createElement('tr');
         tr1.className='group-start';
-        tr1.dataset.i = String(globalIndex); // ★ 儲存 rowsStar 索引
 
         // 左欄：編號 + ★（兩模式共用）
         const tdIdx=document.createElement('td');
@@ -359,7 +293,7 @@
         const tdMain=document.createElement('td');
 
         if (!compactMode){
-          /* 正常模式：三行 */
+          /* 正常模式：三行（單字/KK/中文/詞性 + 英/中例句） */
           tdIdx.rowSpan=3;
 
           tdMain.className='word-line';
@@ -368,40 +302,32 @@
           tdMain.innerHTML = `<b>${escapeHTML(r.word)}</b> <span class="kk small-muted">${escapeHTML(r.kk)}</span> <span class="small">${escapeHTML(r.zh)}</span> <span class="small-muted">${escapeHTML(r.pos)}</span>`;
           tr1.append(tdIdx, tdMain);
 
+          // 第 2 行：英文例句
           const tr2=document.createElement('tr');
           const tdExEn=document.createElement('td');
-          tdExEn.innerHTML = `<span class="small-muted">${escapeHTML(r.exEn) || ''}</span>`;
+          tdExEn.innerHTML = `<span class="small-muted">${r.exEn || ''}</span>`;
           if (r.exEn){
             tdExEn.setAttribute('data-say', r.exEn);
             tdExEn.setAttribute('data-lang','en');
           }
           tr2.append(tdExEn);
 
+          // 第 3 行：中文例句
           const tr3=document.createElement('tr');
           const tdExZh=document.createElement('td');
-          tdExZh.innerHTML = `<span class="small-muted">${escapeHTML(r.exZh) || ''}</span>`;
+          tdExZh.innerHTML = `<span class="small-muted">${r.exZh || ''}</span>`;
           tr3.append(tdExZh);
 
           $tbody.append(tr1, tr2, tr3);
         } else {
           /* 精簡模式：單行（只顯示 中文 + 詞性） */
           tdIdx.rowSpan=1;
-          tdMain.className='word-line compact-main'; /* ★ 標示 compact 主欄 */
+          tdMain.className='word-line';
           tdMain.innerHTML = `<span class="small">${escapeHTML(r.zh)}</span> <span class="small-muted">${escapeHTML(r.pos)}</span>`;
-
-          /* ★ 按住 → 臨時展開；放開 → 還原 */
-          const pressHandler = (ev)=>{
-            ev.preventDefault();     // 避免選字/長按選單
-            collapseExpanded();      // 先收回其它列
-            expandRowOnce(tr1);      // 展開本列
-          };
-          tdMain.addEventListener('mousedown', pressHandler);
-          tdMain.addEventListener('touchstart', pressHandler, {passive:false});
-
           tr1.append(tdIdx, tdMain);
           $tbody.append(tr1);
         }
-      });
+      }
 
       renderPagination(totalPages);
       renderQuickPager(totalPages);
@@ -527,17 +453,12 @@
       localStorage.setItem('tts.rate', rate);
     });
 
-    // 模式切換：切換前先收回任何臨時展開
+    // 模式切換（不儲存，預設正常）：按鈕僅顯示目前模式（正常/精簡）
     $modeToggle.addEventListener('click', ()=>{
-      collapseExpanded();                 // ★
       compactMode = !compactMode;
       $modeToggle.textContent = compactMode ? '精簡' : '正常';
       render();
     });
-
-    // ★ 放開滑鼠/手指就收回臨時展開（只在精簡模式下作用）
-    document.addEventListener('mouseup', ()=>{ if (compactMode) collapseExpanded(); });
-    document.addEventListener('touchend', ()=>{ if (compactMode) collapseExpanded(); });
 
     // 初始化
     $rate.value = rate.toFixed(2);
@@ -551,5 +472,4 @@
   </script>
 </body>
 </html>
-
 
