@@ -57,7 +57,7 @@
     #topBar{ gap:.5rem; }
     .right-tools{ min-width:220px; margin-left:auto; }
 
-    /* 縮小欄位寬度（頁碼＋搜尋） */
+    /* 縮小欄位寬度（編號搜尋＋搜尋） */
     .jump-group{ width:120px; }
     .search-flex{ width:160px; }
     .search-wrap .input-group-text{ padding:.2rem .45rem; font-size:.85rem; }
@@ -122,19 +122,18 @@
       </div>
     </div>
 
-    <!-- 分頁（左） + 頁碼輸入與搜尋（右，靠右對齊；可換行後仍靠右） -->
+    <!-- 分頁（左） + 編號搜尋與文字搜尋（右） -->
     <nav id="topBar" class="mb-2 d-flex align-items-center flex-wrap">
-      <!-- 左側：分頁按鈕 -->
       <ul id="pagination" class="pagination mb-2 mb-lg-0"></ul>
 
-      <!-- 右側：輸入頁碼 + 搜尋 -->
       <div class="right-tools d-flex align-items-center flex-wrap gap-2 justify-content-end">
+        <!-- 編號搜尋 -->
         <div class="input-group input-group-sm jump-group">
-          <input id="pageJump" type="number" class="form-control bg-dark text-light border-secondary" min="1" placeholder="編號">
+          <input id="pageJump" type="number" class="form-control bg-dark text-light border-secondary" placeholder="編號">
           <button id="pageGo" class="btn btn-outline-light">Go</button>
         </div>
 
-        <!-- 🔍 搜尋（縮小寬度） -->
+        <!-- 🔍 關鍵字搜尋 -->
         <div class="search-flex">
           <div class="search-wrap w-100">
             <div class="input-group input-group-sm">
@@ -357,20 +356,28 @@
       const pageJump = document.getElementById('pageJump');
       const pageGo = document.getElementById('pageGo');
       if (pageJump) {
-        pageJump.max = totalPages;
+        // ⚠️ 不再把 max 設為頁數（使用 loadData 設定的編號上下限）
         const go = () => {
-          const idxVal = pageJump.value.trim();
-          if (!idxVal) return;
+          const minIdx = parseInt(pageJump.min, 10);
+          const maxIdx = parseInt(pageJump.max, 10);
+          const idxVal = parseInt((pageJump.value || '').trim(), 10);
+          if (Number.isNaN(idxVal)) return;
 
-          // 找到編號對應的 row index
-          const targetIndex = rows.findIndex(r => String(r.idx) === idxVal);
+          // 邊界檢查：確保在編號上下限內
+          if ((Number.isFinite(minIdx) && idxVal < minIdx) ||
+              (Number.isFinite(maxIdx) && idxVal > maxIdx)) {
+            pageJump.classList.add('is-invalid');
+            setTimeout(()=>pageJump.classList.remove('is-invalid'), 1200);
+            return;
+          }
 
+          // 依編號定位
+          const targetIndex = rows.findIndex(r => String(r.idx) === String(idxVal));
           if (targetIndex >= 0) {
             const page = Math.floor(targetIndex / pageSize) + 1;
-            highlightIdxValue = rows[targetIndex].idx; // ✅ 捲到並高亮
+            highlightIdxValue = rows[targetIndex].idx;
             goPage(page);
           } else {
-            // 沒找到 → 顯示錯誤
             pageJump.classList.add('is-invalid');
             setTimeout(()=>pageJump.classList.remove('is-invalid'), 1200);
           }
@@ -710,15 +717,15 @@
           td.setAttribute('data-lang','en');
           td.style.cursor = 'pointer';
 
-          // ✅ 使用 flex-row + align-items-center，確保水平排列
+          // 水平排列，不換行
           const row = document.createElement('div');
-          row.className='d-flex flex-row align-items-center justify-content-between';
+          row.className='d-flex flex-row flex-nowrap align-items-center justify-content-between gap-2';
 
           const speakArea = document.createElement('div');
           speakArea.className = 'flex-grow-1 text-secondary';
           speakArea.style.minHeight = '1.25rem';
           speakArea.title = '點此發音';
-          speakArea.textContent = '🔊'; //'點此發音'
+          speakArea.textContent = '🔊 點擊發音';
 
           const btn = makeToggleBtn(()=>{
             detailRows.add(String(r.idx));
@@ -767,6 +774,19 @@
         rows=parseTSV(text);
         buildSearchIndex();
 
+        /* ✅ 設定「編號搜尋」的上下限與 placeholder（依 voca.txt 的最小/最大 idx） */
+        const pageJump = document.getElementById('pageJump');
+        if (pageJump) {
+          const idxNums = rows.map(r => parseInt(r.idx, 10)).filter(n => !Number.isNaN(n));
+          if (idxNums.length) {
+            const minIdx = Math.min(...idxNums);
+            const maxIdx = Math.max(...idxNums);
+            pageJump.min = String(minIdx);
+            pageJump.max = String(maxIdx);
+            pageJump.placeholder = `${minIdx}~${maxIdx}`;
+          }
+        }
+
         const totalPages=Math.ceil(rows.length/pageSize)||1;
         if (currentPage>totalPages) currentPage=totalPages;
         if (currentPage<1) currentPage=1;
@@ -778,6 +798,7 @@
   </script>
 </body>
 </html>
+
 
 
 
