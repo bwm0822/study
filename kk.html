@@ -49,7 +49,7 @@
 
     /* 欄位內容樣式 */
     td.letters{white-space:nowrap}
-    td.symbol{white-space:nowrap}            /* 音標不換行 */
+    td.symbol{white-space:nowrap}
     td.desc{color:#adb5bd;white-space:normal;word-break:break-word}
     td.words{white-space:normal;word-break:break-word}
 
@@ -61,29 +61,11 @@
     td[data-play]:active, .say-token:active{transform:scale(1.03)}
     .playing{outline:2px solid var(--bs-primary);box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
 
-    /* ====== 單字範例欄位：一組(字+[])之間保留 gap；組內超貼 ====== */
-    .word-group{
-      display:flex;
-      flex-wrap:wrap;
-      gap:.35rem .6rem;          /* 組 與 組 之間 */
-    }
-    .pair{
-      display:inline-flex;
-      align-items:baseline;
-      column-gap:.08rem;         /* 組內：英文字 與 [] 的距離（可依喜好調到 0） */
-    }
-    .pair .say-token{
-      display:inline-block;
-      padding:0 .1rem;
-      border-radius:.25rem;
-    }
-    .pair .note{
-      display:inline;
-      color:#6c757d;
-      font-size:.9rem;
-      cursor:default;
-      padding:0;
-    }
+    /* 單字範例欄位：一組(字+[])之間保留 gap；組內超貼 */
+    .word-group{display:flex;flex-wrap:wrap;gap:.35rem .6rem}
+    .pair{display:inline-flex;align-items:baseline;column-gap:.08rem}
+    .pair .say-token{display:inline-block;padding:0 .1rem;border-radius:.25rem}
+    .pair .note{display:inline;color:#6c757d;font-size:.9rem;cursor:default;padding:0}
     .pair .note:hover,.pair .note:active{background:transparent;transform:none}
 
     /* 章節目錄下拉（右上角） */
@@ -91,7 +73,7 @@
     .dropdown-menu{max-height:70vh; overflow:auto}
     .toc-h2{padding-left:1.5rem}
 
-    /* 小螢幕時再給字母欄多一點空間 */
+    /* 小螢幕 */
     @media (max-width: 576px){
       :root{
         --col-w-letters: 32%;
@@ -138,11 +120,10 @@
       </div>
     </div>
 
-    <div id="content"></div> <!-- 大/小標題 + 多個表格外框都插在這 -->
+    <div id="content"></div>
     <audio id="player" preload="auto"></audio>
   </main>
 
-  <!-- Bootstrap JS（啟用 dropdown） -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
@@ -158,19 +139,15 @@
 
     function populateVoices(){
       voices = speechSynthesis.getVoices() || [];
-      const listEn = voices
-        .filter(v => v.lang && /^en/i.test(v.lang))
-        .sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'en'));
-      const listZhRaw = voices
-        .filter(v => v.lang && /^zh/i.test(v.lang))
-        .sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'zh'));
-      // 中文優先 zh-TW
+      const listEn = voices.filter(v => v.lang && /^en/i.test(v.lang))
+                           .sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'en'));
+      const listZhRaw = voices.filter(v => v.lang && /^zh/i.test(v.lang))
+                              .sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'zh'));
       const listZh = [...listZhRaw.filter(v=>/zh[-_]?TW/i.test(v.lang)), ...listZhRaw.filter(v=>!(/zh[-_]?TW/i.test(v.lang)))];
 
       const savedEn = localStorage.getItem('tts.enVoice');
       const savedZh = localStorage.getItem('tts.zhVoice');
 
-      // 填英
       selEn.innerHTML = '';
       listEn.forEach(v=>{
         const opt=document.createElement('option');
@@ -181,7 +158,6 @@
       if (savedEn && [...selEn.options].some(o=>o.value===savedEn)) selEn.value = savedEn;
       else if (listEn.length) selEn.value = listEn[0].value;
 
-      // 填中
       selZh.innerHTML = '';
       listZh.forEach(v=>{
         const opt=document.createElement('option');
@@ -200,7 +176,6 @@
         const v = voices.find(v=>v.name===name&&v.lang===lang);
         if (v) return v;
       }
-      // fallback: first matching prefix; zh 再優先 zh-TW
       if (/^zh/i.test(fallbackPrefix)){
         return voices.find(v=>/zh[-_]?TW/i.test(v.lang))
             || voices.find(v=>/^zh/i.test(v.lang))
@@ -245,15 +220,12 @@
     // ====== 讀取檔案 ======
     fetch(TXT_URL + '?c=' + Date.now())
       .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
-      .then(txt => {
-        const items = parseAll(txt); // [{type:'h1'|'h2'|'row'}...]
-        render(items);
-      })
+      .then(txt => { render(parseAll(txt)); })
       .catch(err => {
         console.warn('讀取失敗，使用示例資料：', err);
         const demo =
-`<1>（一）母音音標
-<2>單母音
+`<1>（一）母音音標 #https://example.com/vowels;外部連結#
+<2>單母音 ## TOC 不顯示這段
 字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
 a\t[ æ ]\tkk.mp3\t0\t1.1\t短音的ㄟ\tcat [n.], hat
 i\t[ ɪ ]\tkk.mp3\t1.2\t2.2\t短音的ㄧ\tit, ink [短音]
@@ -271,9 +243,8 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]
 字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
 p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
 
-<1>#https://english.cool/places-prepositions/;地方介系詞#`;
-        const items = parseAll(demo);
-        render(items);
+<1>#https://english.cool/places-prepositions/;地方介系詞#  ## 這個 H1 在頁面顯示為連結，但 TOC 會整項被省略（因為只有連結）`;
+        render(parseAll(demo));
       });
 
     // ====== 解析：任意位置的 <1>/<2> 與資料列 ======
@@ -291,13 +262,14 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
         const m2 = line.match(/^\s*<\s*2\s*>\s*(.+)$/);
         if (m2){ items.push({type:'h2', text: m2[1].trim()}); continue; }
 
-        if (!line.includes('\t')) continue; // 非標題、無 Tab → 略過
+        if (!line.includes('\t')) continue;
 
         const cols = splitCols(line);
-        if (isHeaderRow(cols)) continue;    // 忽略來源 7 欄表頭
+        if (isHeaderRow(cols)) continue;
 
         while (cols.length < 7) cols.push('');
         const [letters, symbol, mp3, start, end, desc, word] = cols;
+
         if (!(letters||symbol||mp3||start||end||desc||word)) continue;
 
         items.push({
@@ -314,27 +286,17 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       return items;
     }
 
-    // ---- 輔助：拆欄、表頭判斷（需命中 >=2 欄名才算表頭） ----
-    function splitCols(line){
-      return (line || '').split('\t').map(s => (s ?? '').trim());
-    }
-    function normalizeKey(s){
-      return (s || '')
-        .replace(/[／/]/g,'/')
-        .replace(/\s+/g,'')
-        .toLowerCase();
-    }
-    const HEADER_KEYS = new Set([
-      '字母/字母組合','音標','mp3','start','end','發音','單字範例','單字','例字'
-    ]);
+    // ---- 輔助：拆欄、表頭判斷 ----
+    function splitCols(line){ return (line || '').split('\t').map(s => (s ?? '').trim()); }
+    function normalizeKey(s){ return (s||'').replace(/[／/]/g,'/').replace(/\s+/g,'').toLowerCase(); }
+    const HEADER_KEYS = new Set(['字母/字母組合','音標','mp3','start','end','發音','單字範例','單字','例字']);
     function isHeaderRow(cols){
       if (!cols || !cols.length) return false;
       const norm = cols.map(normalizeKey);
-      const hits = norm.filter(c => HEADER_KEYS.has(c)).length;
-      return hits >= 2;
+      return norm.filter(c => HEADER_KEYS.has(c)).length >= 2;
     }
 
-    // ====== 建一個新小節表格（獨立外框 + 統一欄寬） ======
+    // ====== 建一個新小節表格 ======
     function createSectionTable(){
       const frame = document.createElement('div');
       frame.className = 'table-frame mb-3';
@@ -364,7 +326,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       return table.querySelector('tbody');
     }
 
-    // ====== 章節目錄（不改變網址；用 button 平滑捲動） ======
+    // ====== TOC：忽略所有 #...# 連結片段，並裁掉第一個（可含全形）"##" 之後 ======
     function buildTOC(items){
       tocMenu.innerHTML = '';
       if (!items.length){
@@ -374,16 +336,17 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
         return;
       }
       items.forEach(({id, text, level})=>{
+        const label = makeTOCLabel(text || '');
+        if (!label) return; // 若整段只有連結或被裁空，這項不進 TOC
+
         const li = document.createElement('li');
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'dropdown-item' + (level === 2 ? ' toc-h2' : '');
-        btn.innerHTML = parseLinks(text || '');
+        btn.textContent = label; // 用 textContent，避免 HTML
         btn.addEventListener('click', () => {
           const el = document.getElementById(id);
-          if (el){
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
+          if (el){ el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
           const ddEl = document.getElementById('tocDropdown');
           const dropdown = bootstrap.Dropdown.getInstance(ddEl) || new bootstrap.Dropdown(ddEl);
           dropdown.hide();
@@ -393,7 +356,33 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       });
     }
 
-    // ====== 繪製（大標題/小標題在外；每個小標題後有自己的表格外框） ======
+    // 產生 TOC 顯示字串：去掉所有 #...#，再裁掉第一個 "##" 或 "＃＃" 之後
+    function makeTOCLabel(raw){
+      const noLinks = removeLinkBlocks(String(raw ?? ''));
+      const idx1 = noLinks.indexOf('##');
+      const idx2 = noLinks.indexOf('＃＃'); // 全形
+      const cut = (idx1 === -1) ? idx2 : (idx2 === -1 ? idx1 : Math.min(idx1, idx2));
+      const head = cut >= 0 ? noLinks.slice(0, cut) : noLinks;
+      return head.trim();
+    }
+
+    // 把 #...# 片段整段移除（含 #URL;標題# 或 #URL#）
+    function removeLinkBlocks(s){
+      let out = '';
+      for (let i = 0; i < s.length; ){
+        if (s[i] === '#'){
+          const end = s.indexOf('#', i + 1);
+          if (end !== -1){
+            i = end + 1; // 跳過整個 #...#
+            continue;
+          }
+        }
+        out += s[i++];
+      }
+      return out;
+    }
+
+    // ====== 繪製（標題保留連結；TOC 省略連結） ======
     function render(items){
       content.innerHTML = '';
       tocMenu.innerHTML = '';
@@ -407,7 +396,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
           h.className = 'h1-title';
           const id = `h1-${++h1Count}`;
           h.id = id;
-          h.innerHTML = parseLinks(it.text || '');
+          h.innerHTML = parseLinks(it.text || ''); // 頁面上保留連結
           content.appendChild(h);
           tocItems.push({id, text: it.text || '', level: 1});
           currentTbody = null;
@@ -418,7 +407,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
           h.className = 'h2-title';
           const id = `h2-${++h2Count}`;
           h.id = id;
-          h.innerHTML = parseLinks(it.text || '');
+          h.innerHTML = parseLinks(it.text || ''); // 頁面上保留連結
           content.appendChild(h);
           tocItems.push({id, text: it.text || '', level: 2});
           currentTbody = createSectionTable();
@@ -468,13 +457,13 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       tdDesc.innerHTML = parseLinks(r.desc || '');
       if (r.desc){
         tdDesc.addEventListener('click', (ev)=>{
-          if (ev.target.closest('a')) return; // 點連結時不發音
+          if (ev.target.closest('a')) return;
           sayZh(tdDesc, r.desc);
         });
       }
       tr.appendChild(tdDesc);
 
-      // 單字範例（每個英文字 -> 英文發音；方括號為備註，備註可含 #URL;標題#）
+      // 單字範例（英文字 -> 英文發音；備註可含 #URL;標題#）
       const tdWord = document.createElement('td');
       tdWord.className = 'words';
       tdWord.appendChild(renderWordTokens(r.word || ''));
@@ -532,7 +521,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       clearTimeout(endTimer); endTimer = null;
     }
 
-    // ====== 單字範例：把「英文字 + 後面 []」視為同一組 .pair ======
+    // ====== 單字範例 tokenization ======
     function splitWords(s){
       const unified = s.replace(/[ \u3000]/g,' ').replace(/[，、；;／/|]/g, ',');
       return unified.split(',').map(t => t.trim()).filter(t => t);
@@ -541,35 +530,20 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
     function renderWordTokens(s){
       const group = document.createElement('div');
       group.className = 'word-group';
-      const segments = splitWords(s); // 以逗號分段
-      segments.forEach(seg=>{
-        tokenizeSegmentIntoPairs(seg, group);
-      });
+      splitWords(s).forEach(seg=> tokenizeSegmentIntoPairs(seg, group));
       return group;
     }
 
-    /**
-     * 將一個片段（例："coat [n.]"、"bird blue [adj.]"、"[短音]"、"[#url;標題#]"）拆成多個 .pair
-     * 規則：
-     *   - 每個英文字先生成一個 .pair（內含 .say-token）
-     *   - 之後若遇到 [] 註記，就接到「最後一個 .pair」裡
-     *   - 若開頭就是 []（沒有前字），則單獨成一個只含 .note 的 .pair（可含連結）
-     */
     function tokenizeSegmentIntoPairs(segment, groupEl){
       const tokenRe = /\[[^\]]*\]/g;
       let lastIndex = 0, m;
       const tokens = [];
-
       while ((m = tokenRe.exec(segment)) !== null){
-        if (m.index > lastIndex){
-          tokens.push({type:'text', value: segment.slice(lastIndex, m.index)});
-        }
-        tokens.push({type:'note', value: m[0]}); // 含方括號
+        if (m.index > lastIndex) tokens.push({type:'text', value: segment.slice(lastIndex, m.index)});
+        tokens.push({type:'note', value: m[0]});
         lastIndex = m.index + m[0].length;
       }
-      if (lastIndex < segment.length){
-        tokens.push({type:'text', value: segment.slice(lastIndex)});
-      }
+      if (lastIndex < segment.length) tokens.push({type:'text', value: segment.slice(lastIndex)});
 
       let lastPair = null;
       for (const tk of tokens){
@@ -577,23 +551,20 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
           tk.value.split(/\s+/).map(w=>w.trim()).filter(Boolean).forEach(w=>{
             const pair = document.createElement('span');
             pair.className = 'pair';
-
             const word = document.createElement('span');
             word.className = 'say-token';
             word.textContent = w;
             word.addEventListener('click', ()=> sayEn(word, w));
-
             pair.appendChild(word);
             groupEl.appendChild(pair);
-            lastPair = pair; // 讓接下來的 [] 可以掛到這一組
+            lastPair = pair;
           });
-        }else if (tk.type === 'note'){
+        }else{
           const note = document.createElement('span');
           note.className = 'note';
-          note.innerHTML = parseLinks(tk.value); // 支援 #URL;標題#
-          if (lastPair){
-            lastPair.appendChild(note);
-          }else{
+          note.innerHTML = parseLinks(tk.value);
+          if (lastPair){ lastPair.appendChild(note); }
+          else{
             const pair = document.createElement('span');
             pair.className = 'pair';
             pair.appendChild(note);
@@ -604,12 +575,11 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       }
     }
 
-    // ====== 連結語法：#URL;標題# 或 #URL# -> 顯示 標題 / URL（無中括號），新分頁開啟 ======
+    // ====== 連結語法：#URL;標題# / #URL#（頁面上顯示；TOC 已省略） ======
     function parseLinks(s){
       if (s == null) return '';
       const text = String(s);
 
-      // 先把整段做 HTML escape，再把 #...# 區段替換成 <a>
       const pieces = [];
       let last = 0;
       const re = /#([^#\s][^#]*?)#/g; // 介於兩個 # 之間，且非空
@@ -621,7 +591,6 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
         const payload = m[1].trim();
         let url = payload;
         let title = '';
-
         const semi = payload.indexOf(';');
         if (semi >= 0){
           url = payload.slice(0, semi).trim();
@@ -638,12 +607,8 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
     }
 
     // ====== TTS（英/中；讀取 UI 設定） ======
-    function sayEn(el, text){
-      sayWithVoice(el, text, getSavedVoiceByKey('tts.enVoice','en'), 'en-US');
-    }
-    function sayZh(el, text){
-      sayWithVoice(el, text, getSavedVoiceByKey('tts.zhVoice','zh'), 'zh-TW');
-    }
+    function sayEn(el, text){ sayWithVoice(el, text, getSavedVoiceByKey('tts.enVoice','en'), 'en-US'); }
+    function sayZh(el, text){ sayWithVoice(el, text, getSavedVoiceByKey('tts.zhVoice','zh'), 'zh-TW'); }
     function sayWithVoice(el, text, voice, fallbackLang){
       stopAll();
       if (!text) return;
@@ -663,12 +628,8 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
 
     // ====== 共用 ======
     function stopAll(){ stopPlayback(); try{ speechSynthesis.cancel(); }catch{} }
-    function escapeHTML(s){
-      return (s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-    function attrEscape(s){
-      return (String(s??'')).replace(/"/g,'&quot;');
-    }
+    function escapeHTML(s){ return (s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function attrEscape(s){ return (String(s??'')).replace(/"/g,'&quot;'); }
     function resolveAudio(mp3){
       if (!mp3) return '';
       if (/^(https?:)?\/\//i.test(mp3) || mp3.startsWith('/')) return mp3;
@@ -677,6 +638,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
   </script>
 </body>
 </html>
+
 
 
 
