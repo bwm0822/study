@@ -35,8 +35,31 @@
 
     .input-group .form-control.is-invalid{border-color:#dc3545}
 
-    /* 語音控制：讓滑桿同列時長度合適 */
-    .range-inline{width:260px;min-width:180px}
+    /* ===== 頂部控制列：語音 / 語速 / 模式 同一列，各佔 1/3 ===== */
+    .ctl-row{
+      display:flex; gap:.75rem; align-items:stretch; flex-wrap:nowrap;
+      overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin;
+    }
+    .ctl-third{
+      flex:1 1 33.333%;
+      min-width:260px;
+    }
+    .ctl-card{
+      background:#171a1d; border:1px solid rgba(255,255,255,.12);
+      border-radius:.75rem; padding:.6rem .75rem; white-space:nowrap;
+      height:100%;
+    }
+    .ctl-inline{display:flex; align-items:center; gap:.5rem; white-space:nowrap}
+    .ctl-inline label{margin:0; color:#f8f9fa}
+
+    /* 微縮尺寸 */
+    .ctl-inline select#selEn.form-select{ width:100%; min-width:140px; padding-top:.15rem; padding-bottom:.15rem; }
+    .range-inline{ width:100%; min-width:120px }
+    .mode-btns{flex-wrap:nowrap}
+    .mode-btns .btn{min-width:4.0rem; padding:.2rem .5rem; line-height:1.1}
+
+    /* 詳細模式中的例句行距小些 */
+    .ex-line{line-height:1.35}
   </style>
 </head>
 <body>
@@ -52,15 +75,39 @@
   </nav>
 
   <main class="container container-narrow my-3">
-    <!-- 語音控制（英文語音＋語速在同一列） -->
-    <div class="card mb-3 bg-dark text-light border-secondary">
-      <div class="card-body">
-        <div class="d-flex align-items-center flex-wrap gap-3">
-          <label class="form-label mb-0">語音</label>
-          <select id="selEn" class="form-select form-select-sm w-auto bg-dark text-light border-secondary"></select>
-
-          <span for="rate" class="form-label mb-0">語速</span><span id="rateVal">1.00</span>
-          <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00">
+    <!-- ✅ 語音 / 語速 / 模式：同一列，各佔 1/3 -->
+    <div class="ctl-row mb-3">
+      <!-- 語音 -->
+      <div class="ctl-third">
+        <div class="ctl-card">
+          <div class="ctl-inline">
+            <label for="selEn">語音</label>
+            <select id="selEn" class="form-select form-select-sm bg-dark text-light border-secondary"></select>
+          </div>
+        </div>
+      </div>
+      <!-- 語速 -->
+      <div class="ctl-third">
+        <div class="ctl-card">
+          <div class="ctl-inline">
+            <label for="rate">語速</label>
+            <span id="rateVal">1.00</span>
+            <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00">
+          </div>
+        </div>
+      </div>
+      <!-- 模式 -->
+      <div class="ctl-third">
+        <div class="ctl-card">
+          <div class="ctl-inline">
+            <label>模式</label>
+            <div class="btn-group mode-btns" role="group" aria-label="modes">
+              <button class="btn btn-primary btn-sm" data-mode="normal">正常</button>
+              <button class="btn btn-outline-light btn-sm" data-mode="zh">中文</button>
+              <button class="btn btn-outline-light btn-sm" data-mode="en">英文</button>
+              <button class="btn btn-outline-light btn-sm" data-mode="voice">語音</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -74,7 +121,7 @@
       </div>
     </nav>
 
-    <!-- 兩欄表格（無表頭；每筆三行） -->
+    <!-- 兩欄表格 -->
     <div class="table-responsive">
       <table id="voca" class="table table-dark table-hover align-middle mb-3">
         <tbody></tbody>
@@ -103,16 +150,21 @@
     const $rateVal = document.getElementById('rateVal');
     const $empty = document.getElementById('emptyState');
     const $starCount = document.getElementById('starCount');
+    const $modeBtns = document.querySelector('.mode-btns');
+
+    // 模式（不儲存，預設 normal）
+    const Modes = { NORMAL:'normal', ZH:'zh', EN:'en', VOICE:'voice' };
+    let currentMode = Modes.NORMAL;
+    // 記錄哪些 idx 正在「詳細」狀態
+    const detailRows = new Set();
 
     let voices = [];
     let rows = [];       // 所有單字（從 voca.txt 讀入）
-    let rowsStar = [];   // 僅顯示已標註
+    let rowsStar = [];   // 只顯示已標註的
     let rate = parseFloat(localStorage.getItem('tts.rate') || '1') || 1;
     let currentPage = parseInt(localStorage.getItem('voca.review.currentPage') || '1', 10) || 1;
 
-    /* ====== 解析 voca.txt：7 欄 ======
-       #, word, KK, 中文, 詞性, 例句EN, 例句ZH
-    ================================== */
+    /* ====== 解析 voca.txt：7 欄 ====== */
     function parseTSV(txt){
       return txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n')
         .map(l=>l.trim()).filter(l=>l && !l.startsWith('#'))
@@ -126,7 +178,7 @@
         });
     }
 
-    /* ====== 語音（只列英文） ====== */
+    /* ====== 語音（選擇清單） ====== */
     function loadVoices(){ voices = speechSynthesis.getVoices(); populateEnVoices(); }
     function populateEnVoices(){
       if (!voices.length) return;
@@ -188,7 +240,7 @@
     function isStarred(idx){ return getStarsSet().has(String(idx)); }
     function updateStarCount(){ $starCount.textContent = `★ ${loadStars().length}`; }
 
-    /* ====== 以星號建立 rowsStar，切頁時清掉未標註 ====== */
+    /* ====== 以星號建立 rowsStar ====== */
     function buildInitialStarRows(){
       const set = getStarsSet();
       rowsStar = rows.filter(r => set.has(String(r.idx)));
@@ -207,14 +259,56 @@
     function goPage(p){
       const totalPages = Math.ceil(rowsStar.length / pageSize) || 1;
       const nextPage = Math.min(Math.max(1, p), totalPages || 1);
-      if (nextPage !== currentPage){ purgeUnstarredFromRowsStar(); }
+      if (nextPage !== currentPage){
+        purgeUnstarredFromRowsStar();
+        detailRows.clear(); // 換頁時離開所有詳細
+      }
       currentPage = Math.min(Math.max(1, nextPage), Math.ceil(rowsStar.length / pageSize) || 1);
       savePage();
       render();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    /* ====== 渲染：兩欄、每筆三行 ====== */
+    /* ====== 模式按鈕 ====== */
+    $modeBtns.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button[data-mode]');
+      if (!btn) return;
+      currentMode = btn.dataset.mode; // 不存，預設 normal
+      [...$modeBtns.querySelectorAll('button')].forEach(b=>{
+        if (b===btn){ b.classList.remove('btn-outline-light'); b.classList.add('btn-primary'); }
+        else { b.classList.add('btn-outline-light'); b.classList.remove('btn-primary'); }
+      });
+      detailRows.clear(); // 切模式時離開所有詳細
+      render();
+    });
+
+    /* ====== 渲染：依模式生成列 ====== */
+    function escapeHTML(s){return (s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+    function makeIdxCell(idx, starSet, rowSpan=1){
+      const tdIdx=document.createElement('td');
+      tdIdx.rowSpan=rowSpan;
+      tdIdx.className='text-secondary small text-center align-middle idx-cell';
+      tdIdx.dataset.idx = idx;
+
+      const idxWrap=document.createElement('div');
+      idxWrap.className='idx-wrap';
+      const idxText=document.createElement('div'); idxText.textContent=idx;
+      const starSpan=document.createElement('div'); starSpan.className='idx-star'; starSpan.textContent='★';
+      starSpan.hidden = !starSet.has(String(idx));
+      idxWrap.append(idxText,starSpan);
+      tdIdx.appendChild(idxWrap);
+      return tdIdx;
+    }
+    function makeToggleBtn(onClick){
+      const btn = document.createElement('button');
+      btn.type='button';
+      btn.className='btn btn-outline-light btn-sm';
+      btn.textContent='切換';
+      btn.addEventListener('click', (e)=>{ e.stopPropagation(); onClick(); });
+      return btn;
+    }
+
     function render(){
       $tbody.innerHTML='';
       const totalPages = Math.ceil(rowsStar.length / pageSize) || 1;
@@ -238,64 +332,185 @@
       const starSet = getStarsSet();
 
       for(const r of pageRows){
-        // 第 1 行：左(#/★)、右( word [KK] 中文 [詞性] ) —— 點單字會發音
-        const tr1=document.createElement('tr');
-        tr1.className='group-start';
+        const idx = escapeHTML(r.idx);
+        const word= escapeHTML(r.word);
+        const kk  = escapeHTML(r.kk);
+        const zh  = escapeHTML(r.zh);
+        const pos = escapeHTML(r.pos);
+        const exEn= escapeHTML(r.exEn);
+        const exZh= escapeHTML(r.exZh);
 
-        const tdIdx=document.createElement('td');
-        tdIdx.rowSpan=3;
-        tdIdx.className='text-secondary small text-center align-middle idx-cell';
-        tdIdx.dataset.idx = r.idx;
+        const inDetail = detailRows.has(String(r.idx));
 
-        const idxWrap=document.createElement('div');
-        idxWrap.className='idx-wrap';
-        const idxText=document.createElement('div');
-        idxText.textContent=r.idx;
+        /* ===== 詳細（= 正常 + 右側有切換鈕，3 行） ===== */
+        if (inDetail){
+          const tr1=document.createElement('tr');
+          tr1.className='group-start';
 
-        const starSpan=document.createElement('div');
-        starSpan.className='idx-star';
-        starSpan.textContent='★';
-        starSpan.hidden = !starSet.has(String(r.idx));
+          const tdIdx = makeIdxCell(r.idx, starSet, 3);
 
-        idxWrap.append(idxText,starSpan);
-        tdIdx.appendChild(idxWrap);
+          const tdMain=document.createElement('td');
+          tdMain.className='word-line';
+          tdMain.setAttribute('data-say', r.word);
+          tdMain.setAttribute('data-lang','en');
 
-        const tdMain=document.createElement('td');
-        tdMain.className='word-line';
-        tdMain.setAttribute('data-say', r.word);
-        tdMain.setAttribute('data-lang','en');
-        tdMain.innerHTML = `<b>${escapeHTML(r.word)}</b> <span class="kk small-muted">${escapeHTML(r.kk)}</span> <span class="small">${escapeHTML(r.zh)}</span> <span class="small-muted">${escapeHTML(r.pos)}</span>`;
+          const row = document.createElement('div');
+          row.className='d-flex justify-content-between align-items-center gap-2';
+          const left = document.createElement('div');
+          left.innerHTML = `<b>${word}</b> <span class="kk small-muted">${kk}</span> <span class="small">${zh}</span> <span class="small-muted">${pos}</span>`;
+          const btn = makeToggleBtn(()=>{
+            detailRows.delete(String(r.idx));
+            render(); // 回到上個模式（由 currentMode 控制）
+          });
+          row.append(left, btn);
+          tdMain.appendChild(row);
 
-        tr1.append(tdIdx, tdMain);
+          tr1.append(tdIdx, tdMain);
 
-        // 第 2 行：右(英文例句，可點發音)
-        const tr2=document.createElement('tr');
-        const tdExEn=document.createElement('td');
-        // tdExEn.textContent = r.exEn || '';
-        tdExEn.innerHTML = `<span class="small-muted">${r.exEn || ''}</span>`;
-        if (r.exEn){
-          tdExEn.setAttribute('data-say', r.exEn);
-          tdExEn.setAttribute('data-lang','en');
+          const tr2=document.createElement('tr');
+          const tdExEn=document.createElement('td');
+          tdExEn.className='ex-line';
+          tdExEn.innerHTML = `<span class="small-muted">${exEn || ''}</span>`;
+          if (r.exEn){
+            tdExEn.setAttribute('data-say', r.exEn);
+            tdExEn.setAttribute('data-lang','en');
+          }
+          tr2.append(tdExEn);
+
+          const tr3=document.createElement('tr');
+          const tdExZh=document.createElement('td');
+          tdExZh.className='ex-line';
+          tdExZh.innerHTML = `<span class="small-muted">${exZh || ''}</span>`;
+          tr3.append(tdExZh);
+
+          $tbody.append(tr1, tr2, tr3);
+          continue;
         }
-        tr2.append(tdExEn);
 
-        // 第 3 行：右(中文例句)
-        const tr3=document.createElement('tr');
-        const tdExZh=document.createElement('td');
-        // tdExZh.className='small-muted';
-        // tdExZh.textContent = r.exZh || '';
-        tdExZh.innerHTML = `<span class="small-muted">${r.exZh || ''}</span>`;
-        tr3.append(tdExZh);
+        /* ===== 正常（3 行，無切換鈕） ===== */
+        if (currentMode === Modes.NORMAL){
+          const tr1=document.createElement('tr');
+          tr1.className='group-start';
 
-        $tbody.append(tr1, tr2, tr3);
+          const tdIdx = makeIdxCell(r.idx, starSet, 3);
+          const tdMain=document.createElement('td');
+          tdMain.className='word-line';
+          tdMain.setAttribute('data-say', r.word);
+          tdMain.setAttribute('data-lang','en');
+          tdMain.innerHTML = `<b>${word}</b> <span class="kk small-muted">${kk}</span> <span class="small">${zh}</span> <span class="small-muted">${pos}</span>`;
+          tr1.append(tdIdx, tdMain);
+
+          const tr2=document.createElement('tr');
+          const tdExEn=document.createElement('td');
+          tdExEn.className='ex-line';
+          tdExEn.innerHTML = `<span class="small-muted">${exEn || ''}</span>`;
+          if (r.exEn){
+            tdExEn.setAttribute('data-say', r.exEn);
+            tdExEn.setAttribute('data-lang','en');
+          }
+          tr2.append(tdExEn);
+
+          const tr3=document.createElement('tr');
+          const tdExZh=document.createElement('td');
+          tdExZh.className='ex-line';
+          tdExZh.innerHTML = `<span class="small-muted">${exZh || ''}</span>`;
+          tr3.append(tdExZh);
+
+          $tbody.append(tr1, tr2, tr3);
+          continue;
+        }
+
+        /* ===== 中文（1 行：中文 + 詞性 + 右側切換） ===== */
+        if (currentMode === Modes.ZH){
+          const tr=document.createElement('tr');
+          tr.className='group-start';
+
+          const tdIdx = makeIdxCell(r.idx, starSet, 1);
+          const td=document.createElement('td');
+
+          const row = document.createElement('div');
+          row.className='d-flex justify-content-between align-items-center gap-2';
+          const left = document.createElement('div');
+          left.innerHTML = `<span class="small">${zh}</span> <span class="small-muted">${pos}</span>`;
+          const btn = makeToggleBtn(()=>{
+            detailRows.add(String(r.idx));
+            render();
+          });
+          row.append(left, btn);
+          td.appendChild(row);
+
+          tr.append(tdIdx, td);
+          $tbody.append(tr);
+          continue;
+        }
+
+        /* ===== 英文（1 行：英文 + 右側切換） ===== */
+        if (currentMode === Modes.EN){
+          const tr=document.createElement('tr');
+          tr.className='group-start';
+
+          const tdIdx = makeIdxCell(r.idx, starSet, 1);
+          const td=document.createElement('td');
+
+          const row = document.createElement('div');
+          row.className='d-flex justify-content-between align-items-center gap-2';
+          const left = document.createElement('div');
+          left.setAttribute('data-say', r.word);
+          left.setAttribute('data-lang','en');
+          left.innerHTML = `<b>${word}</b>`;
+          const btn = makeToggleBtn(()=>{
+            detailRows.add(String(r.idx));
+            render();
+          });
+          row.append(left, btn);
+          td.appendChild(row);
+
+          tr.append(tdIdx, td);
+          $tbody.append(tr);
+          continue;
+        }
+
+        /* ===== 語音（1 行：顯示「點擊發音」＋右側切換；可發音） ===== */
+        if (currentMode === Modes.VOICE){
+          const tr=document.createElement('tr');
+          tr.className='group-start';
+
+          const tdIdx = makeIdxCell(r.idx, starSet, 1);
+
+          const td=document.createElement('td');
+          // 讓整個儲存格都可以點擊朗讀（除了切換鈕會 stopPropagation）
+          td.setAttribute('data-say', r.word);
+          td.setAttribute('data-lang','en');
+          td.style.cursor = 'pointer';
+
+          // 同一行橫排：左「點擊發音」，右「切換」鈕
+          const row = document.createElement('div');
+          row.className='d-flex flex-row flex-nowrap align-items-center justify-content-between gap-2';
+
+          const speakArea = document.createElement('div');
+          speakArea.className = 'flex-grow-1 text-secondary';
+          speakArea.style.minHeight = '1.25rem';
+          speakArea.title = '點此發音';
+          speakArea.textContent = '🔊 點擊發音';
+
+          const btn = makeToggleBtn(()=>{
+            detailRows.add(String(r.idx));
+            render();
+          });
+
+          row.append(speakArea, btn);
+          td.appendChild(row);
+
+          tr.append(tdIdx, td);
+          $tbody.append(tr);
+          continue;
+        }
       }
 
       renderPagination(totalPages);
       renderQuickPager(totalPages);
       updateStarCount();
     }
-
-    function escapeHTML(s){return (s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
     /* ====== 分頁/快速鍵 ====== */
     function renderPagination(totalPages){
@@ -355,6 +570,52 @@
       }
     }
 
+    /* ====== 事件：表格、星號、返回、清除 ====== */
+    document.getElementById('voca').addEventListener('click', ev=>{
+      // A) 點左欄 → 切換標註（★）
+      const idxCell = ev.target.closest('td.idx-cell');
+      if (idxCell){
+        const idx = idxCell.dataset.idx;
+        const set = getStarsSet();
+        if (set.has(idx)) set.delete(idx); else set.add(idx);
+        saveStars([...set]);
+        const star = idxCell.querySelector('.idx-star');
+        if (star) star.hidden = !isStarred(idx);
+        updateStarCount();
+        ev.stopPropagation();
+        return;
+      }
+
+      // B) 任何模式：若點到帶 data-say 的英文 → 發音
+      const el = ev.target.closest('[data-say]');
+      if(el){
+        const isEn = (el.getAttribute('data-lang')||'').toLowerCase().startsWith('en');
+        if (isEn){
+          const text = el.getAttribute('data-say')||el.textContent||'';
+          el.classList.add('speaking');
+          speakEn(text, ()=>el.classList.remove('speaking'));
+        }
+      }
+    });
+
+    document.getElementById('backBtn').addEventListener('click', ()=>history.back());
+    document.getElementById('clearStarsBtn').addEventListener('click', ()=>{
+      if (!confirm('確定要清除所有標註嗎？')) return;
+      localStorage.setItem('voca.stars', '[]');
+      rowsStar = [];
+      currentPage = 1;
+      detailRows.clear();
+      render();
+    });
+
+    // 語音設定
+    $selEn.addEventListener('change', ()=>localStorage.setItem('tts.enVoice',$selEn.value));
+    $rate.addEventListener('input', ()=>{
+      rate = parseFloat($rate.value)||1;
+      $rateVal.textContent = rate.toFixed(2);
+      localStorage.setItem('tts.rate', rate);
+    });
+
     /* ====== 載入資料 ====== */
     async function loadData(){
       try{
@@ -372,48 +633,6 @@
       }
     }
 
-    /* ====== 事件 ====== */
-    // 左欄：點一下切換★（不立刻移除列；切頁時才清）
-    document.getElementById('voca').addEventListener('click', ev=>{
-      const idxCell = ev.target.closest('td.idx-cell');
-      if (idxCell){
-        const idx = idxCell.dataset.idx;
-        const set = getStarsSet();
-        if (set.has(idx)) set.delete(idx); else set.add(idx);
-        saveStars([...set]);
-        const star = idxCell.querySelector('.idx-star');
-        if (star) star.hidden = !isStarred(idx);
-        updateStarCount();
-        ev.stopPropagation();
-        return;
-      }
-      // 右欄：按「單字」或「英文例句」會發音（只播英文）
-      const el = ev.target.closest('[data-say]');
-      if(!el) return;
-      const isEn = (el.getAttribute('data-lang')||'').toLowerCase().startsWith('en');
-      if (!isEn) return;
-      const text = el.getAttribute('data-say')||el.textContent||'';
-      el.classList.add('speaking');
-      speakEn(text, ()=>el.classList.remove('speaking'));
-    });
-
-    document.getElementById('backBtn').addEventListener('click', ()=>history.back());
-    document.getElementById('clearStarsBtn').addEventListener('click', ()=>{
-      if (!confirm('確定要清除所有標註嗎？')) return;
-      localStorage.setItem('voca.stars', '[]');
-      rowsStar = [];
-      currentPage = 1;
-      render();
-    });
-
-    // 語音設定
-    $selEn.addEventListener('change', ()=>localStorage.setItem('tts.enVoice',$selEn.value));
-    $rate.addEventListener('input', ()=>{
-      rate = parseFloat($rate.value)||1;
-      $rateVal.textContent = rate.toFixed(2);
-      localStorage.setItem('tts.rate', rate);
-    });
-
     // 初始化
     $rate.value = rate.toFixed(2);
     $rateVal.textContent = rate.toFixed(2);
@@ -422,3 +641,5 @@
   </script>
 </body>
 </html>
+
+
