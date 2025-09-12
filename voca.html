@@ -63,17 +63,77 @@
     .search-wrap .input-group-text{ padding:.2rem .45rem; font-size:.85rem; }
     #searchClear{ padding:.2rem .45rem; }
 
-    /* ➕ 控制列三等分（語音選擇 / 語速 / 模式） */
-    .ctl-row{display:flex; flex-wrap:wrap; gap:.75rem;}
-    .ctl-third{flex:1 1 0; min-width:260px}
-    .ctl-card{background:#171a1d; border:1px solid rgba(255,255,255,.12); border-radius:.75rem; padding:.6rem .75rem;}
-    .ctl-title{font-size:.85rem; color:#adb5bd; margin-bottom:.35rem}
+    /* ➕ 控制列：語音 / 語速 / 模式 永遠同一列（窄螢幕橫向捲動） */
+    .ctl-row{
+      display:flex;
+      flex-wrap:nowrap;             /* 不換行 */
+      gap:.75rem;
+      overflow-x:auto;              /* 小螢幕可左右滑動 */
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:thin;
+    }
+    .ctl-third{
+      flex:0 0 auto;                /* 不壓縮、不自動換行 */
+      min-width:260px;
+    }
+    .ctl-card{
+      background:#171a1d; border:1px solid rgba(255,255,255,.12);
+      border-radius:.75rem; padding:.6rem .75rem;
+      white-space:nowrap;           /* 卡片內容也不換行 */
+    }
 
-    /* 模式按鈕群 */
-    .mode-btns .btn{min-width:4.5rem}
+    /* 新增：標籤與控制同一行 */
+    .ctl-inline{
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+      white-space:nowrap;
+    }
+    .ctl-inline label{
+      margin:0;
+      font-size:.95rem;
+      color:#f8f9fa; /* 標籤用白色 */
+    }
+
+    /* 模式按鈕群不換行 */
+    .mode-btns{flex-wrap:nowrap;}
+    .mode-btns .btn{min-width:4.5rem; white-space:nowrap}
 
     /* 詳細模式中的例句行距小些 */
     .ex-line{line-height:1.35}
+
+
+
+    /* === 尺寸微縮版 === */
+
+    /* 語音下拉：縮小固定寬度，不吃滿 */
+    .ctl-inline select#selEn.form-select {
+      width: 100%;          /* ← 原本會 100% 寬，改為固定 */
+      min-width: 140px;
+      padding-top: .15rem;
+      padding-bottom: .15rem;
+    }
+
+    /* 語速拉桿：縮短 */
+    .range-inline{
+      width: 100%;          /* ← 原 260px */
+      min-width: 120px;
+    }
+
+    /* 模式按鈕：變窄一點 */
+    .mode-btns .btn{
+      min-width: 4.0rem;     /* ← 原 4.5rem */
+      padding: .2rem .5rem;  /* 較緊湊 */
+      line-height: 1.1;
+    }
+
+    /* 卡片內行高更緊湊些（可選） */
+    .ctl-card{ padding:.5rem .6rem; }
+    .ctl-inline{ gap: .4rem; }
+
+    /* 讓窄螢幕仍可橫向捲動（保留原本行為） */
+    .ctl-row{ gap: .6rem; }
+
   </style>
 </head>
 <body>
@@ -92,31 +152,40 @@
   </nav>
 
   <main class="container container-narrow my-3">
-    <!-- ✅ 控制列：語音選擇 / 語速 / 模式（各 1/3） -->
+    <!-- ✅ 控制列：語音選擇 / 語速 / 模式（同一列，窄螢幕可橫向捲動） -->
     <div class="ctl-row mb-3">
-      <!-- 語音選擇 -->
+      <!-- 語音（語音[下拉選單] 同一行） -->
       <div class="ctl-third">
         <div class="ctl-card">
-          <div class="ctl-title">語音</div>
-          <select id="selEn" class="form-select form-select-sm bg-dark text-light border-secondary"></select>
+          <div class="ctl-inline">
+            <label for="selEn">語音</label>
+            <select id="selEn" class="form-select form-select-sm bg-dark text-light border-secondary"></select>
+          </div>
         </div>
       </div>
-      <!-- 語速 -->
+
+      <!-- 語速（語速[數值][拉桿] 同一行） -->
       <div class="ctl-third">
         <div class="ctl-card">
-          <div class="ctl-title">語速 <span id="rateVal" class="ms-1">1.00</span></div>
-          <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00">
+          <div class="ctl-inline">
+            <label for="rate">語速</label>
+            <span id="rateVal">1.00</span>
+            <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00">
+          </div>
         </div>
       </div>
-      <!-- 模式 -->
+
+      <!-- 模式（模式[按鈕群] 同一行） -->
       <div class="ctl-third">
         <div class="ctl-card">
-          <div class="ctl-title">模式</div>
-          <div class="btn-group mode-btns" role="group" aria-label="modes">
-            <button class="btn btn-primary btn-sm" data-mode="normal">正常</button>
-            <button class="btn btn-outline-light btn-sm" data-mode="zh">中文</button>
-            <button class="btn btn-outline-light btn-sm" data-mode="en">英文</button>
-            <button class="btn btn-outline-light btn-sm" data-mode="voice">語音</button>
+          <div class="ctl-inline">
+            <label>模式</label>
+            <div class="btn-group mode-btns" role="group" aria-label="modes">
+              <button class="btn btn-primary btn-sm" data-mode="normal">正常</button>
+              <button class="btn btn-outline-light btn-sm" data-mode="zh">中文</button>
+              <button class="btn btn-outline-light btn-sm" data-mode="en">英文</button>
+              <button class="btn btn-outline-light btn-sm" data-mode="voice">語音</button>
+            </div>
           </div>
         </div>
       </div>
@@ -356,14 +425,13 @@
       const pageJump = document.getElementById('pageJump');
       const pageGo = document.getElementById('pageGo');
       if (pageJump) {
-        // ⚠️ 不再把 max 設為頁數（使用 loadData 設定的編號上下限）
+        // 以 loadData 設定的「編號上下限」為準
         const go = () => {
           const minIdx = parseInt(pageJump.min, 10);
           const maxIdx = parseInt(pageJump.max, 10);
           const idxVal = parseInt((pageJump.value || '').trim(), 10);
           if (Number.isNaN(idxVal)) return;
 
-          // 邊界檢查：確保在編號上下限內
           if ((Number.isFinite(minIdx) && idxVal < minIdx) ||
               (Number.isFinite(maxIdx) && idxVal > maxIdx)) {
             pageJump.classList.add('is-invalid');
@@ -371,7 +439,6 @@
             return;
           }
 
-          // 依編號定位
           const targetIndex = rows.findIndex(r => String(r.idx) === String(idxVal));
           if (targetIndex >= 0) {
             const page = Math.floor(targetIndex / pageSize) + 1;
@@ -798,6 +865,9 @@
   </script>
 </body>
 </html>
+
+
+
 
 
 
