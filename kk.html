@@ -269,7 +269,9 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]
 
 <2>無聲子音
 字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
-p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
+p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
+
+<1>#https://english.cool/places-prepositions/;地方介系詞#`;
         const items = parseAll(demo);
         render(items);
       });
@@ -362,48 +364,6 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
       return table.querySelector('tbody');
     }
 
-    // ====== 繪製（大標題/小標題在外；每個小標題後有自己的表格外框） ======
-    function render(items){
-      content.innerHTML = '';
-      tocMenu.innerHTML = '';
-      let currentTbody = null;
-      const tocItems = [];
-      let h1Count = 0, h2Count = 0;
-
-      items.forEach(it=>{
-        if (it.type === 'h1'){
-          const h = document.createElement('div');
-          h.className = 'h1-title';
-          const id = `h1-${++h1Count}`;
-          h.id = id;
-          h.textContent = it.text || '';
-          content.appendChild(h);
-          tocItems.push({id, text: it.text || '', level: 1});
-          currentTbody = null;
-          return;
-        }
-        if (it.type === 'h2'){
-          const h = document.createElement('div');
-          h.className = 'h2-title';
-          const id = `h2-${++h2Count}`;
-          h.id = id;
-          h.textContent = it.text || '';
-          content.appendChild(h);
-          tocItems.push({id, text: it.text || '', level: 2});
-          currentTbody = createSectionTable();
-          return;
-        }
-        if (it.type === 'row'){
-          if (!currentTbody){
-            currentTbody = createSectionTable();
-          }
-          currentTbody.appendChild(buildDataRow(it));
-        }
-      });
-
-      buildTOC(tocItems);
-    }
-
     // ====== 章節目錄（不改變網址；用 button 平滑捲動） ======
     function buildTOC(items){
       tocMenu.innerHTML = '';
@@ -418,7 +378,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'dropdown-item' + (level === 2 ? ' toc-h2' : '');
-        btn.textContent = text;
+        btn.innerHTML = parseLinks(text || '');
         btn.addEventListener('click', () => {
           const el = document.getElementById(id);
           if (el){
@@ -431,6 +391,48 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
         li.appendChild(btn);
         tocMenu.appendChild(li);
       });
+    }
+
+    // ====== 繪製（大標題/小標題在外；每個小標題後有自己的表格外框） ======
+    function render(items){
+      content.innerHTML = '';
+      tocMenu.innerHTML = '';
+      let currentTbody = null;
+      const tocItems = [];
+      let h1Count = 0, h2Count = 0;
+
+      items.forEach(it=>{
+        if (it.type === 'h1'){
+          const h = document.createElement('div');
+          h.className = 'h1-title';
+          const id = `h1-${++h1Count}`;
+          h.id = id;
+          h.innerHTML = parseLinks(it.text || '');
+          content.appendChild(h);
+          tocItems.push({id, text: it.text || '', level: 1});
+          currentTbody = null;
+          return;
+        }
+        if (it.type === 'h2'){
+          const h = document.createElement('div');
+          h.className = 'h2-title';
+          const id = `h2-${++h2Count}`;
+          h.id = id;
+          h.innerHTML = parseLinks(it.text || '');
+          content.appendChild(h);
+          tocItems.push({id, text: it.text || '', level: 2});
+          currentTbody = createSectionTable();
+          return;
+        }
+        if (it.type === 'row'){
+          if (!currentTbody){
+            currentTbody = createSectionTable();
+          }
+          currentTbody.appendChild(buildDataRow(it));
+        }
+      });
+
+      buildTOC(tocItems);
     }
 
     // ====== 資料列 ======
@@ -460,16 +462,19 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
       }
       tr.appendChild(tdSymbol);
 
-      // 發音（點擊 -> 中文發音）
+      // 發音（點擊 -> 中文發音；支援 #URL;標題# 連結，點連結不觸發朗讀）
       const tdDesc = document.createElement('td');
       tdDesc.className = 'desc say-token';
-      tdDesc.textContent = r.desc || '';
+      tdDesc.innerHTML = parseLinks(r.desc || '');
       if (r.desc){
-        tdDesc.addEventListener('click', ()=> sayZh(tdDesc, r.desc));
+        tdDesc.addEventListener('click', (ev)=>{
+          if (ev.target.closest('a')) return; // 點連結時不發音
+          sayZh(tdDesc, r.desc);
+        });
       }
       tr.appendChild(tdDesc);
 
-      // 單字範例（每個英文字 -> 英文發音；方括號為備註）
+      // 單字範例（每個英文字 -> 英文發音；方括號為備註，備註可含 #URL;標題#）
       const tdWord = document.createElement('td');
       tdWord.className = 'words';
       tdWord.appendChild(renderWordTokens(r.word || ''));
@@ -544,11 +549,11 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
     }
 
     /**
-     * 將一個片段（例："coat [n.]"、"bird blue [adj.]"、"[短音]"）拆成多個 .pair
+     * 將一個片段（例："coat [n.]"、"bird blue [adj.]"、"[短音]"、"[#url;標題#]"）拆成多個 .pair
      * 規則：
      *   - 每個英文字先生成一個 .pair（內含 .say-token）
      *   - 之後若遇到 [] 註記，就接到「最後一個 .pair」裡
-     *   - 若開頭就是 []（沒有前字），則單獨成一個只含 .note 的 .pair
+     *   - 若開頭就是 []（沒有前字），則單獨成一個只含 .note 的 .pair（可含連結）
      */
     function tokenizeSegmentIntoPairs(segment, groupEl){
       const tokenRe = /\[[^\]]*\]/g;
@@ -585,8 +590,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
         }else if (tk.type === 'note'){
           const note = document.createElement('span');
           note.className = 'note';
-          note.textContent = tk.value;
-
+          note.innerHTML = parseLinks(tk.value); // 支援 #URL;標題#
           if (lastPair){
             lastPair.appendChild(note);
           }else{
@@ -598,6 +602,39 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
           }
         }
       }
+    }
+
+    // ====== 連結語法：#URL;標題# 或 #URL# -> 顯示 標題 / URL（無中括號），新分頁開啟 ======
+    function parseLinks(s){
+      if (s == null) return '';
+      const text = String(s);
+
+      // 先把整段做 HTML escape，再把 #...# 區段替換成 <a>
+      const pieces = [];
+      let last = 0;
+      const re = /#([^#\s][^#]*?)#/g; // 介於兩個 # 之間，且非空
+      let m;
+      while ((m = re.exec(text)) !== null){
+        const before = text.slice(last, m.index);
+        pieces.push(escapeHTML(before));
+
+        const payload = m[1].trim();
+        let url = payload;
+        let title = '';
+
+        const semi = payload.indexOf(';');
+        if (semi >= 0){
+          url = payload.slice(0, semi).trim();
+          title = payload.slice(semi + 1).trim();
+        }
+
+        const disp = title || url;
+        const a = `<a href="${attrEscape(url)}" target="_blank" rel="noopener">${escapeHTML(disp)}</a>`;
+        pieces.push(a);
+        last = m.index + m[0].length;
+      }
+      pieces.push(escapeHTML(text.slice(last)));
+      return pieces.join('');
     }
 
     // ====== TTS（英/中；讀取 UI 設定） ======
@@ -626,7 +663,12 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
 
     // ====== 共用 ======
     function stopAll(){ stopPlayback(); try{ speechSynthesis.cancel(); }catch{} }
-    function escapeHTML(s){return (s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+    function escapeHTML(s){
+      return (s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function attrEscape(s){
+      return (String(s??'')).replace(/"/g,'&quot;');
+    }
     function resolveAudio(mp3){
       if (!mp3) return '';
       if (/^(https?:)?\/\//i.test(mp3) || mp3.startsWith('/')) return mp3;
@@ -635,6 +677,8 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
   </script>
 </body>
 </html>
+
+
 
 
 

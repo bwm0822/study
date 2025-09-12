@@ -1,4 +1,4 @@
-<1>一、母音音標 (17個)						
+<1>一、母音音標 (17個) #https://www.youtube.com/watch?v=r32JqQG0Gwo&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=1;[第3頁]# #https://www.youtube.com/watch?v=V_FKxz_MSYE&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=2;[第4頁]# #https://www.youtube.com/watch?v=fckd-bojWz4&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=3;[第5頁]# #https://www.youtube.com/watch?v=b23m1RTdpkk&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=4;[第6頁]# #https://www.youtube.com/watch?v=ucXHQPL9H3M&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=5;[第7頁]#						
 						
 <2>單母音						
 						
@@ -25,7 +25,7 @@ i、i e、i g h、i_e	[ aɪ ]	kk.mp3	28.0	29.0	發ㄞㄧ音	child [tʃaɪld]、t
 o u、o w	[ aʊ ]	kk.mp3	30.0	31.0	發ㄠˋ音	loud [laʊd]、flower [ˋflaʊɚ]
 o y、o i	[ ɔɪ ]	kk.mp3	32.0	33.0	發ㄡㄧ音	joy [dʒɔɪ]、noise [nɔɪz]
 						
-<1>二、子音音標 (24個)						
+<1>二、子音音標 (24個) #https://www.youtube.com/watch?v=DQD44tHoDoA&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=6;[第8頁]# #https://www.youtube.com/watch?v=-VS2kiH1ao8&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=7;[第9頁]# #https://www.youtube.com/watch?v=w9MXOLsdBbs&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=8;[第10頁]# #https://www.youtube.com/watch?v=ubEEt2dfs7M&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=9;[第11頁]# #https://www.youtube.com/watch?v=_8R05VhoXvc&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=10;[第12頁]# #https://www.youtube.com/watch?v=Ee70WWF0QUY&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=11;[第13頁]#						
 						
 <2>有聲子音						
 						
@@ -65,3 +65,5 @@ c h、t c h、t u r e	[ tʃ ]	kk.mp3	81.0	82.0	舌面頂住上顎，堵住氣流
 t r	[ t r ]	kk.mp3	83.0	84.0	發音接近ㄔㄨ˙	tree [tri]、truck [trʌk]、train [tren]
 d r	[ d r ]	kk.mp3	85.0	86.0	發音接近ㄓㄨ˙	drink [drɪŋk]、drive [draɪv]、draw [drɔ]
 t s	[ t s ]	kk.mp3	87.0	88.0	發音接近ㄘ	pets [pɛts]、students [ˈstuːdənts]
+						
+<1>三、音節 #https://www.youtube.com/watch?v=bLZFfmss5mQ&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=12;[第14、15頁]#						
