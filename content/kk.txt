@@ -23,47 +23,47 @@ i r、e r、u r、e a r	[ ɝ ]	kk.mp3	26.0	27.0	舌尖往後上方捲，發長�
 字母／字母組合	音標	mp3	start	end	發音	單字範例
 i、i e、i g h、i_e	[ aɪ ]	kk.mp3	28.0	29.0	發ㄞㄧ音	child [tʃaɪld]、tie [taɪ]、light [laɪt]、fire [faɪr]
 o u、o w	[ aʊ ]	kk.mp3	30.0	31.0	發ㄠˋ音	loud [laʊd]、flower [ˋflaʊɚ]
-o y、o i	[ ɔɪ ]	kk.mp3	32.0	33.0	發ㄡㄧ音	joy [dʒɔɪ]、noise [nɔɪz]
+o y、o i	[ ɔɪ ]	kk.mp3	32.0	32.5	發ㄡㄧ音	joy [dʒɔɪ]、noise [nɔɪz]
 						
 <1>二、子音音標 (24個) #https://www.youtube.com/watch?v=DQD44tHoDoA&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=6;[第8頁]# #https://www.youtube.com/watch?v=-VS2kiH1ao8&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=7;[第9頁]# #https://www.youtube.com/watch?v=w9MXOLsdBbs&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=8;[第10頁]# #https://www.youtube.com/watch?v=ubEEt2dfs7M&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=9;[第11頁]# #https://www.youtube.com/watch?v=_8R05VhoXvc&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=10;[第12頁]# #https://www.youtube.com/watch?v=Ee70WWF0QUY&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=11;[第13頁]#						
 						
 <2>有聲子音						
 						
 字母／字母組合	音標	mp3	start	end	發音	單字範例
-b、b b	[ b ]	kk.mp3	34.0	35.0	發ㄅ音	basic [ˋbesɪk]、bubble [ˋbʌb!]
-d、d d	[ d ]	kk.mp3	36.0	37.0	發短音的ㄉ	dinner [ˋdɪnɚ]、addition [əˋdɪʃən]
-g、g g	[ g ]	kk.mp3	38.0	39.0	發短音的ㄍ	grammar [ˋgræmɚ]、luggage [ˋlʌgɪdʒ]
-v、f	[ v ]	kk.mp3	40.0	41.0	下唇碰到上齒，吹氣同時振動聲帶，發音類似 / f /	vegetable [ˋvɛdʒtəb!]、of [ʌv]
-z、s	[ z ]	kk.mp3	42.0	43.0	雙脣微啟，上下齒閉合，吹氣同時振動聲帶，發音接近ㄖ	zoo [zu]、pause [pɔz]
-t h	[ ð ]	kk.mp3	44.0	46.0	上下齒輕咬舌尖，吹氣同時振動聲帶，發音接近ㄌㄜ˙	this [ðɪs]
-s i、s u、g e	[ ʒ ]	kk.mp3	47.0	48.0	舌面往上輕觸上顎，吹氣同時振動聲帶，與 / ʃ / 發音口型相同，發音接近ㄓ˙	television [ˋtɛlə͵vɪʒən]、pleasure [ˋplɛʒɚ]
-j、g e、d g e、g i、g y	[ dʒ ]	kk.mp3	49.0	50.0	舌面往上頂住上顎，堵住氣流並振動聲帶，發音接近ㄐㄧ˙	enjoy [ɪnˋdʒɔɪ]、change [tʃendʒ]、judge [dʒʌdʒ]、apologize [əˋpɑlə͵dʒaɪz]、gym [dʒɪm]
-l、l l	[ l ]	kk.mp3	51.0	52.0	舌尖頂住上齒齦後發聲，母音前發音接近ㄌ，母音後發音接近ㄛ	lend [lɛnd]、fall [fɔl]
-r、r r	[ r ]	kk.mp3	53.0	54.0	嘴唇微微噘起，舌尖上揚並振動聲帶，母音前發音接近ㄖㄨㄦ，母音後發音接近ㄦ	romantic [roˋmæntɪk]、mirror [ˋmɪrɚ]
-m、m m	[ m ]	kk.mp3	55.0	56.0	母音前發音接近ㄇ，母音後發音接近雙唇緊閉發 m	moon [mun]、community [kəˋmjunətɪ]
-n、n n	[ n ]	kk.mp3	57.0	58.0	舌尖頂住上齒齦，再從鼻腔發聲，母音前發音接近ㄋ，母音後發音接近ㄣ	clean [klin]、tennis [ˋtɛnɪs]
-ng、n k	[ ŋ ]	kk.mp3	59.0	60.0	舌尖平放，再從鼻腔發聲，發ㄣˋ音	long [lɔŋ]、thank [θæŋk]
-y	[ j ]	kk.mp3	61.0	62.0	發短音的ㄧ˙	young [jʌŋ]
-w、w h、o	[ w ]	kk.mp3	63.0	64.0	發短音的ㄨ	world [wɝld]、who [hwu]、one [wʌn]
+b、b b	[ b ]	kk.mp3	33.5	34.5	發ㄅ音	basic [ˋbesɪk]、bubble [ˋbʌb!]
+d、d d	[ d ]	kk.mp3	35.5	36.5	發短音的ㄉ	dinner [ˋdɪnɚ]、addition [əˋdɪʃən]
+g、g g	[ g ]	kk.mp3	37.5	38.5	發短音的ㄍ	grammar [ˋgræmɚ]、luggage [ˋlʌgɪdʒ]
+v、f	[ v ]	kk.mp3	39.5	40.5	下唇碰到上齒，吹氣同時振動聲帶，發音類似 / f /	vegetable [ˋvɛdʒtəb!]、of [ʌv]
+z、s	[ z ]	kk.mp3	41.5	42.5	雙脣微啟，上下齒閉合，吹氣同時振動聲帶，發音接近ㄖ	zoo [zu]、pause [pɔz]
+t h	[ ð ]	kk.mp3	43.5	45.5	上下齒輕咬舌尖，吹氣同時振動聲帶，發音接近ㄌㄜ˙	this [ðɪs]
+s i、s u、g e	[ ʒ ]	kk.mp3	46.5	47.5	舌面往上輕觸上顎，吹氣同時振動聲帶，與 / ʃ / 發音口型相同，發音接近ㄓ˙	television [ˋtɛlə͵vɪʒən]、pleasure [ˋplɛʒɚ]
+j、g e、d g e、g i、g y	[ dʒ ]	kk.mp3	48.5	49.5	舌面往上頂住上顎，堵住氣流並振動聲帶，發音接近ㄐㄧ˙	enjoy [ɪnˋdʒɔɪ]、change [tʃendʒ]、judge [dʒʌdʒ]、apologize [əˋpɑlə͵dʒaɪz]、gym [dʒɪm]
+l、l l	[ l ]	kk.mp3	50.5	51.5	舌尖頂住上齒齦後發聲，母音前發音接近ㄌ，母音後發音接近ㄛ	lend [lɛnd]、fall [fɔl]
+r、r r	[ r ]	kk.mp3	52.5	53.5	嘴唇微微噘起，舌尖上揚並振動聲帶，母音前發音接近ㄖㄨㄦ，母音後發音接近ㄦ	romantic [roˋmæntɪk]、mirror [ˋmɪrɚ]
+m、m m	[ m ]	kk.mp3	54.5	55.5	母音前發音接近ㄇ，母音後發音接近雙唇緊閉發 m	moon [mun]、community [kəˋmjunətɪ]
+n、n n	[ n ]	kk.mp3	56.5	57.5	舌尖頂住上齒齦，再從鼻腔發聲，母音前發音接近ㄋ，母音後發音接近ㄣ	clean [klin]、tennis [ˋtɛnɪs]
+ng、n k	[ ŋ ]	kk.mp3	58.5	59.5	舌尖平放，再從鼻腔發聲，發ㄣˋ音	long [lɔŋ]、thank [θæŋk]
+y	[ j ]	kk.mp3	60.5	61.5	發短音的ㄧ˙	young [jʌŋ]
+w、w h、o	[ w ]	kk.mp3	62.5	63.5	發短音的ㄨ	world [wɝld]、who [hwu]、one [wʌn]
 						
 <2>無聲子音						
 						
 字母／字母組合	音標	mp3	start	end	發音	單字範例
-p、p p	[ p ]	kk.mp3	65.0	66.0	發ㄆ音	keep [kip]、application [ˋæplə͵keʃən]
-t、t t	[ t ]	kk.mp3	67.0	68.0	發ㄊ音	table [ˋteb!]、letter [ˋlɛtɚ]
-c、k、c k、c h	[ k ]	kk.mp3	69.0	70.0	發ㄎ音	accept [əkˋsɛpt]、king [kɪŋ]、rock [rɑk]、schedule [ˋskɛdʒul]
-h、w h	[ h ]	kk.mp3	71.0	72.0	發ㄏ音	heaven [ˋhɛvən]、when [hwɛn]
-f、f e、g h、p h	[ f ]	kk.mp3	73.0	74.0	下唇碰到上齒，透過唇齒縫隙吹氣，接近無聲，發音接近ㄈㄨ	family [ˋfæməlɪ]、life [laɪf]、cough [kɔf]、phase [fez]
-s、c、s c	[ s ]	kk.mp3	75.0	76.0	發ㄙ音	see [si]、city [ˋsɪtɪ]、school [skul]
-t h	[ θ ]	kk.mp3	77.0	78.0	上下齒輕咬舌尖，不振動聲帶吹氣，發音接近ㄙ	health [hɛlθ]
-c、s、s h、t i o n	[ ʃ ]	kk.mp3	79.0	80.0	舌面輕觸上顎吹氣，發音接近ㄒㄩ˙	special [ˋspɛʃəl]、sure [ʃʊr]、fish [fɪʃ]、action [ˋækʃən]
-c h、t c h、t u r e	[ tʃ ]	kk.mp3	81.0	82.0	舌面頂住上顎，堵住氣流後發聲，與 / ʃ / 口型相同，發音接近ㄑㄩ˙	lunch [lʌntʃ]、catch [kætʃ]、adventure [ədˋvɛntʃɚ]
+p、p p	[ p ]	kk.mp3	64.5	65.5	發ㄆ音	keep [kip]、application [ˋæplə͵keʃən]
+t、t t	[ t ]	kk.mp3	66.5	67.5	發ㄊ音	table [ˋteb!]、letter [ˋlɛtɚ]
+c、k、c k、c h	[ k ]	kk.mp3	68.5	69.5	發ㄎ音	accept [əkˋsɛpt]、king [kɪŋ]、rock [rɑk]、schedule [ˋskɛdʒul]
+h、w h	[ h ]	kk.mp3	70.5	71.5	發ㄏ音	heaven [ˋhɛvən]、when [hwɛn]
+f、f e、g h、p h	[ f ]	kk.mp3	72.5	73.5	下唇碰到上齒，透過唇齒縫隙吹氣，接近無聲，發音接近ㄈㄨ	family [ˋfæməlɪ]、life [laɪf]、cough [kɔf]、phase [fez]
+s、c、s c	[ s ]	kk.mp3	74.5	75.5	發ㄙ音	see [si]、city [ˋsɪtɪ]、school [skul]
+t h	[ θ ]	kk.mp3	76.5	77.5	上下齒輕咬舌尖，不振動聲帶吹氣，發音接近ㄙ	health [hɛlθ]
+c、s、s h、t i o n	[ ʃ ]	kk.mp3	78.5	79.5	舌面輕觸上顎吹氣，發音接近ㄒㄩ˙	special [ˋspɛʃəl]、sure [ʃʊr]、fish [fɪʃ]、action [ˋækʃən]
+c h、t c h、t u r e	[ tʃ ]	kk.mp3	80.5	81.5	舌面頂住上顎，堵住氣流後發聲，與 / ʃ / 口型相同，發音接近ㄑㄩ˙	lunch [lʌntʃ]、catch [kætʃ]、adventure [ədˋvɛntʃɚ]
 						
 <2>常見子音組合						
 						
 字母／字母組合	音標	mp3	start	end	發音	單字範例
-t r	[ t r ]	kk.mp3	83.0	84.0	發音接近ㄔㄨ˙	tree [tri]、truck [trʌk]、train [tren]
-d r	[ d r ]	kk.mp3	85.0	86.0	發音接近ㄓㄨ˙	drink [drɪŋk]、drive [draɪv]、draw [drɔ]
-t s	[ t s ]	kk.mp3	87.0	88.0	發音接近ㄘ	pets [pɛts]、students [ˈstuːdənts]
+t r	[ t r ]	kk.mp3	82.5	83.5	發音接近ㄔㄨ˙	tree [tri]、truck [trʌk]、train [tren]
+d r	[ d r ]	kk.mp3	84.5	85.5	發音接近ㄓㄨ˙	drink [drɪŋk]、drive [draɪv]、draw [drɔ]
+t s	[ t s ]	kk.mp3	86.5	87.5	發音接近ㄘ	pets [pɛts]、students [ˈstuːdənts]
 						
 <1>三、音節 #https://www.youtube.com/watch?v=bLZFfmss5mQ&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=12;[第14、15頁]#						
