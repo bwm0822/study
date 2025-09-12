@@ -23,7 +23,7 @@
     .tts-card{border:1px solid rgba(255,255,255,.25)}
     .tts-bar{display:flex;align-items:center;gap:.8rem;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap}
     .range-inline{width:280px;min-width:200px}
-    .tts-select{min-width:260px}
+    .tts-select{min-width:220px}
 
     /* ---- 外框只包表格，不含大小標題 ---- */
     .table-frame{border:1px solid rgba(255,255,255,.2);border-radius:.6rem;overflow:hidden}
@@ -122,12 +122,16 @@
   </nav>
 
   <main class="container py-3">
-    <!-- ★ 英文語音 / 語速 控制列（同一列、白字、外框，設定可儲存） -->
+    <!-- ★ 英/中 語音 + 語速 控制列（同一列，設定可儲存） -->
     <div class="card tts-card mb-3 bg-dark text-white">
       <div class="card-body py-2">
         <div class="tts-bar">
-          <span class="me-1">語音</span>
+          <span class="me-1">語音(英)</span>
           <select id="selEn" class="form-select form-select-sm w-auto tts-select bg-dark text-white border-secondary"></select>
+
+          <span>語音(中)</span>
+          <select id="selZh" class="form-select form-select-sm w-auto tts-select bg-dark text-white border-secondary"></select>
+
           <span>語速</span><span id="rateVal">1.00</span>
           <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00" />
         </div>
@@ -147,32 +151,64 @@
 
     // ====== TTS 控制（UI + 永續存取） ======
     const selEn   = document.getElementById('selEn');
+    const selZh   = document.getElementById('selZh');
     const rateEl  = document.getElementById('rate');
     const rateVal = document.getElementById('rateVal');
     let voices = [];
 
     function populateVoices(){
       voices = speechSynthesis.getVoices() || [];
-      const list = voices
+      const listEn = voices
         .filter(v => v.lang && /^en/i.test(v.lang))
         .sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'en'));
-      const saved = localStorage.getItem('tts.enVoice');
+      const listZhRaw = voices
+        .filter(v => v.lang && /^zh/i.test(v.lang))
+        .sort((a,b)=>(a.lang+a.name).localeCompare(b.lang+b.name,'zh'));
+      // 中文優先 zh-TW
+      const listZh = [...listZhRaw.filter(v=>/zh[-_]?TW/i.test(v.lang)), ...listZhRaw.filter(v=>!(/zh[-_]?TW/i.test(v.lang)))];
+
+      const savedEn = localStorage.getItem('tts.enVoice');
+      const savedZh = localStorage.getItem('tts.zhVoice');
+
+      // 填英
       selEn.innerHTML = '';
-      list.forEach(v=>{
+      listEn.forEach(v=>{
         const opt=document.createElement('option');
         opt.value = v.name + '||' + v.lang;
         opt.textContent = `${v.name} (${v.lang})${v.default?' ★':''}`;
         selEn.appendChild(opt);
       });
-      if (saved && [...selEn.options].some(o=>o.value===saved)) selEn.value = saved;
-      else if (list.length) selEn.value = list[0].value;
+      if (savedEn && [...selEn.options].some(o=>o.value===savedEn)) selEn.value = savedEn;
+      else if (listEn.length) selEn.value = listEn[0].value;
+
+      // 填中
+      selZh.innerHTML = '';
+      listZh.forEach(v=>{
+        const opt=document.createElement('option');
+        opt.value = v.name + '||' + v.lang;
+        opt.textContent = `${v.name} (${v.lang})${v.default?' ★':''}`;
+        selZh.appendChild(opt);
+      });
+      if (savedZh && [...selZh.options].some(o=>o.value===savedZh)) selZh.value = savedZh;
+      else if (listZh.length) selZh.value = listZh[0].value;
     }
-    function getSavedVoice(){
-      const saved = localStorage.getItem('tts.enVoice');
-      if (!saved) return (voices.find(v=>/^en/i.test(v.lang)) || null);
-      const [name,lang] = saved.split('||');
-      return voices.find(v=>v.name===name&&v.lang===lang) || voices.find(v=>/^en/i.test(v.lang)) || null;
+
+    function getSavedVoiceByKey(key, fallbackPrefix){
+      const saved = localStorage.getItem(key);
+      if (saved){
+        const [name,lang] = saved.split('||');
+        const v = voices.find(v=>v.name===name&&v.lang===lang);
+        if (v) return v;
+      }
+      // fallback: first matching prefix; zh 再優先 zh-TW
+      if (/^zh/i.test(fallbackPrefix)){
+        return voices.find(v=>/zh[-_]?TW/i.test(v.lang))
+            || voices.find(v=>/^zh/i.test(v.lang))
+            || null;
+      }
+      return voices.find(v=>new RegExp('^'+fallbackPrefix,'i').test(v.lang)) || null;
     }
+
     function getSavedRate(){
       const r = parseFloat(localStorage.getItem('tts.rate') || '1');
       return isNaN(r) ? 1 : r;
@@ -189,6 +225,7 @@
       localStorage.setItem('tts.rate', r);
     });
     selEn.addEventListener('change', ()=> localStorage.setItem('tts.enVoice', selEn.value));
+    selZh.addEventListener('change', ()=> localStorage.setItem('tts.zhVoice', selZh.value));
 
     populateVoices();
     if ('onvoiceschanged' in speechSynthesis){
@@ -400,11 +437,16 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
     function buildDataRow(r){
       const tr = document.createElement('tr');
 
+      // 字母／字母組合（點擊 -> 中文發音）
       const tdLetters = document.createElement('td');
-      tdLetters.className = 'letters';
+      tdLetters.className = 'letters say-token';
       tdLetters.textContent = r.letters || '';
+      if (r.letters){
+        tdLetters.addEventListener('click', ()=> sayZh(tdLetters, r.letters));
+      }
       tr.appendChild(tdLetters);
 
+      // 音標（可點擊播放片段）
       const tdSymbol = document.createElement('td');
       tdSymbol.className = 'symbol';
       tdSymbol.innerHTML = `<b>${escapeHTML(r.symbol || '')}</b>`;
@@ -418,11 +460,16 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
       }
       tr.appendChild(tdSymbol);
 
+      // 發音（點擊 -> 中文發音）
       const tdDesc = document.createElement('td');
-      tdDesc.className = 'desc';
+      tdDesc.className = 'desc say-token';
       tdDesc.textContent = r.desc || '';
+      if (r.desc){
+        tdDesc.addEventListener('click', ()=> sayZh(tdDesc, r.desc));
+      }
       tr.appendChild(tdDesc);
 
+      // 單字範例（每個英文字 -> 英文發音；方括號為備註）
       const tdWord = document.createElement('td');
       tdWord.className = 'words';
       tdWord.appendChild(renderWordTokens(r.word || ''));
@@ -529,7 +576,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
             const word = document.createElement('span');
             word.className = 'say-token';
             word.textContent = w;
-            word.addEventListener('click', ()=> sayToken(word, w));
+            word.addEventListener('click', ()=> sayEn(word, w));
 
             pair.appendChild(word);
             groupEl.appendChild(pair);
@@ -553,14 +600,19 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
       }
     }
 
-    // ====== TTS（讀取 UI 設定） ======
-    function sayToken(el, text){
+    // ====== TTS（英/中；讀取 UI 設定） ======
+    function sayEn(el, text){
+      sayWithVoice(el, text, getSavedVoiceByKey('tts.enVoice','en'), 'en-US');
+    }
+    function sayZh(el, text){
+      sayWithVoice(el, text, getSavedVoiceByKey('tts.zhVoice','zh'), 'zh-TW');
+    }
+    function sayWithVoice(el, text, voice, fallbackLang){
       stopAll();
       if (!text) return;
       const u = new SpeechSynthesisUtterance(text);
-      const v = getSavedVoice();
-      if (v) u.voice = v;
-      u.lang = v?.lang || 'en-US';
+      if (voice) u.voice = voice;
+      u.lang = voice?.lang || fallbackLang || 'en-US';
       u.rate = getSavedRate();
       u.pitch=1; u.volume=1;
 
@@ -568,7 +620,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
       u.onend = ()=> el.classList.remove('playing');
       u.onerror = ()=> el.classList.remove('playing');
 
-      speechSynthesis.cancel();
+      try{ speechSynthesis.cancel(); }catch{}
       speechSynthesis.speak(u);
     }
 
@@ -583,6 +635,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie`;
   </script>
 </body>
 </html>
+
 
 
 
