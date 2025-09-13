@@ -138,7 +138,7 @@
     const baseIndex = new Map(); // base(lower) -> tr
     let allRows = [];
 
-    fetch('/content/irregular.txt?c='+Date.now())
+    fetch('content/irregular.txt?c='+Date.now())
       .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
       .then(txt => {
         allRows = parseTSV(txt);

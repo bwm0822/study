@@ -839,7 +839,7 @@
 
     async function loadData(){
       try{
-        const res=await fetch('/content/voca.txt?c='+Date.now());
+        const res=await fetch('content/voca.txt?c='+Date.now());
         if(!res.ok) throw new Error('HTTP '+res.status);
         const text=await res.text();
         rows=parseTSV(text);
