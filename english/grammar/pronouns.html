@@ -2,7 +2,6 @@
 <!doctype html>
 <html lang="zh-Hant" data-bs-theme="dark">
 <head>
-  <base href="/study/">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>代名詞表</title>
@@ -114,7 +113,18 @@
     const theadRow = document.getElementById('theadRow');
     const tbody    = document.getElementById('tbody');
 
-    fetch('content/pronouns.txt?c='+Date.now())
+    function getRoot() 
+    {
+      const isGh = location.hostname.endsWith('github.io');
+      const segs = location.pathname.split('/').filter(Boolean);
+      const repo = isGh ? (segs[0] || '') : '';
+      // 例：
+      // - localhost:  return 'http://localhost:3000/'
+      // - GH Pages:   return 'https://bwm0822.github.io/study/'
+      return location.origin + '/' + (repo ? repo + '/' : '');
+    }
+
+    fetch(getRoot()+'content/pronouns.txt?c='+Date.now())
       .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
       .then(txt => {
         const {header, data} = parseTSV(txt);

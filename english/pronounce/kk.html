@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="zh-Hant" data-bs-theme="dark">
 <head>
-  <base href="/study/">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KK 音標</title>
@@ -210,8 +209,19 @@
       setTimeout(populateVoices, 400);
     }
 
+    function getRoot() 
+    {
+      const isGh = location.hostname.endsWith('github.io');
+      const segs = location.pathname.split('/').filter(Boolean);
+      const repo = isGh ? (segs[0] || '') : '';
+      // 例：
+      // - localhost:  return 'http://localhost:3000/'
+      // - GH Pages:   return 'https://bwm0822.github.io/study/'
+      return location.origin + '/' + (repo ? repo + '/' : '');
+    }
+
     // ====== 常數（內容解析） ======
-    const TXT_URL    = 'content/kk.txt';   // Tab：字母/音標/mp3/start/end/發音/單字範例
+    const TXT_URL    = getRoot()+'content/kk.txt';   // Tab：字母/音標/mp3/start/end/發音/單字範例
     const AUDIO_BASE = 'audio/';
 
     const content  = document.getElementById('content');

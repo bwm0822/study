@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant" data-bs-theme="dark">
 <head>
-  <base href="/study/">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>單字測驗</title>
@@ -129,8 +128,19 @@
     let allRows = [];
     let MAX_IDX = 1;
 
+    function getRoot() 
+    {
+      const isGh = location.hostname.endsWith('github.io');
+      const segs = location.pathname.split('/').filter(Boolean);
+      const repo = isGh ? (segs[0] || '') : '';
+      // 例：
+      // - localhost:  return 'http://localhost:3000/'
+      // - GH Pages:   return 'https://bwm0822.github.io/study/'
+      return location.origin + '/' + (repo ? repo + '/' : '');
+    }
+
     // ====== 資料 ======
-    fetch('content/voca.txt?c=' + Date.now())
+    fetch(getRoot()+'content/voca.txt?c=' + Date.now())
       .then(r => { if(!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
       .then(txt => {
         allRows = parseTSV(txt);

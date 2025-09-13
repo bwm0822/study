@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="zh-Hant" data-bs-theme="dark">
 <head>
-  <base href="/study/">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>複習單字</title>
@@ -617,10 +616,21 @@
       localStorage.setItem('tts.rate', rate);
     });
 
+    function getRoot() 
+    {
+      const isGh = location.hostname.endsWith('github.io');
+      const segs = location.pathname.split('/').filter(Boolean);
+      const repo = isGh ? (segs[0] || '') : '';
+      // 例：
+      // - localhost:  return 'http://localhost:3000/'
+      // - GH Pages:   return 'https://bwm0822.github.io/study/'
+      return location.origin + '/' + (repo ? repo + '/' : '');
+    }
+
     /* ====== 載入資料 ====== */
     async function loadData(){
       try{
-        const res = await fetch('content/voca.txt?c='+Date.now());
+        const res = await fetch(getRoot()+'content/voca.txt?c='+Date.now());
         if(!res.ok) throw new Error('HTTP '+res.status);
         const text = await res.text();
         rows = parseTSV(text);

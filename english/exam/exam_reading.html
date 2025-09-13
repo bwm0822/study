@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant" data-bs-theme="dark">
 <head>
-  <base href="/study/">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title id="pagetitle">文字內容</title>
@@ -82,7 +81,18 @@
     const fileName = file.replace(/\.[^/.]+$/, "");
     titleEl.textContent = file.includes("ans") ? "[解答] "+fileName : "[測驗] "+fileName;
 
-    fetch("content/exam/" + encodeURIComponent(file))
+    function getRoot() 
+    {
+      const isGh = location.hostname.endsWith('github.io');
+      const segs = location.pathname.split('/').filter(Boolean);
+      const repo = isGh ? (segs[0] || '') : '';
+      // 例：
+      // - localhost:  return 'http://localhost:3000/'
+      // - GH Pages:   return 'https://bwm0822.github.io/study/'
+      return location.origin + '/' + (repo ? repo + '/' : '');
+    }
+
+    fetch(getRoot()+"content/exam/" + encodeURIComponent(file))
       .then(res => { if (!res.ok) throw new Error("HTTP " + res.status); return res.text(); })
       .then(txt => { outEl.textContent = txt; window.scrollTo({ top: 0, behavior: "instant" }); })
       .catch(err => { outEl.textContent = "讀取失敗：" + err.message; });
