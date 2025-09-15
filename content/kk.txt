@@ -1,6 +1,6 @@
 <1>一、母音音標 (17個) #https://www.youtube.com/watch?v=r32JqQG0Gwo&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=1;[第3頁]# #https://www.youtube.com/watch?v=V_FKxz_MSYE&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=2;[第4頁]# #https://www.youtube.com/watch?v=fckd-bojWz4&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=3;[第5頁]# #https://www.youtube.com/watch?v=b23m1RTdpkk&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=4;[第6頁]# #https://www.youtube.com/watch?v=ucXHQPL9H3M&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=5;[第7頁]# #https://www.ltedu.com.tw/web/Sharefile/LT/KK/;[補充]#						
 						
-<2>單母音	i					
+<2>單母音				
 						
 字母／字母組合	音標	mp3	start	end	發音	單字範例
 i、y	[ ɪ ]	kk.mp3	0.5	2.5	發短音的ㄧ˙	it [ɪt]、his[hɪz]、twenty[ˋtwɛntɪ]
@@ -9,7 +9,7 @@ a、e、e a	[ ɛ ]	kk.mp3	4.5	6.5	嘴形向左右拉，發短音的ㄝ	many [ˋm
 a i、e i、a y、e y、e a、a_e	[ e ]	kk.mp3	6.5	8.5	嘴形有 2 段變化，發長音的ㄟㄧ	plain [plen]、neighbor [ˋnebɚ]、play [ple]、prey [pre]、break [brek]、mate [met]
 a	[ æ ]	kk.mp3	8.5	10.5	嘴形往下張大，發ㄝˋ	mad [mæd]
 a、o	[ ɑ ]	kk.mp3	10.5	12.5	嘴形上下張大，發短音的ㄚ	wash [wɑʃ]、stop [stɑp]
-a l、a u、a w、o u	[ ɔ ]	kk.mp3	13.55	14.5	嘴形呈圓形，發短音的ㄛ	call [kɔl]、author [ˋɔθɚ]、law [lɔ]、bought [bɔt]
+a l、a u、a w、o u	[ ɔ ]	kk.mp3	13.6	14.5	嘴形呈圓形，發短音的ㄛ	call [kɔl]、author [ˋɔθɚ]、law [lɔ]、bought [bɔt]
 o a、o e、o w、o u g h、o_e	[ o ]	kk.mp3	14.5	16.5	嘴形有 2 段變化，發長音的ㄡㄨ	coat [kot]、poet [ˋpoɪɪt]、flow [flo]、although [ɔlˋðo]、phone [fon]
 u、o o、o u	[ ʊ ]	kk.mp3	16.5	18.5	嘴形放鬆張開，發短音的ㄨ˙	full [fʊl]、book [bʊk]、could [kʊd]
 o o、u i、u e、o u、e w、u_e	[ u ]	kk.mp3	18.5	20.5	嘴形向前噘起，發長音的ㄨˋ	moon [mun]、suit [sut]、clue [klu]、through [θru]、chew [tʃu]、mute [mjut]
