@@ -168,7 +168,7 @@ for idx, (r, apath, s, e) in enumerate(valid_rows):
 
     # ★ 更新工作表：把原來的 mp3/start/end 改為合併後 kk.mp3 的時間軸（已包含先前片段與 gap）
     ws.cell(row=r, column=COL_MP3, value="kk.mp3")
-    ws.cell(row=r, column=COL_S,   value=(merged_s-0.25))  # start 時間點往前移 0.25 秒
+    ws.cell(row=r, column=COL_S,   value=(merged_s-0.5))  # start 時間點往前移 0.5 秒
     ws.cell(row=r, column=COL_E,   value=merged_e)
 
     print(f"  ✓ 列 {r}: {apath.name} → [{merged_s}, {merged_e}]（已考慮前面片段與 1s gap）")
