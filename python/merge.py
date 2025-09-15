@@ -149,6 +149,10 @@ for idx, (r, apath, s, e) in enumerate(valid_rows):
 
     clip = seg[s_ms:e_ms]
 
+    # 在片段之前加入 1 秒 gap
+    merged = AudioSegment.silent(duration=GAP_MS) if merged is None else (merged + AudioSegment.silent(duration=GAP_MS))
+    cur_ms += GAP_MS
+
     # 合併後 kk.mp3 的時間（秒，三位小數）
     merged_s = round(cur_ms / 1000.0, 3)
     merged_e = round((cur_ms + len(clip)) / 1000.0, 3)
@@ -162,13 +166,9 @@ for idx, (r, apath, s, e) in enumerate(valid_rows):
     #     merged += AudioSegment.silent(duration=GAP_MS)
     #     cur_ms += GAP_MS
 
-    # 在片段之前加入 1 秒 gap
-    merged += AudioSegment.silent(duration=GAP_MS)
-    cur_ms += GAP_MS
-
     # ★ 更新工作表：把原來的 mp3/start/end 改為合併後 kk.mp3 的時間軸（已包含先前片段與 gap）
     ws.cell(row=r, column=COL_MP3, value="kk.mp3")
-    ws.cell(row=r, column=COL_S,   value=(merged_s-0.5))  # start 時間點往前移 0.5 秒
+    ws.cell(row=r, column=COL_S,   value=(merged_s-0.25))  # start 時間點往前移 0.25 秒
     ws.cell(row=r, column=COL_E,   value=merged_e)
 
     print(f"  ✓ 列 {r}: {apath.name} → [{merged_s}, {merged_e}]（已考慮前面片段與 1s gap）")
