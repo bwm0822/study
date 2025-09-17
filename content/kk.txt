@@ -1,29 +1,29 @@
 <1>一、母音音標 (17個) #https://www.youtube.com/watch?v=r32JqQG0Gwo&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=1;[第3頁]# #https://www.youtube.com/watch?v=V_FKxz_MSYE&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=2;[第4頁]# #https://www.youtube.com/watch?v=fckd-bojWz4&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=3;[第5頁]# #https://www.youtube.com/watch?v=b23m1RTdpkk&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=4;[第6頁]# #https://www.youtube.com/watch?v=ucXHQPL9H3M&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=5;[第7頁]# #https://www.ltedu.com.tw/web/Sharefile/LT/KK/;[補充]#						
 						
-<2>單母音				
+<2>單母音						
 						
 字母／字母組合	音標	mp3	start	end	發音	單字範例
 i、y	[ ɪ ]	kk.mp3	0.5	2.5	發短音的ㄧ˙	it [ɪt]、his[hɪz]、twenty[ˋtwɛntɪ]
-e e、e a、i e、e i、e y、e_e	[ i ]	kk.mp3	2.5	4.5	發長音的ㄧˋ	feed [fid]、tea [ti]、relief [rɪˋlif]、ceiling [ˋsilɪŋ]、these [ðiz]
-a、e、e a	[ ɛ ]	kk.mp3	4.5	6.5	嘴形向左右拉，發短音的ㄝ	many [ˋmɛnɪ]、letter [ˋlɛtɚ]、pleasure [ˋplɛʒɚ]
-a i、e i、a y、e y、e a、a_e	[ e ]	kk.mp3	6.5	8.5	嘴形有 2 段變化，發長音的ㄟㄧ	plain [plen]、neighbor [ˋnebɚ]、play [ple]、prey [pre]、break [brek]、mate [met]
+e e、e a、e_e	[ i ]	kk.mp3	2.5	4.5	發長音的ㄧˋ	feed [fid]、tea [ti]、relief [rɪˋlif]、ceiling [ˋsilɪŋ]、these [ðiz]
+e	[ ɛ ]	kk.mp3	4.5	6.5	嘴形向左右拉，發短音的ㄝ	many [ˋmɛnɪ]、letter [ˋlɛtɚ]、pleasure [ˋplɛʒɚ]
+a i、a y、a_e	[ e ]	kk.mp3	6.5	8.5	嘴形有 2 段變化，發長音的ㄟㄧ	plain [plen]、neighbor [ˋnebɚ]、play [ple]、prey [pre]、break [brek]、mate [met]
 a	[ æ ]	kk.mp3	8.5	10.5	嘴形往下張大，發ㄝˋ	mad [mæd]
-a、o	[ ɑ ]	kk.mp3	10.5	12.5	嘴形上下張大，發短音的ㄚ	wash [wɑʃ]、stop [stɑp]
-a l、a u、a w、o u	[ ɔ ]	kk.mp3	13.6	14.5	嘴形呈圓形，發短音的ㄛ	call [kɔl]、author [ˋɔθɚ]、law [lɔ]、bought [bɔt]
-o a、o e、o w、o u g h、o_e	[ o ]	kk.mp3	14.5	16.5	嘴形有 2 段變化，發長音的ㄡㄨ	coat [kot]、poet [ˋpoɪɪt]、flow [flo]、although [ɔlˋðo]、phone [fon]
-u、o o、o u	[ ʊ ]	kk.mp3	16.5	18.5	嘴形放鬆張開，發短音的ㄨ˙	full [fʊl]、book [bʊk]、could [kʊd]
-o o、u i、u e、o u、e w、u_e	[ u ]	kk.mp3	18.5	20.5	嘴形向前噘起，發長音的ㄨˋ	moon [mun]、suit [sut]、clue [klu]、through [θru]、chew [tʃu]、mute [mjut]
-u、o	[ ʌ ]	kk.mp3	20.5	22.5	嘴形放鬆張開，發短音ㄜ	bug [bʌg]、color [ˋkʌlɚ]
-a、o、e	[ ə ]	kk.mp3	22.5	24.5	弱化音，發短音的ㄜ	ago [əˋgo]、together [təˋgɛðɚ]、calendar [ˋkæləndɚ]
-e r、a r、o r、u r e	[ ɚ ]	kk.mp3	24.5	26.5	舌尖往後上方捲，發短音的ㄦ	better [ˋbɛtɚ]、familiar [fəˋmɪljɚ]、color [ˋkʌlɚ]、nature [ˋnetʃɚ]
-i r、e r、u r、e a r	[ ɝ ]	kk.mp3	26.5	28.5	舌尖往後上方捲，發長音的ㄦˋ	bird [bɝd]、her [hɝ]、turn [tɝn]、learn [lɝn]
+o	[ ɑ ]	kk.mp3	10.5	12.5	嘴形上下張大，發短音的ㄚ	wash [wɑʃ]、stop [stɑp]
+a u、a w、o	[ ɔ ]	kk.mp3	13.6	14.5	嘴形呈圓形，發短音的ㄛ	call [kɔl]、author [ˋɔθɚ]、law [lɔ]、bought [bɔt]
+o a、o e、o_e	[ o ]	kk.mp3	14.5	16.5	嘴形有 2 段變化，發長音的ㄡㄨ	coat [kot]、poet [ˋpoɪɪt]、flow [flo]、although [ɔlˋðo]、phone [fon]
+o o、u	[ ʊ ]	kk.mp3	16.5	18.5	嘴形放鬆張開，發短音的ㄨ˙	full [fʊl]、book [bʊk]、could [kʊd]
+o o、u e、u_e	[ u ]	kk.mp3	18.5	20.5	嘴形向前噘起，發長音的ㄨˋ	moon [mun]、suit [sut]、clue [klu]、through [θru]、chew [tʃu]、mute [mjut]
+u	[ ʌ ]	kk.mp3	20.5	22.5	嘴形放鬆張開，發短音ㄜ	bug [bʌg]、color [ˋkʌlɚ]
+a、o	[ ə ]	kk.mp3	22.5	24.5	弱化音，發短音的ㄜ	ago [əˋgo]、together [təˋgɛðɚ]、calendar [ˋkæləndɚ]
+e r、u r	[ ɚ ]	kk.mp3	24.5	26.5	舌尖往後上方捲，發短音的ㄦ	better [ˋbɛtɚ]、familiar [fəˋmɪljɚ]、color [ˋkʌlɚ]、nature [ˋnetʃɚ]
+i r、u r、o r	[ ɝ ]	kk.mp3	26.5	28.5	舌尖往後上方捲，發長音的ㄦˋ	bird [bɝd]、her [hɝ]、turn [tɝn]、learn [lɝn]
 						
 <2>雙母音						
 						
 字母／字母組合	音標	mp3	start	end	發音	單字範例
-i、i e、i g h、i_e	[ aɪ ]	kk.mp3	28.5	30.5	發ㄞㄧ音	child [tʃaɪld]、tie [taɪ]、light [laɪt]、fire [faɪr]
+i、i e、i_e、i g h	[ aɪ ]	kk.mp3	28.5	30.5	發ㄞㄧ音	child [tʃaɪld]、tie [taɪ]、light [laɪt]、fire [faɪr]
 o u、o w	[ aʊ ]	kk.mp3	30.5	32.5	發ㄠˋ音	loud [laʊd]、flower [ˋflaʊɚ]
-o y、o i	[ ɔɪ ]	kk.mp3	32.5	34.0	發ㄡㄧ音	joy [dʒɔɪ]、noise [nɔɪz]
+o i、o y	[ ɔɪ ]	kk.mp3	32.5	34.0	發ㄡㄧ音	joy [dʒɔɪ]、noise [nɔɪz]
 						
 <1>二、子音音標 (24個) #https://www.youtube.com/watch?v=DQD44tHoDoA&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=6;[第8頁]# #https://www.youtube.com/watch?v=-VS2kiH1ao8&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=7;[第9頁]# #https://www.youtube.com/watch?v=w9MXOLsdBbs&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=8;[第10頁]# #https://www.youtube.com/watch?v=ubEEt2dfs7M&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=9;[第11頁]# #https://www.youtube.com/watch?v=_8R05VhoXvc&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=10;[第12頁]# #https://www.youtube.com/watch?v=Ee70WWF0QUY&list=PL0KZczKsxGFOXulV_zfiaOhc5iKJhgpyU&index=11;[第13頁]# #https://www.ltedu.com.tw/web/Sharefile/LT/KK/;[補充]#						
 						
@@ -35,7 +35,7 @@ d、d d	[ d ]	kk.mp3	36.0	38.0	發短音的ㄉ	dinner [ˋdɪnɚ]、addition [ə�
 g、g g	[ g ]	kk.mp3	38.0	40.0	發短音的ㄍ	grammar [ˋgræmɚ]、luggage [ˋlʌgɪdʒ]
 v、f	[ v ]	kk.mp3	40.0	42.0	下唇碰到上齒，吹氣同時振動聲帶，發音類似 / f /	vegetable [ˋvɛdʒtəb!]、of [ʌv]
 z、s	[ z ]	kk.mp3	42.0	44.0	雙脣微啟，上下齒閉合，吹氣同時振動聲帶，發音接近ㄖ	zoo [zu]、pause [pɔz]
-t h	[ ð ]	kk.mp3	44.0	47.0	上下齒輕咬舌尖，吹氣同時振動聲帶，發音接近ㄌㄜ˙	this [ðɪs]
+t h	[ ð ]	kk.mp3	44.0	47.0	上下齒輕咬舌尖，吹氣同時振動聲帶，發音接近ㄖ	this [ðɪs]
 s i、s u、g e	[ ʒ ]	kk.mp3	47.0	49.0	舌面往上輕觸上顎，吹氣同時振動聲帶，與 / ʃ / 發音口型相同，發音接近ㄓ˙	television [ˋtɛlə͵vɪʒən]、pleasure [ˋplɛʒɚ]
 j、g e、d g e、g i、g y	[ dʒ ]	kk.mp3	49.0	51.0	舌面往上頂住上顎，堵住氣流並振動聲帶，發音接近ㄐㄧ˙	enjoy [ɪnˋdʒɔɪ]、change [tʃendʒ]、judge [dʒʌdʒ]、apologize [əˋpɑlə͵dʒaɪz]、gym [dʒɪm]
 l、l l	[ l ]	kk.mp3	51.0	53.0	舌尖頂住上齒齦後發聲，母音前發音接近ㄌ，母音後發音接近ㄛ	lend [lɛnd]、fall [fɔl]
