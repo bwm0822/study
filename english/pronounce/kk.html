@@ -18,37 +18,37 @@
     body{background:#212529;color:#f8f9fa}
     .navbar{border-bottom:1px solid rgba(255,255,255,.15)}
 
-    /* ---- 控制列：單行，不換行，三等分 ---- */
+    /* 控制列 */
     .tts-card{border:1px solid rgba(255,255,255,.25)}
-    .tts-bar{display:flex; align-items:center; gap:.6rem; flex-wrap:nowrap; overflow:hidden}
-    .tts-col{flex:0 0 33.3333%; min-width:0; display:flex; align-items:center; gap:.5rem}
-    .tts-col label{flex:0 0 auto; white-space:nowrap}
-    .tts-select{flex:1 1 auto; min-width:0; width:100%}
+    .tts-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:nowrap;overflow:hidden}
+    .tts-col{flex:0 0 33.3333%;min-width:0;display:flex;align-items:center;gap:.5rem}
+    .tts-col label{flex:0 0 auto;white-space:nowrap}
+    .tts-select{flex:1 1 auto;min-width:0;width:100%}
 
-    /* ---- 表格外框與固定版面 ---- */
+    /* 表格外框與固定版面 */
     .table-frame{border:1px solid rgba(255,255,255,.2);border-radius:.6rem;overflow:hidden}
     .table-frame .table{margin-bottom:0}
     .section-table{table-layout:fixed;width:100%}
     .section-table thead th{position:sticky;top:0;z-index:1;background:#1b1f22}
 
     /* 標題 */
-    .h1-title{color:#fff;font-weight:700;font-size:1.05rem;margin:1rem 0 .4rem; scroll-margin-top:calc(var(--navbar-h) + 10px)}
-    .h2-title{color:#ced4da;font-weight:600;font-size:.95rem;margin:.5rem 0 .6rem; scroll-margin-top:calc(var(--navbar-h) + 10px)}
+    .h1-title{color:#fff;font-weight:700;font-size:1.05rem;margin:1rem 0 .4rem;scroll-margin-top:calc(var(--navbar-h) + 10px)}
+    .h2-title{color:#ced4da;font-weight:600;font-size:.95rem;margin:.5rem 0 .6rem;scroll-margin-top:calc(var(--navbar-h) + 10px)}
     .h1-title,.h2-title{user-select:text}
 
-    /* 欄寬（固定四欄，靠 CSS 控制顯示/隱藏） */
-    col.col-letters{width:var(--col-w-letters)}
-    col.col-symbol {width:var(--col-w-symbol)}
-    col.col-desc   {width:var(--col-w-desc)}
-    col.col-words  {width:var(--col-w-words)}
+    /* 欄寬 */
+    .col-letters{width:var(--col-w-letters)}
+    .col-symbol {width:var(--col-w-symbol)}
+    .col-desc   {width:var(--col-w-desc)}
+    .col-words  {width:var(--col-w-words)}
 
     /* 內容樣式與互動 */
     .section-table th, .section-table td{overflow:hidden;text-overflow:ellipsis}
-    th.th-letters, td.letters{white-space:nowrap}
-    th.th-symbol , td.symbol {white-space:nowrap}
-    th.th-desc   , td.desc   {white-space:normal;word-break:break-word;color:#adb5bd}
-    td.words{white-space:normal;word-break:break-word; position:relative}
-    .word-group{display:flex;flex-wrap:wrap;gap:.35rem .6rem; padding-right:4.5rem}
+    td.letters, th.th-letters{white-space:nowrap}
+    td.symbol , th.th-symbol {white-space:nowrap}
+    td.desc   , th.th-desc   {white-space:normal;word-break:break-word;color:#adb5bd}
+    td.words{white-space:normal;word-break:break-word;position:relative}
+    .word-group{display:flex;flex-wrap:wrap;gap:.35rem .6rem;padding-right:4.5rem}
     .pair{display:inline-flex;align-items:baseline;column-gap:.08rem}
     .pair .say-token{display:inline-block;padding:0 .1rem;border-radius:.25rem}
     .pair .note{display:inline;color:#6c757d;font-size:.9rem;cursor:default;padding:0}
@@ -58,37 +58,20 @@
     td[data-play]:active, .say-token:active{transform:scale(1.03)}
     .playing{outline:2px solid var(--bs-primary);box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
 
+    /* 每列切換按鈕 */
+    .swap-btn{position:absolute;right:.35rem;top:.35rem;z-index:1}
+
     /* 章節目錄 */
     .dropdown-menu-dark{--bs-dropdown-bg:#1f2428;--bs-dropdown-link-active-bg:#0d6efd}
     .dropdown-menu{max-height:70vh; overflow:auto}
     .toc-h2{padding-left:1.5rem}
 
-    /* 列上的整欄切換按鈕 */
-    .swap-btn{position:absolute; right:.35rem; top:.35rem; z-index:1}
-
-    /* ---- 模式下的「整欄顯示/隱藏」 ---- */
-    /* 發音模式：預設隱藏發音欄；加 .show-desc-col 時顯示整欄 */
-    .mode-pron:not(.show-desc-col) th.th-desc,
-    .mode-pron:not(.show-desc-col) td.desc,
-    .mode-pron:not(.show-desc-col) col.col-desc{display:none}
-    .mode-pron.show-desc-col th.th-desc,
-    .mode-pron.show-desc-col td.desc{display:table-cell}
-    .mode-pron.show-desc-col col.col-desc{display:table-column}
-
-    /* 字母模式：預設隱藏字母欄；加 .show-letters-col 時顯示整欄 */
-    .mode-letters:not(.show-letters-col) th.th-letters,
-    .mode-letters:not(.show-letters-col) td.letters,
-    .mode-letters:not(.show-letters-col) col.col-letters{display:none}
-    .mode-letters.show-letters-col th.th-letters,
-    .mode-letters.show-letters-col td.letters{display:table-cell}
-    .mode-letters.show-letters-col col.col-letters{display:table-column}
-
-    @media (max-width: 576px){
+    @media (max-width:576px){
       :root{
-        --col-w-letters: 32%;
-        --col-w-symbol : 15%;
-        --col-w-desc   : 23%;
-        --col-w-words  : 30%;
+        --col-w-letters:32%;
+        --col-w-symbol :15%;
+        --col-w-desc   :23%;
+        --col-w-words  :30%;
       }
     }
   </style>
@@ -107,7 +90,7 @@
   </nav>
 
   <main class="container py-3">
-    <!-- 控制列：單行、不換行，各 1/3 -->
+    <!-- 控制列 -->
     <div class="card tts-card mb-3 bg-dark text-white">
       <div class="card-body py-2">
         <div class="tts-bar">
@@ -136,12 +119,11 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
   <script>
     // ====== 返回鍵 ======
     document.getElementById('backBtn').addEventListener('click', ()=>history.back());
 
-    // ====== 語音控制（記錄 voice；不記錄模式） ======
+    // ====== 語音控制 ======
     const selEn = document.getElementById('selEn');
     const selZh = document.getElementById('selZh');
     let voices = [];
@@ -208,7 +190,7 @@
     const tocMenu    = document.getElementById('tocMenu');
     const player     = document.getElementById('player');
 
-    // ====== 模式（不儲存；預設正常；用 CSS 控制欄位顯示） ======
+    // ====== 模式（預設正常） ======
     const modeBtns = {
       normal : document.getElementById('modeNormal'),
       pron   : document.getElementById('modePron'),
@@ -221,13 +203,13 @@
       mode = next;
       Object.values(modeBtns).forEach(b=>b.classList.remove('active'));
       modeBtns[mode === 'pron' ? 'pron' : mode === 'letters' ? 'letters' : 'normal'].classList.add('active');
-      render(parsedCache, mode); // 依模式重繪（同時加上 mode-* class）
+      render(parsedCache, mode); // 依模式重繪
     }
     modeBtns.normal.addEventListener('click', ()=>setMode('normal'));
     modeBtns.pron.addEventListener('click',   ()=>setMode('pron'));
     modeBtns.letters.addEventListener('click',()=>setMode('letters'));
 
-    // ====== 讀取檔案 ======
+    // ====== 載入資料 ======
     fetch(TXT_URL + '?c=' + Date.now())
       .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
       .then(txt => { parsedCache = parseAll(txt); render(parsedCache, mode); })
@@ -296,11 +278,11 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
       return norm.filter(c => HEADER_KEYS.has(c)).length >= 2;
     }
 
-    // ====== 繪製（固定四欄；用 table 上的 class 控制顯示） ======
+    // ====== 繪製 ======
     function render(items, mode='normal'){
       content.innerHTML = '';
       tocMenu.innerHTML = '';
-      let currentTbody = null, currentTable = null;
+      let currentTbody = null;
       const tocItems = [];
       let h1Count = 0, h2Count = 0;
 
@@ -313,7 +295,7 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
           h.innerHTML = parseLinks(it.text || '');
           content.appendChild(h);
           tocItems.push({id, text: it.text || '', level: 1});
-          currentTbody = null; currentTable = null;
+          currentTbody = null;
           return;
         }
         if (it.type === 'h2'){
@@ -324,11 +306,11 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
           h.innerHTML = parseLinks(it.text || '');
           content.appendChild(h);
           tocItems.push({id, text: it.text || '', level: 2});
-          ({tbody: currentTbody, table: currentTable} = createSectionTable(mode));
+          currentTbody = createSectionTable(mode);
           return;
         }
         if (it.type === 'row'){
-          if (!currentTbody){ ({tbody: currentTbody, table: currentTable} = createSectionTable(mode)); }
+          if (!currentTbody) currentTbody = createSectionTable(mode);
           currentTbody.appendChild(buildDataRow(it, mode));
         }
       });
@@ -345,10 +327,34 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
       frame.appendChild(wrap);
 
       const table = document.createElement('table');
-      table.className = 'table table-dark table-hover align-middle section-table ' +
-                        (mode==='pron' ? 'mode-pron' : mode==='letters' ? 'mode-letters' : 'mode-normal');
+      table.className = 'table table-dark table-hover align-middle section-table';
 
-      // 固定 4 欄，顯示由 CSS 控制
+      // 表頭：用 colspan 讓外觀對齊（body 一律維持 4 欄）
+      let headHtml = '';
+      if (mode === 'pron'){
+        headHtml = `
+          <tr>
+            <th class="th-letters">字母／字母組合</th>
+            <th class="th-symbol">音標</th>
+            <th class="th-words" colspan="2">單字範例</th>
+          </tr>`;
+      } else if (mode === 'letters'){
+        headHtml = `
+          <tr>
+            <th class="th-symbol">音標</th>
+            <th class="th-desc">發音</th>
+            <th class="th-words" colspan="2">單字範例</th>
+          </tr>`;
+      } else {
+        headHtml = `
+          <tr>
+            <th class="th-letters">字母／字母組合</th>
+            <th class="th-symbol">音標</th>
+            <th class="th-desc">發音</th>
+            <th class="th-words">單字範例</th>
+          </tr>`;
+      }
+
       table.innerHTML = `
         <colgroup>
           <col class="col-letters">
@@ -356,29 +362,25 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
           <col class="col-desc">
           <col class="col-words">
         </colgroup>
-        <thead>
-          <tr>
-            <th class="th-letters">字母／字母組合</th>
-            <th class="th-symbol">音標</th>
-            <th class="th-desc">發音</th>
-            <th class="th-words">單字範例</th>
-          </tr>
-        </thead>
+        <thead>${headHtml}</thead>
         <tbody></tbody>`;
+
       wrap.appendChild(table);
       content.appendChild(frame);
-      return {tbody: table.querySelector('tbody'), table};
+      return table.querySelector('tbody');
     }
 
     function buildDataRow(r, mode){
       const tr = document.createElement('tr');
 
+      // 1) 字母
       const tdLetters = document.createElement('td');
       tdLetters.className = 'letters say-token';
       tdLetters.textContent = r.letters || '';
       if (r.letters){ tdLetters.addEventListener('click', ()=> sayZh(tdLetters, r.letters)); }
       tr.appendChild(tdLetters);
 
+      // 2) 音標
       const tdSymbol = document.createElement('td');
       tdSymbol.className = 'symbol';
       tdSymbol.innerHTML = `<b>${escapeHTML(r.symbol || '')}</b>`;
@@ -392,6 +394,7 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
       }
       tr.appendChild(tdSymbol);
 
+      // 3) 發音
       const tdDesc = document.createElement('td');
       tdDesc.className = 'desc say-token';
       tdDesc.innerHTML = parseLinks(r.desc || '');
@@ -403,24 +406,64 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
       }
       tr.appendChild(tdDesc);
 
+      // 4) 單字 + 每列切換
       const tdWord = document.createElement('td');
       tdWord.className = 'words';
       tdWord.appendChild(renderWordTokens(r.word || ''));
 
-      // 在發音/字母模式下，加上「整欄切換」按鈕（按任一列都會切整欄）
-      if (mode === 'pron' || mode === 'letters'){
+      if (mode === 'pron'){
+        // 預設隱藏本列發音，單字跨兩欄
+        tdDesc.style.display = 'none';
+        tdWord.colSpan = 2;
+
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'btn btn-outline-light btn-sm swap-btn';
         btn.textContent = '切換';
-        btn.title = mode==='pron' ? '顯示/隱藏整欄【發音】' : '顯示/隱藏整欄【字母】';
-        btn.setAttribute('data-toggle', mode==='pron' ? 'desc-col' : 'letters-col');
+        btn.title = '顯示/隱藏本列的【發音】';
+        btn.setAttribute('data-toggle','desc');
         tdWord.appendChild(btn);
+      } else if (mode === 'letters'){
+        // 預設隱藏本列字母，單字跨兩欄
+        tdLetters.style.display = 'none';
+        tdWord.colSpan = 2;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn btn-outline-light btn-sm swap-btn';
+        btn.textContent = '切換';
+        btn.title = '顯示/隱藏本列的【字母】';
+        btn.setAttribute('data-toggle','letters');
+        tdWord.appendChild(btn);
+      } else {
+        tdWord.colSpan = 1; // 正常模式
       }
 
       tr.appendChild(tdWord);
       return tr;
     }
+
+    // ====== 每列切換（只影響該列；切出來就是正常欄位樣式） ======
+    content.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.swap-btn');
+      if (!btn) return;
+
+      const tr = btn.closest('tr');
+      const kind = btn.getAttribute('data-toggle'); // 'desc' | 'letters'
+      const tdWord = tr.querySelector('td.words');
+
+      if (kind === 'desc'){
+        const tdDesc = tr.querySelector('td.desc');
+        const hidden = tdDesc.style.display === 'none' || getComputedStyle(tdDesc).display === 'none';
+        tdDesc.style.display = hidden ? '' : 'none';   // 顯示/隱藏發音格
+        tdWord.colSpan = hidden ? 1 : 2;               // 單字從 2->1 / 1->2
+      } else if (kind === 'letters'){
+        const tdLetters = tr.querySelector('td.letters');
+        const hidden = tdLetters.style.display === 'none' || getComputedStyle(tdLetters).display === 'none';
+        tdLetters.style.display = hidden ? '' : 'none';// 顯示/隱藏字母格
+        tdWord.colSpan = hidden ? 1 : 2;               // 單字從 2->1 / 1->2
+      }
+    });
 
     // ====== TOC ======
     function buildTOC(items){
@@ -529,7 +572,9 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
         tokens.push({type:'note', value: m[0]});
         lastIndex = m.index + m[0].length;
       }
-      if (lastIndex < segment.length) tokens.push({type:'text', value: segment.slice(lastIndex)});
+      if (lastIndex < segment.length){
+        tokens.push({type:'text', value: segment.slice(lastIndex)});
+      }
       let lastPair = null;
       for (const tk of tokens){
         if (tk.type === 'text'){
@@ -601,20 +646,14 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
       speechSynthesis.speak(u);
     }
 
-    // ====== 「整欄切換」事件委派（按任何一列的【切換】都切整欄） ======
-    content.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.swap-btn');
-      if (!btn) return;
-      const table = btn.closest('table');
-      const kind = btn.getAttribute('data-toggle'); // 'desc-col' | 'letters-col'
-      if (kind === 'desc-col')      table.classList.toggle('show-desc-col');
-      else if (kind === 'letters-col') table.classList.toggle('show-letters-col');
-    });
-
     // ====== 共用 ======
     function stopAll(){ stopPlayback(); try{ speechSynthesis.cancel(); }catch{} }
-    function escapeHTML(s){ return (s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-    function attrEscape(s){ return (String(s??'')).replace(/"/g,'&quot;'); }
+    function escapeHTML(s){
+      return (s ?? '').replace(/[&<>"']/g, c => (
+        {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+      ));
+    }
+    function attrEscape(s){ return (String(s ?? '')).replace(/"/g,'&quot;'); }
     function resolveAudio(mp3){
       if (!mp3) return '';
       if (/^(https?:)?\/\//i.test(mp3) || mp3.startsWith('/')) return mp3;
@@ -623,6 +662,11 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
   </script>
 </body>
 </html>
+
+
+
+
+
 
 
 
