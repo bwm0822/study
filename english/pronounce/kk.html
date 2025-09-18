@@ -7,73 +7,74 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     :root{
-      /* ★ 全站統一欄寬（總和 100%）— 加大字母欄、縮小音標欄 */
       --col-w-letters: 28%;
       --col-w-symbol : 10%;
       --col-w-desc   : 30%;
       --col-w-words  : 32%;
-      --navbar-h     : 56px; /* navbar 高度，供滾動定位 */
+      --navbar-h     : 56px;
     }
 
     html{scroll-behavior:smooth}
     body{background:#212529;color:#f8f9fa}
     .navbar{border-bottom:1px solid rgba(255,255,255,.15)}
 
-    /* ---- TTS 控制欄（外框 + 同一列 + 白字） ---- */
+    /* ---- 控制列：單行，不換行，盡量塞進頁面內 ---- */
     .tts-card{border:1px solid rgba(255,255,255,.25)}
-    .tts-bar{display:flex;align-items:center;gap:.8rem;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap}
-    .range-inline{width:280px;min-width:200px}
-    .tts-select{min-width:220px}
+    .tts-bar{
+      display:flex; align-items:center; gap:.6rem;
+      flex-wrap:nowrap;     /* 不換行 */
+      overflow:hidden;      /* 不顯示橫向卷軸，等分收縮塞進去 */
+    }
+    .tts-col{
+      flex:1 1 0;           /* 三塊平均 1/3，允許收縮 */
+      min-width:0;
+      display:flex; align-items:center; gap:.5rem;
+    }
+    .tts-col label{flex:0 0 auto; white-space:nowrap}
+    .tts-select{flex:1 1 auto; min-width:0; width:100%}
 
-    /* ---- 外框只包表格，不含大小標題 ---- */
+    /* ---- 表格外框 ---- */
     .table-frame{border:1px solid rgba(255,255,255,.2);border-radius:.6rem;overflow:hidden}
     .table-frame .table{margin-bottom:0}
 
-    /* 每個小節自己的表格，固定版面以對齊欄位 */
+    /* 每小節固定版面 */
     .section-table{table-layout:fixed;width:100%}
     .section-table thead th{position:sticky;top:0;z-index:1;background:#1b1f22}
 
-    /* 大小標題（不在外框內、無 hover），並預留滾動定位空間 */
+    /* 標題 */
     .h1-title{color:#fff;font-weight:700;font-size:1.05rem;margin:1rem 0 .4rem; scroll-margin-top:calc(var(--navbar-h) + 10px)}
     .h2-title{color:#ced4da;font-weight:600;font-size:.95rem;margin:.5rem 0 .6rem; scroll-margin-top:calc(var(--navbar-h) + 10px)}
     .h1-title,.h2-title{user-select:text}
 
-    /* 統一欄寬（所有表格共用） */
+    /* 正常模式欄寬 */
     .col-letters{width:var(--col-w-letters)}
     .col-symbol {width:var(--col-w-symbol)}
     .col-desc   {width:var(--col-w-desc)}
     .col-words  {width:var(--col-w-words)}
 
-    /* 防止內容溢出重疊（超出以省略號） */
+    /* 內容樣式與互動 */
     .section-table th, .section-table td{overflow:hidden;text-overflow:ellipsis}
-
-    /* 欄位內容樣式 */
     td.letters{white-space:nowrap}
     td.symbol{white-space:nowrap}
     td.desc{color:#adb5bd;white-space:normal;word-break:break-word}
     td.words{white-space:normal;word-break:break-word}
-
-    /* 互動（只在表格內作用） */
-    td[data-play], .say-token{
-      cursor:pointer;transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease
-    }
+    td[data-play], .say-token{cursor:pointer;transition:transform .08s ease, background-color .2s ease, box-shadow .2s ease}
     td[data-play]:hover, .say-token:hover{background-color:rgba(255,255,255,.06)}
     td[data-play]:active, .say-token:active{transform:scale(1.03)}
     .playing{outline:2px solid var(--bs-primary);box-shadow:inset 0 0 0 .25rem rgba(var(--bs-primary-rgb),.2)}
 
-    /* 單字範例欄位：一組(字+[])之間保留 gap；組內超貼 */
+    /* 單字 token 排版 */
     .word-group{display:flex;flex-wrap:wrap;gap:.35rem .6rem}
     .pair{display:inline-flex;align-items:baseline;column-gap:.08rem}
     .pair .say-token{display:inline-block;padding:0 .1rem;border-radius:.25rem}
     .pair .note{display:inline;color:#6c757d;font-size:.9rem;cursor:default;padding:0}
     .pair .note:hover,.pair .note:active{background:transparent;transform:none}
 
-    /* 章節目錄下拉（右上角） */
+    /* 章節目錄 */
     .dropdown-menu-dark{--bs-dropdown-bg:#1f2428;--bs-dropdown-link-active-bg:#0d6efd}
     .dropdown-menu{max-height:70vh; overflow:auto}
     .toc-h2{padding-left:1.5rem}
 
-    /* 小螢幕 */
     @media (max-width: 576px){
       :root{
         --col-w-letters: 32%;
@@ -89,33 +90,35 @@
     <div class="container d-flex align-items-center">
       <button id="backBtn" class="btn btn-outline-light btn-sm">返回</button>
       <span class="navbar-brand ms-3 mb-0 h1">KK 音標</span>
-      <a href="https://dictionary.cambridge.org/help/phonetics.html" target="_blank" rel="noopener">
-          KK 音標(參考連結)
-      </a>
-      <!-- 右側：章節目錄 Dropdown（不改網址） -->
+      <a href="https://dictionary.cambridge.org/help/phonetics.html" target="_blank" rel="noopener">KK 音標(參考連結)</a>
       <div class="dropdown ms-auto">
-        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button"
-                id="tocDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          章節目錄
-        </button>
+        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="tocDropdown" data-bs-toggle="dropdown" aria-expanded="false">章節目錄</button>
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="tocDropdown" id="tocMenu"></ul>
       </div>
     </div>
   </nav>
 
   <main class="container py-3">
-    <!-- ★ 英/中 語音 + 語速 控制列（同一列，設定可儲存） -->
+    <!-- 控制列：單行、不換行，各 1/3 -->
     <div class="card tts-card mb-3 bg-dark text-white">
       <div class="card-body py-2">
         <div class="tts-bar">
-          <span class="me-1">語音(英)</span>
-          <select id="selEn" class="form-select form-select-sm w-auto tts-select bg-dark text-white border-secondary"></select>
-
-          <span>語音(中)</span>
-          <select id="selZh" class="form-select form-select-sm w-auto tts-select bg-dark text-white border-secondary"></select>
-
-          <span>語速</span><span id="rateVal">1.00</span>
-          <input id="rate" type="range" class="form-range range-inline" min="0.5" max="2.0" step="0.05" value="1.00" />
+          <div class="tts-col">
+            <label class="me-1">英</label>
+            <select id="selEn" class="form-select form-select-sm tts-select bg-dark text-white border-secondary"></select>
+          </div>
+          <div class="tts-col">
+            <label class="me-1">中</label>
+            <select id="selZh" class="form-select form-select-sm tts-select bg-dark text-white border-secondary"></select>
+          </div>
+          <div class="tts-col">
+            <label class="me-1">模式</label>
+            <div class="btn-group btn-group-sm w-100" role="group" aria-label="mode">
+              <button id="modeNormal"  type="button" class="btn btn-outline-light active">正常</button>
+              <button id="modePron"    type="button" class="btn btn-outline-light">發音</button>
+              <button id="modeLetters" type="button" class="btn btn-outline-light">字母</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -125,18 +128,14 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
   <script>
     // ====== 返回鍵 ======
     document.getElementById('backBtn').addEventListener('click', ()=>history.back());
 
-    // ====== TTS 控制（UI + 永續存取） ======
-    const selEn   = document.getElementById('selEn');
-    const selZh   = document.getElementById('selZh');
-    const rateEl  = document.getElementById('rate');
-    const rateVal = document.getElementById('rateVal');
+    // ====== 語音控制（記錄 voice；不記錄模式） ======
+    const selEn = document.getElementById('selEn');
+    const selZh = document.getElementById('selZh');
     let voices = [];
-
     function populateVoices(){
       voices = speechSynthesis.getVoices() || [];
       const listEn = voices.filter(v => v.lang && /^en/i.test(v.lang))
@@ -168,7 +167,6 @@
       if (savedZh && [...selZh.options].some(o=>o.value===savedZh)) selZh.value = savedZh;
       else if (listZh.length) selZh.value = listZh[0].value;
     }
-
     function getSavedVoiceByKey(key, fallbackPrefix){
       const saved = localStorage.getItem(key);
       if (saved){
@@ -177,88 +175,73 @@
         if (v) return v;
       }
       if (/^zh/i.test(fallbackPrefix)){
-        return voices.find(v=>/zh[-_]?TW/i.test(v.lang))
-            || voices.find(v=>/^zh/i.test(v.lang))
-            || null;
+        return voices.find(v=>/zh[-_]?TW/i.test(v.lang)) || voices.find(v=>/^zh/i.test(v.lang)) || null;
       }
       return voices.find(v=>new RegExp('^'+fallbackPrefix,'i').test(v.lang)) || null;
     }
-
-    function getSavedRate(){
-      const r = parseFloat(localStorage.getItem('tts.rate') || '1');
-      return isNaN(r) ? 1 : r;
-    }
-
-    (function initRate(){
-      const r = getSavedRate();
-      rateEl.value = r.toFixed(2);
-      rateVal.textContent = r.toFixed(2);
-    })();
-    rateEl.addEventListener('input', ()=>{
-      const r = parseFloat(rateEl.value) || 1;
-      rateVal.textContent = r.toFixed(2);
-      localStorage.setItem('tts.rate', r);
-    });
     selEn.addEventListener('change', ()=> localStorage.setItem('tts.enVoice', selEn.value));
     selZh.addEventListener('change', ()=> localStorage.setItem('tts.zhVoice', selZh.value));
-
     populateVoices();
-    if ('onvoiceschanged' in speechSynthesis){
-      speechSynthesis.onvoiceschanged = populateVoices;
-    } else {
-      setTimeout(populateVoices, 400);
-    }
+    if ('onvoiceschanged' in speechSynthesis){ speechSynthesis.onvoiceschanged = populateVoices; }
+    else { setTimeout(populateVoices, 400); }
 
-    function getRoot() 
-    {
+    function getRoot(){
       const isGh = location.hostname.endsWith('github.io');
       const segs = location.pathname.split('/').filter(Boolean);
       const repo = isGh ? (segs[0] || '') : '';
-      // 例：
-      // - localhost:  return 'http://localhost:3000/'
-      // - GH Pages:   return 'https://bwm0822.github.io/study/'
       return location.origin + '/' + (repo ? repo + '/' : '');
     }
 
-    // ====== 常數（內容解析） ======
-    const TXT_URL    = getRoot()+'content/kk.txt';   // Tab：字母/音標/mp3/start/end/發音/單字範例
+    // ====== 常數 ======
+    const TXT_URL    = getRoot()+'content/kk.txt';
     const AUDIO_BASE = getRoot()+'audio/';
+    const content    = document.getElementById('content');
+    const tocMenu    = document.getElementById('tocMenu');
+    const player     = document.getElementById('player');
 
-    const content  = document.getElementById('content');
-    const tocMenu  = document.getElementById('tocMenu');
-    const player   = document.getElementById('player');
+    // ====== 模式（不儲存；預設正常；改為重繪來移除欄位） ======
+    const modeBtns = {
+      normal : document.getElementById('modeNormal'),
+      pron   : document.getElementById('modePron'),
+      letters: document.getElementById('modeLetters'),
+    };
+    let mode = 'normal';   // 'normal' | 'pron' | 'letters'
+    let parsedCache = [];
+
+    function setMode(next){
+      mode = next;
+      Object.values(modeBtns).forEach(b=>b.classList.remove('active'));
+      modeBtns[mode === 'pron' ? 'pron' : mode === 'letters' ? 'letters' : 'normal'].classList.add('active');
+      render(parsedCache, mode); // 依模式重繪（真正移除欄）
+    }
+    modeBtns.normal.addEventListener('click', ()=>setMode('normal'));
+    modeBtns.pron.addEventListener('click', ()=>setMode('pron'));
+    modeBtns.letters.addEventListener('click', ()=>setMode('letters'));
 
     // ====== 讀取檔案 ======
     fetch(TXT_URL + '?c=' + Date.now())
       .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
-      .then(txt => { render(parseAll(txt)); })
+      .then(txt => { parsedCache = parseAll(txt); render(parsedCache, mode); })
       .catch(err => {
         console.warn('讀取失敗，使用示例資料：', err);
         const demo =
 `<1>（一）母音音標 #https://example.com/vowels;外部連結#
-<2>單母音 ## TOC 不顯示這段
+<2>單母音
 字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
 a\t[ æ ]\tkk.mp3\t0\t1.1\t短音的ㄟ\tcat [n.], hat
 i\t[ ɪ ]\tkk.mp3\t1.2\t2.2\t短音的ㄧ\tit, ink [短音]
-
 <2>雙母音
 字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
 ai\t[ aɪ ]\tkk.mp3\t2.3\t3.6\tㄞ\tbike [名詞], time
-
 <1>（二）子音音標
 <2>有聲子音
 字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
-b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]
-
-<2>無聲子音
-字母／字母組合\t音標\tmp3\tstart\tend\t發音\t單字範例
-p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
-
-<1>#https://english.cool/places-prepositions/;地方介系詞#  ## 這個 H1 在頁面顯示為連結，但 TOC 會整項被省略（因為只有連結）`;
-        render(parseAll(demo));
+b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
+        parsedCache = parseAll(demo);
+        render(parsedCache, mode);
       });
 
-    // ====== 解析：任意位置的 <1>/<2> 與資料列 ======
+    // ====== 解析 ======
     function parseAll(txt){
       const rawLines = txt.replace(/\uFEFF/g,'').replace(/\r/g,'').split('\n');
       const lines = rawLines.map(l => l.replace(/\s+$/,''));
@@ -280,7 +263,6 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
 
         while (cols.length < 7) cols.push('');
         const [letters, symbol, mp3, start, end, desc, word] = cols;
-
         if (!(letters||symbol||mp3||start||end||desc||word)) continue;
 
         items.push({
@@ -296,8 +278,6 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       }
       return items;
     }
-
-    // ---- 輔助：拆欄、表頭判斷 ----
     function splitCols(line){ return (line || '').split('\t').map(s => (s ?? '').trim()); }
     function normalizeKey(s){ return (s||'').replace(/[／/]/g,'/').replace(/\s+/g,'').toLowerCase(); }
     const HEADER_KEYS = new Set(['字母/字母組合','音標','mp3','start','end','發音','單字範例','單字','例字']);
@@ -307,94 +287,8 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       return norm.filter(c => HEADER_KEYS.has(c)).length >= 2;
     }
 
-    // ====== 建一個新小節表格 ======
-    function createSectionTable(){
-      const frame = document.createElement('div');
-      frame.className = 'table-frame mb-3';
-
-      const wrap = document.createElement('div');
-      wrap.className = 'table-responsive m-0';
-      frame.appendChild(wrap);
-
-      const table = document.createElement('table');
-      table.className = 'table table-dark table-hover align-middle section-table';
-      table.innerHTML = `
-        <colgroup>
-          <col class="col-letters"><col class="col-symbol"><col class="col-desc"><col class="col-words">
-        </colgroup>
-        <thead>
-          <tr>
-            <th>字母／字母組合</th>
-            <th>音標</th>
-            <th>發音</th>
-            <th>單字範例</th>
-          </tr>
-        </thead>
-        <tbody></tbody>`;
-      wrap.appendChild(table);
-
-      content.appendChild(frame);
-      return table.querySelector('tbody');
-    }
-
-    // ====== TOC：忽略所有 #...# 連結片段，並裁掉第一個（可含全形）"##" 之後 ======
-    function buildTOC(items){
-      tocMenu.innerHTML = '';
-      if (!items.length){
-        const li = document.createElement('li');
-        li.innerHTML = `<span class="dropdown-item-text text-secondary">（無章節）</span>`;
-        tocMenu.appendChild(li);
-        return;
-      }
-      items.forEach(({id, text, level})=>{
-        const label = makeTOCLabel(text || '');
-        if (!label) return; // 若整段只有連結或被裁空，這項不進 TOC
-
-        const li = document.createElement('li');
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'dropdown-item' + (level === 2 ? ' toc-h2' : '');
-        btn.textContent = label; // 用 textContent，避免 HTML
-        btn.addEventListener('click', () => {
-          const el = document.getElementById(id);
-          if (el){ el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-          const ddEl = document.getElementById('tocDropdown');
-          const dropdown = bootstrap.Dropdown.getInstance(ddEl) || new bootstrap.Dropdown(ddEl);
-          dropdown.hide();
-        });
-        li.appendChild(btn);
-        tocMenu.appendChild(li);
-      });
-    }
-
-    // 產生 TOC 顯示字串：去掉所有 #...#，再裁掉第一個 "##" 或 "＃＃" 之後
-    function makeTOCLabel(raw){
-      const noLinks = removeLinkBlocks(String(raw ?? ''));
-      const idx1 = noLinks.indexOf('##');
-      const idx2 = noLinks.indexOf('＃＃'); // 全形
-      const cut = (idx1 === -1) ? idx2 : (idx2 === -1 ? idx1 : Math.min(idx1, idx2));
-      const head = cut >= 0 ? noLinks.slice(0, cut) : noLinks;
-      return head.trim();
-    }
-
-    // 把 #...# 片段整段移除（含 #URL;標題# 或 #URL#）
-    function removeLinkBlocks(s){
-      let out = '';
-      for (let i = 0; i < s.length; ){
-        if (s[i] === '#'){
-          const end = s.indexOf('#', i + 1);
-          if (end !== -1){
-            i = end + 1; // 跳過整個 #...#
-            continue;
-          }
-        }
-        out += s[i++];
-      }
-      return out;
-    }
-
-    // ====== 繪製（標題保留連結；TOC 省略連結） ======
-    function render(items){
+    // ====== 繪製（依模式決定是否產生整欄） ======
+    function render(items, mode='normal'){
       content.innerHTML = '';
       tocMenu.innerHTML = '';
       let currentTbody = null;
@@ -407,7 +301,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
           h.className = 'h1-title';
           const id = `h1-${++h1Count}`;
           h.id = id;
-          h.innerHTML = parseLinks(it.text || ''); // 頁面上保留連結
+          h.innerHTML = parseLinks(it.text || '');
           content.appendChild(h);
           tocItems.push({id, text: it.text || '', level: 1});
           currentTbody = null;
@@ -418,37 +312,57 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
           h.className = 'h2-title';
           const id = `h2-${++h2Count}`;
           h.id = id;
-          h.innerHTML = parseLinks(it.text || ''); // 頁面上保留連結
+          h.innerHTML = parseLinks(it.text || '');
           content.appendChild(h);
           tocItems.push({id, text: it.text || '', level: 2});
-          currentTbody = createSectionTable();
+          currentTbody = createSectionTable(mode);
           return;
         }
         if (it.type === 'row'){
-          if (!currentTbody){
-            currentTbody = createSectionTable();
-          }
-          currentTbody.appendChild(buildDataRow(it));
+          if (!currentTbody) currentTbody = createSectionTable(mode);
+          currentTbody.appendChild(buildDataRow(it, mode));
         }
       });
 
       buildTOC(tocItems);
     }
 
-    // ====== 資料列 ======
-    function buildDataRow(r){
+    function createSectionTable(mode){
+      const frame = document.createElement('div');
+      frame.className = 'table-frame mb-3';
+
+      const wrap = document.createElement('div');
+      wrap.className = 'table-responsive m-0';
+      frame.appendChild(wrap);
+
+      const table = document.createElement('table');
+      table.className = 'table table-dark table-hover align-middle section-table';
+
+      // 動態 colgroup / thead
+      let colHtml = '';
+      let headHtml = '<tr>';
+      if (mode !== 'letters'){ colHtml += '<col class="col-letters">'; headHtml += '<th>字母／字母組合</th>'; }
+      colHtml += '<col class="col-symbol">'; headHtml += '<th>音標</th>';
+      if (mode !== 'pron'){ colHtml += '<col class="col-desc">'; headHtml += '<th>發音</th>'; }
+      colHtml += '<col class="col-words">'; headHtml += '<th>單字範例</th></tr>';
+
+      table.innerHTML = `<colgroup>${colHtml}</colgroup><thead>${headHtml}</thead><tbody></tbody>`;
+      wrap.appendChild(table);
+      content.appendChild(frame);
+      return table.querySelector('tbody');
+    }
+
+    function buildDataRow(r, mode){
       const tr = document.createElement('tr');
 
-      // 字母／字母組合（點擊 -> 中文發音）
-      const tdLetters = document.createElement('td');
-      tdLetters.className = 'letters say-token';
-      tdLetters.textContent = r.letters || '';
-      if (r.letters){
-        tdLetters.addEventListener('click', ()=> sayZh(tdLetters, r.letters));
+      if (mode !== 'letters'){
+        const tdLetters = document.createElement('td');
+        tdLetters.className = 'letters say-token';
+        tdLetters.textContent = r.letters || '';
+        if (r.letters){ tdLetters.addEventListener('click', ()=> sayZh(tdLetters, r.letters)); }
+        tr.appendChild(tdLetters);
       }
-      tr.appendChild(tdLetters);
 
-      // 音標（可點擊播放片段）
       const tdSymbol = document.createElement('td');
       tdSymbol.className = 'symbol';
       tdSymbol.innerHTML = `<b>${escapeHTML(r.symbol || '')}</b>`;
@@ -462,19 +376,19 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       }
       tr.appendChild(tdSymbol);
 
-      // 發音（點擊 -> 中文發音；支援 #URL;標題# 連結，點連結不觸發朗讀）
-      const tdDesc = document.createElement('td');
-      tdDesc.className = 'desc say-token';
-      tdDesc.innerHTML = parseLinks(r.desc || '');
-      if (r.desc){
-        tdDesc.addEventListener('click', (ev)=>{
-          if (ev.target.closest('a')) return;
-          sayZh(tdDesc, r.desc);
-        });
+      if (mode !== 'pron'){
+        const tdDesc = document.createElement('td');
+        tdDesc.className = 'desc say-token';
+        tdDesc.innerHTML = parseLinks(r.desc || '');
+        if (r.desc){
+          tdDesc.addEventListener('click', (ev)=>{
+            if (ev.target.closest('a')) return;
+            sayZh(tdDesc, r.desc);
+          });
+        }
+        tr.appendChild(tdDesc);
       }
-      tr.appendChild(tdDesc);
 
-      // 單字範例（英文字 -> 英文發音；備註可含 #URL;標題#）
       const tdWord = document.createElement('td');
       tdWord.className = 'words';
       tdWord.appendChild(renderWordTokens(r.word || ''));
@@ -483,11 +397,56 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       return tr;
     }
 
-    // ====== 音標分段播放 ======
-    let endTimer = null;
-    let lastOnTimeUpdate = null;
-    let currentPlayingEl = null;
+    // ====== TOC ======
+    function buildTOC(items){
+      tocMenu.innerHTML = '';
+      if (!items.length){
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="dropdown-item-text text-secondary">（無章節）</span>`;
+        tocMenu.appendChild(li);
+        return;
+      }
+      items.forEach(({id, text, level})=>{
+        const label = makeTOCLabel(text || '');
+        if (!label) return;
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'dropdown-item' + (level === 2 ? ' toc-h2' : '');
+        btn.textContent = label;
+        btn.addEventListener('click', () => {
+          const el = document.getElementById(id);
+          if (el){ el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+          const ddEl = document.getElementById('tocDropdown');
+          const dropdown = bootstrap.Dropdown.getInstance(ddEl) || new bootstrap.Dropdown(ddEl);
+          dropdown.hide();
+        });
+        li.appendChild(btn);
+        tocMenu.appendChild(li);
+      });
+    }
+    function makeTOCLabel(raw){
+      const noLinks = removeLinkBlocks(String(raw ?? ''));
+      const idx1 = noLinks.indexOf('##');
+      const idx2 = noLinks.indexOf('＃＃');
+      const cut = (idx1 === -1) ? idx2 : (idx2 === -1 ? idx1 : Math.min(idx1, idx2));
+      const head = cut >= 0 ? noLinks.slice(0, cut) : noLinks;
+      return head.trim();
+    }
+    function removeLinkBlocks(s){
+      let out = '';
+      for (let i = 0; i < s.length; ){
+        if (s[i] === '#'){
+          const end = s.indexOf('#', i + 1);
+          if (end !== -1){ i = end + 1; continue; }
+        }
+        out += s[i++];
+      }
+      return out;
+    }
 
+    // ====== 播放分段 ======
+    let endTimer = null, lastOnTimeUpdate = null, currentPlayingEl = null;
     function onPlayCell(e){
       stopAll();
       const td = e.currentTarget;
@@ -504,9 +463,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
           try{ player.currentTime = start; }catch{}
           player.play().catch(()=>{});
           lastOnTimeUpdate = ()=>{
-            if (player.currentTime >= end - 0.02){
-              stopPlayback();
-            }
+            if (player.currentTime >= end - 0.02){ stopPlayback(); }
           };
           player.addEventListener('timeupdate', lastOnTimeUpdate);
           const dur = Math.max(0, (end - start) * 1000);
@@ -517,14 +474,9 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       };
 
       if (player.src !== new URL(src, location.href).href){
-        player.pause();
-        player.src = src;
-        go();
-      }else{
-        go();
-      }
+        player.pause(); player.src = src; go();
+      }else{ go(); }
     }
-
     function stopPlayback(){
       try{ player.pause(); }catch{}
       if (currentPlayingEl){ currentPlayingEl.classList.remove('playing'); currentPlayingEl = null; }
@@ -532,19 +484,17 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       clearTimeout(endTimer); endTimer = null;
     }
 
-    // ====== 單字範例 tokenization ======
+    // ====== 單字 tokenization ======
     function splitWords(s){
       const unified = s.replace(/[ \u3000]/g,' ').replace(/[，、；;／/|]/g, ',');
       return unified.split(',').map(t => t.trim()).filter(t => t);
     }
-
     function renderWordTokens(s){
       const group = document.createElement('div');
       group.className = 'word-group';
       splitWords(s).forEach(seg=> tokenizeSegmentIntoPairs(seg, group));
       return group;
     }
-
     function tokenizeSegmentIntoPairs(segment, groupEl){
       const tokenRe = /\[[^\]]*\]/g;
       let lastIndex = 0, m;
@@ -586,28 +536,21 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       }
     }
 
-    // ====== 連結語法：#URL;標題# / #URL#（頁面上顯示；TOC 已省略） ======
+    // ====== 連結語法 ======
     function parseLinks(s){
       if (s == null) return '';
       const text = String(s);
-
       const pieces = [];
       let last = 0;
-      const re = /#([^#\s][^#]*?)#/g; // 介於兩個 # 之間，且非空
+      const re = /#([^#\s][^#]*?)#/g;
       let m;
       while ((m = re.exec(text)) !== null){
         const before = text.slice(last, m.index);
         pieces.push(escapeHTML(before));
-
         const payload = m[1].trim();
-        let url = payload;
-        let title = '';
+        let url = payload, title = '';
         const semi = payload.indexOf(';');
-        if (semi >= 0){
-          url = payload.slice(0, semi).trim();
-          title = payload.slice(semi + 1).trim();
-        }
-
+        if (semi >= 0){ url = payload.slice(0, semi).trim(); title = payload.slice(semi + 1).trim(); }
         const disp = title || url;
         const a = `<a href="${attrEscape(url)}" target="_blank" rel="noopener">${escapeHTML(disp)}</a>`;
         pieces.push(a);
@@ -617,7 +560,7 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       return pieces.join('');
     }
 
-    // ====== TTS（英/中；讀取 UI 設定） ======
+    // ====== TTS ======
     function sayEn(el, text){ sayWithVoice(el, text, getSavedVoiceByKey('tts.enVoice','en'), 'en-US'); }
     function sayZh(el, text){ sayWithVoice(el, text, getSavedVoiceByKey('tts.zhVoice','zh'), 'zh-TW'); }
     function sayWithVoice(el, text, voice, fallbackLang){
@@ -626,13 +569,10 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
       const u = new SpeechSynthesisUtterance(text);
       if (voice) u.voice = voice;
       u.lang = voice?.lang || fallbackLang || 'en-US';
-      u.rate = getSavedRate();
-      u.pitch=1; u.volume=1;
-
+      u.rate = 1.0; u.pitch=1; u.volume=1;
       el.classList.add('playing');
       u.onend = ()=> el.classList.remove('playing');
       u.onerror = ()=> el.classList.remove('playing');
-
       try{ speechSynthesis.cancel(); }catch{}
       speechSynthesis.speak(u);
     }
@@ -649,6 +589,9 @@ p\t[ p ]\tkk.mp3\t4.5\t5.3\t清雙唇塞音\tpen [n.], pie
   </script>
 </body>
 </html>
+
+
+
 
 
 
