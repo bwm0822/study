@@ -12,6 +12,11 @@
       --col-w-desc   : 30%;
       --col-w-words  : 32%;
       --navbar-h     : 56px;
+
+      /* 新增：控制列每欄寬度（原 33.3333% → 現在 30%） */
+      --tts-col-w    : 30%;
+      /* 新增：控制列間距（原 .6rem → 現在 .5rem） */
+      --tts-gap      : .5rem;
     }
 
     html{scroll-behavior:smooth}
@@ -20,8 +25,8 @@
 
     /* 控制列 */
     .tts-card{border:1px solid rgba(255,255,255,.25)}
-    .tts-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:nowrap;overflow:hidden}
-    .tts-col{flex:0 0 33.3333%;min-width:0;display:flex;align-items:center;gap:.5rem}
+    .tts-bar{display:flex;align-items:center;gap:var(--tts-gap);flex-wrap:nowrap;overflow:hidden}
+    .tts-col{flex:0 0 var(--tts-col-w);min-width:0;display:flex;align-items:center;gap:.5rem}
     .tts-col label{flex:0 0 auto;white-space:nowrap}
     .tts-select{flex:1 1 auto;min-width:0;width:100%}
 
@@ -72,6 +77,8 @@
         --col-w-symbol :15%;
         --col-w-desc   :23%;
         --col-w-words  :30%;
+        /* 手機也沿用較窄欄寬；如需更緊可改 28% */
+        --tts-col-w    : 30%;
       }
     }
   </style>
@@ -412,10 +419,8 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
       tdWord.appendChild(renderWordTokens(r.word || ''));
 
       if (mode === 'pron'){
-        // 預設隱藏本列發音，單字跨兩欄
         tdDesc.style.display = 'none';
         tdWord.colSpan = 2;
-
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'btn btn-outline-light btn-sm swap-btn';
@@ -424,10 +429,8 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
         btn.setAttribute('data-toggle','desc');
         tdWord.appendChild(btn);
       } else if (mode === 'letters'){
-        // 預設隱藏本列字母，單字跨兩欄
         tdLetters.style.display = 'none';
         tdWord.colSpan = 2;
-
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'btn btn-outline-light btn-sm swap-btn';
@@ -436,14 +439,14 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
         btn.setAttribute('data-toggle','letters');
         tdWord.appendChild(btn);
       } else {
-        tdWord.colSpan = 1; // 正常模式
+        tdWord.colSpan = 1;
       }
 
       tr.appendChild(tdWord);
       return tr;
     }
 
-    // ====== 每列切換（只影響該列；切出來就是正常欄位樣式） ======
+    // ====== 每列切換（只影響該列） ======
     content.addEventListener('click', (e)=>{
       const btn = e.target.closest('.swap-btn');
       if (!btn) return;
@@ -455,13 +458,13 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
       if (kind === 'desc'){
         const tdDesc = tr.querySelector('td.desc');
         const hidden = tdDesc.style.display === 'none' || getComputedStyle(tdDesc).display === 'none';
-        tdDesc.style.display = hidden ? '' : 'none';   // 顯示/隱藏發音格
-        tdWord.colSpan = hidden ? 1 : 2;               // 單字從 2->1 / 1->2
+        tdDesc.style.display = hidden ? '' : 'none';
+        tdWord.colSpan = hidden ? 1 : 2;
       } else if (kind === 'letters'){
         const tdLetters = tr.querySelector('td.letters');
         const hidden = tdLetters.style.display === 'none' || getComputedStyle(tdLetters).display === 'none';
-        tdLetters.style.display = hidden ? '' : 'none';// 顯示/隱藏字母格
-        tdWord.colSpan = hidden ? 1 : 2;               // 單字從 2->1 / 1->2
+        tdLetters.style.display = hidden ? '' : 'none';
+        tdWord.colSpan = hidden ? 1 : 2;
       }
     });
 
@@ -662,6 +665,7 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
   </script>
 </body>
 </html>
+
 
 
 
