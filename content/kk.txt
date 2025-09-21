@@ -36,7 +36,7 @@ g、g g	[ g ]	kk.mp3	38.0	40.0	發短音的ㄍ	grammar [ˋgræmɚ]、luggage [ˋ
 v、f	[ v ]	kk.mp3	40.0	42.0	下唇碰到上齒，吹氣同時振動聲帶，發音類似 / f /	vegetable [ˋvɛdʒtəb!]、of [ʌv]
 z、s	[ z ]	kk.mp3	42.0	44.0	雙脣微啟，上下齒閉合，吹氣同時振動聲帶，發音接近ㄖ	zoo [zu]、pause [pɔz]
 t h	[ ð ]	kk.mp3	44.0	47.0	上下齒輕咬舌尖，吹氣同時振動聲帶，發音接近ㄖ	this [ðɪs]
-s i、s u、g e	[ ʒ ]	kk.mp3	47.0	49.0	舌面往上輕觸上顎，吹氣同時振動聲帶，與 / ʃ / 發音口型相同，發音接近ㄓ˙	television [ˋtɛlə͵vɪʒən]、pleasure [ˋplɛʒɚ]
+s i、s u、g e	[ ʒ ]	kk.mp3	47.0	49.0	舌面往上輕觸上顎，吹氣同時振動聲帶，與 / ʃ / 發音口型相同，發音接近ㄐㄜ˙	television [ˋtɛlə͵vɪʒən]、pleasure [ˋplɛʒɚ]
 j、g e、d g e、g i、g y	[ dʒ ]	kk.mp3	49.0	51.0	舌面往上頂住上顎，堵住氣流並振動聲帶，發音接近ㄐㄧ˙	enjoy [ɪnˋdʒɔɪ]、change [tʃendʒ]、judge [dʒʌdʒ]、apologize [əˋpɑlə͵dʒaɪz]、gym [dʒɪm]
 l、l l	[ l ]	kk.mp3	51.0	53.0	舌尖頂住上齒齦後發聲，母音前發音接近ㄌ，母音後發音接近ㄛ	lend [lɛnd]、fall [fɔl]
 r、r r	[ r ]	kk.mp3	53.0	55.0	嘴唇微微噘起，舌尖上揚並振動聲帶，母音前發音接近ㄖㄨㄦ，母音後發音接近ㄦ	romantic [roˋmæntɪk]、mirror [ˋmɪrɚ]
