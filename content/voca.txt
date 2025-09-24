@@ -513,7 +513,7 @@
 511	bright	[braɪt]	明亮的	[形容詞]	The sun is very bright today.	今天太陽很明亮。
 512	strong	[strɔŋ]	強壯的	[形容詞]	He is a strong boy.	他是一個強壯的男孩。
 513	weak	[wik]	虛弱的	[形容詞]	The baby is too weak to walk.	這嬰兒太虛弱，還不能走。
-514	playground	[ˈpleɪˌɡraʊnd]	遊樂場	[名詞]	The kids are playing in the playground.	孩子們正在遊樂場玩耍。
+514	playground	[ˈpleˌɡraʊnd]	遊樂場	[名詞]	The kids are playing in the playground.	孩子們正在遊樂場玩耍。
 515	safe	[sef]	安全的	[形容詞]	The children are safe at home.	孩子們在家裡很安全。
 516	use	[juz]	使用	[動詞]	I use a pen to write.	我用筆寫字。
 517	about	[əˈbaʊt]	關於	[介系詞]	This book is about animals.	這本書是關於動物的。

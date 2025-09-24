@@ -139,6 +139,7 @@
               <option value="zh">中文</option>
               <option value="en">英文</option>
               <option value="voice">語音</option>
+              <option value="phon">音標</option>
             </select>
           </div>
         </div>
@@ -201,8 +202,8 @@
     let searchIndex = [];        // {key, word, zh, i, idxValue}
     let highlightIdxValue = null;
 
-    // 模式（不儲存，預設 normal）
-    const Modes = { NORMAL:'normal', ZH:'zh', EN:'en', VOICE:'voice' };
+    // 模式（不儲存，預設 normal）＋ 新增 PHON（音標）
+    const Modes = { NORMAL:'normal', ZH:'zh', EN:'en', VOICE:'voice', PHON:'phon' };
     let currentMode = Modes.NORMAL;
     const detailRows = new Set();              // 目前進入「詳細」的 idx 集合
 
@@ -349,37 +350,36 @@
 
       add('<<', Math.max(1, currentPage - 1), currentPage === 1);
 
-      if (totalPages <= 10) {
-        for (let i = 1; i <= totalPages; i++) add(i, i, false, i === currentPage);
+      const totalPagesNum = totalPages;
+      if (totalPagesNum <= 10) {
+        for (let i = 1; i <= totalPagesNum; i++) add(i, i, false, i === currentPage);
       } else {
         const atStart = currentPage <= 9;
-        const atEnd   = currentPage >= totalPages - 8;
+        const atEnd   = currentPage >= totalPagesNum - 8;
 
         if (atStart) {
-          for (let i = 1; i <= Math.min(9, totalPages-1); i++) add(i, i, false, i === currentPage);
-          addEllipsis(); add(String(totalPages), totalPages, false, currentPage === totalPages);
+          for (let i = 1; i <= Math.min(9, totalPagesNum-1); i++) add(i, i, false, i === currentPage);
+          addEllipsis(); add(String(totalPagesNum), totalPagesNum, false, currentPage === totalPagesNum);
         } else if (atEnd) {
           add('1', 1, false, currentPage === 1);
           addEllipsis();
-          const start = Math.max(2, totalPages - 8);
-          for (let i = start; i <= totalPages; i++) add(i, i, false, i === currentPage);
+          const start = Math.max(2, totalPagesNum - 8);
+          for (let i = start; i <= totalPagesNum; i++) add(i, i, false, i === currentPage);
         } else {
           const start = Math.max(2, currentPage - 4);
-          const end   = Math.min(totalPages - 1, start + 8);
+          const end   = Math.min(totalPagesNum - 1, start + 8);
           add('1', 1, false, currentPage === 1);
           if (start > 2) addEllipsis();
           for (let i = start; i <= end; i++) add(i, i, false, i === currentPage);
-          if (end < totalPages - 1) addEllipsis();
-          add(String(totalPages), totalPages, false, currentPage === totalPages);
+          if (end < totalPagesNum - 1) addEllipsis();
+          add(String(totalPagesNum), totalPagesNum, false, currentPage === totalPagesNum);
         }
       }
 
       add('>>', Math.min(totalPages, currentPage + 1), currentPage === totalPages);
-
       const pageJump = document.getElementById('pageJump');
       const pageGo = document.getElementById('pageGo');
       if (pageJump) {
-        // 以 loadData 設定的「編號上下限」為準
         const go = () => {
           const minIdx = parseInt(pageJump.min, 10);
           const maxIdx = parseInt(pageJump.max, 10);
@@ -491,12 +491,11 @@
     $searchInput.addEventListener('focus', ()=>{ $searchInput.dispatchEvent(new Event('input')); });
     $searchInput.addEventListener('keydown', (e)=>{ if (e.key === 'Escape'){ hideSearchMenu(); $searchInput.blur(); }});
     $searchClear.addEventListener('click', ()=>{ $searchInput.value=''; hideSearchMenu(); $searchInput.focus(); });
-    document.addEventListener('click', (e)=>{ if (!e.target.closest('.search-wrap')) hideSearchMenu(); });
 
     /* ====== 模式切換（下拉；不儲存；每次預設 normal） ====== */
     $modeSelect.value = 'normal';
     $modeSelect.addEventListener('change', ()=>{
-      currentMode = $modeSelect.value;     // 'normal' | 'zh' | 'en' | 'voice'
+      currentMode = $modeSelect.value;     // 'normal' | 'zh' | 'en' | 'voice' | 'phon'
       detailRows.clear();
       render();
     });
@@ -752,6 +751,30 @@
           $tbody.append(tr);
           continue;
         }
+
+        /* ===== 新增：音標模式（1 行：顯示 KK；可切換詳細） ===== */
+        if (currentMode === Modes.PHON){
+          const tr=document.createElement('tr');
+          tr.className='group-start';
+
+          const tdIdx = makeIdxCell(r.idx, starSet, 1);
+          const td=document.createElement('td');
+
+          const row = document.createElement('div');
+          row.className='d-flex justify-content-between align-items-center gap-2';
+          const left = document.createElement('div');
+          left.innerHTML = `<span class="kk">${kk}</span>`;
+          const btn = makeToggleBtn(()=>{
+            detailRows.add(String(r.idx));
+            render();
+          });
+          row.append(left, btn);
+          td.appendChild(row);
+
+          tr.append(tdIdx, td);
+          $tbody.append(tr);
+          continue;
+        }
       }
 
       renderPagination();
@@ -820,6 +843,7 @@
   </script>
 </body>
 </html>
+
 
 
 
