@@ -66,74 +66,29 @@
     /* ➕ 控制列：語音 / 語速 / 模式 永遠同一列（窄螢幕橫向捲動） */
     .ctl-row{
       display:flex;
-      flex-wrap:nowrap;             /* 不換行 */
+      flex-wrap:nowrap;
       gap:.75rem;
-      overflow-x:auto;              /* 小螢幕可左右滑動 */
+      overflow-x:auto;
       -webkit-overflow-scrolling:touch;
       scrollbar-width:thin;
     }
-    .ctl-third{
-      flex:0 0 auto;                /* 不壓縮、不自動換行 */
-      min-width:260px;
-    }
+    .ctl-third{ flex:0 0 auto; min-width:260px; }
     .ctl-card{
       background:#171a1d; border:1px solid rgba(255,255,255,.12);
       border-radius:.75rem; padding:.6rem .75rem;
-      white-space:nowrap;           /* 卡片內容也不換行 */
-    }
-
-    /* 新增：標籤與控制同一行 */
-    .ctl-inline{
-      display:flex;
-      align-items:center;
-      gap:.5rem;
       white-space:nowrap;
     }
-    .ctl-inline label{
-      margin:0;
-      font-size:.95rem;
-      color:#f8f9fa; /* 標籤用白色 */
-    }
 
-    /* 模式按鈕群不換行 */
-    .mode-btns{flex-wrap:nowrap;}
-    .mode-btns .btn{min-width:4.5rem; white-space:nowrap}
+    /* 標籤與控制同一行 */
+    .ctl-inline{ display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
+    .ctl-inline label{ margin:0; font-size:.95rem; color:#f8f9fa; }
 
-    /* 詳細模式中的例句行距小些 */
-    .ex-line{line-height:1.35}
-
-
-
-    /* === 尺寸微縮版 === */
-
-    /* 語音下拉：縮小固定寬度，不吃滿 */
-    .ctl-inline select#selEn.form-select {
-      width: 100%;          /* ← 原本會 100% 寬，改為固定 */
-      min-width: 140px;
-      padding-top: .15rem;
-      padding-bottom: .15rem;
-    }
-
-    /* 語速拉桿：縮短 */
-    .range-inline{
-      width: 100%;          /* ← 原 260px */
-      min-width: 120px;
-    }
-
-    /* 模式按鈕：變窄一點 */
-    .mode-btns .btn{
-      min-width: 4.0rem;     /* ← 原 4.5rem */
-      padding: .2rem .5rem;  /* 較緊湊 */
-      line-height: 1.1;
-    }
-
-    /* 卡片內行高更緊湊些（可選） */
+    /* ===== 尺寸微縮版 ===== */
+    .ctl-inline select#selEn.form-select{ width:100%; min-width:140px; padding-top:.15rem; padding-bottom:.15rem; }
+    .range-inline{ width:100%; min-width:120px; }
     .ctl-card{ padding:.5rem .6rem; }
-    .ctl-inline{ gap: .4rem; }
-
-    /* 讓窄螢幕仍可橫向捲動（保留原本行為） */
-    .ctl-row{ gap: .6rem; }
-
+    .ctl-inline{ gap:.4rem; }
+    .ctl-row{ gap:.6rem; }
   </style>
 </head>
 <body>
@@ -142,12 +97,8 @@
     <div class="container container-narrow d-flex align-items-center">
       <button id="backBtn" class="btn btn-outline-light btn-sm">返回</button>
       <span class="navbar-brand ms-3 mb-0 h1">國小必學 500 單字+補充</span>
-      <a href="https://translate.google.com/?sl=zh-TW&tl=en&op=translate" target="_blank" rel="noopener" class="ms-2">
-          [google 翻譯]
-      </a>
-      <a href="https://www.youtube.com/watch?v=3MIIG-Nismg&list=PLWVa6dRSd4-p43iMczAy9iIeGzHMiJlfw" target="_blank" rel="noopener" class="ms-2">
-          [背單字的方法]
-      </a>
+      <a href="https://translate.google.com/?sl=zh-TW&tl=en&op=translate" target="_blank" rel="noopener" class="ms-2">[google 翻譯]</a>
+      <a href="https://www.youtube.com/watch?v=3MIIG-Nismg&list=PLWVa6dRSd4-p43iMczAy9iIeGzHMiJlfw" target="_blank" rel="noopener" class="ms-2">[背單字的方法]</a>
       <div class="ms-auto d-flex gap-2">
         <button id="clearStarsBtn" class="btn btn-outline-warning btn-sm">清除標註</button>
       </div>
@@ -157,7 +108,7 @@
   <main class="container container-narrow my-3">
     <!-- ✅ 控制列：語音選擇 / 語速 / 模式（同一列，窄螢幕可橫向捲動） -->
     <div class="ctl-row mb-3">
-      <!-- 語音（語音[下拉選單] 同一行） -->
+      <!-- 語音 -->
       <div class="ctl-third">
         <div class="ctl-card">
           <div class="ctl-inline">
@@ -167,7 +118,7 @@
         </div>
       </div>
 
-      <!-- 語速（語速[數值][拉桿] 同一行） -->
+      <!-- 語速 -->
       <div class="ctl-third">
         <div class="ctl-card">
           <div class="ctl-inline">
@@ -178,17 +129,17 @@
         </div>
       </div>
 
-      <!-- 模式（模式[按鈕群] 同一行） -->
+      <!-- 模式（下拉選單；預設「正常」；不儲存） -->
       <div class="ctl-third">
         <div class="ctl-card">
           <div class="ctl-inline">
-            <label>模式</label>
-            <div class="btn-group mode-btns" role="group" aria-label="modes">
-              <button class="btn btn-primary btn-sm" data-mode="normal">正常</button>
-              <button class="btn btn-outline-light btn-sm" data-mode="zh">中文</button>
-              <button class="btn btn-outline-light btn-sm" data-mode="en">英文</button>
-              <button class="btn btn-outline-light btn-sm" data-mode="voice">語音</button>
-            </div>
+            <label for="modeSelect">模式</label>
+            <select id="modeSelect" class="form-select form-select-sm bg-dark text-light border-secondary">
+              <option value="normal">正常</option>
+              <option value="zh">中文</option>
+              <option value="en">英文</option>
+              <option value="voice">語音</option>
+            </select>
           </div>
         </div>
       </div>
@@ -241,7 +192,7 @@
     const $selEn = document.getElementById('selEn');
     const $rate = document.getElementById('rate');
     const $rateVal = document.getElementById('rateVal');
-    const $modeBtns = document.querySelector('.mode-btns');
+    const $modeSelect = document.getElementById('modeSelect');
 
     // 🔍 搜尋相關
     const $searchInput = document.getElementById('searchInput');
@@ -542,17 +493,10 @@
     $searchClear.addEventListener('click', ()=>{ $searchInput.value=''; hideSearchMenu(); $searchInput.focus(); });
     document.addEventListener('click', (e)=>{ if (!e.target.closest('.search-wrap')) hideSearchMenu(); });
 
-    /* ====== 模式切換 ====== */
-    $modeBtns.addEventListener('click', (e)=>{
-      const btn = e.target.closest('button[data-mode]');
-      if (!btn) return;
-      currentMode = btn.dataset.mode;
-      // 更新按鈕樣式
-      [...$modeBtns.querySelectorAll('button')].forEach(b=>{
-        if (b===btn){ b.classList.remove('btn-outline-light'); b.classList.add('btn-primary'); }
-        else { b.classList.add('btn-outline-light'); b.classList.remove('btn-primary'); }
-      });
-      // 切模式時清空所有詳細列
+    /* ====== 模式切換（下拉；不儲存；每次預設 normal） ====== */
+    $modeSelect.value = 'normal';
+    $modeSelect.addEventListener('change', ()=>{
+      currentMode = $modeSelect.value;     // 'normal' | 'zh' | 'en' | 'voice'
       detailRows.clear();
       render();
     });
@@ -646,7 +590,7 @@
 
         const inDetail = detailRows.has(String(r.idx));
 
-        /* ===== 詳細（3 行，有切換鈕；離開詳細回到目前模式） ===== */
+        /* ===== 詳細（3 行） ===== */
         if (inDetail){
           const tr1=document.createElement('tr');
           tr1.className='group-start';
@@ -691,7 +635,7 @@
           continue;
         }
 
-        /* ===== 正常模式（3 行，沒有切換鈕） ===== */
+        /* ===== 正常模式（3 行） ===== */
         if (currentMode === Modes.NORMAL){
           const tr1=document.createElement('tr');
           tr1.className='group-start';
@@ -724,7 +668,7 @@
           continue;
         }
 
-        /* ===== 中文模式（1 行：編號 + 中文 + 詞性 + 切換） ===== */
+        /* ===== 中文模式（1 行） ===== */
         if (currentMode === Modes.ZH){
           const tr=document.createElement('tr');
           tr.className='group-start';
@@ -748,7 +692,7 @@
           continue;
         }
 
-        /* ===== 英文模式（1 行：編號 + 英文 + 切換） ===== */
+        /* ===== 英文模式（1 行） ===== */
         if (currentMode === Modes.EN){
           const tr=document.createElement('tr');
           tr.className='group-start';
@@ -774,7 +718,7 @@
           continue;
         }
 
-        /* ===== 語音模式（1 行：僅編號；右側整格可點擊朗讀；右側「切換」看詳細） ===== */
+        /* ===== 語音模式（1 行） ===== */
         if (currentMode === Modes.VOICE){
           const tr=document.createElement('tr');
           tr.className='group-start';
@@ -787,7 +731,6 @@
           td.setAttribute('data-lang','en');
           td.style.cursor = 'pointer';
 
-          // 水平排列，不換行
           const row = document.createElement('div');
           row.className='d-flex flex-row flex-nowrap align-items-center justify-content-between gap-2';
 
@@ -831,21 +774,12 @@
 
     // 初始化
     (function init(){
+      document.getElementById('backBtn').addEventListener('click',()=>history.back());
       $rate.value=rate.toFixed(2);
       $rateVal.textContent=rate.toFixed(2);
+      $modeSelect.value = 'normal';           // 每次進入都設為正常
       loadData();
     })();
-
-    function getRoot() 
-    {
-      const isGh = location.hostname.endsWith('github.io');
-      const segs = location.pathname.split('/').filter(Boolean);
-      const repo = isGh ? (segs[0] || '') : '';
-      // 例：
-      // - localhost:  return 'http://localhost:3000/'
-      // - GH Pages:   return 'https://bwm0822.github.io/study/'
-      return location.origin + '/' + (repo ? repo + '/' : '');
-    }
 
     async function loadData(){
       try{
@@ -876,9 +810,17 @@
         render();
       }catch(err){alert('讀取失敗：'+err.message);}
     }
+
+    function getRoot(){
+      const isGh = location.hostname.endsWith('github.io');
+      const segs = location.pathname.split('/').filter(Boolean);
+      const repo = isGh ? (segs[0] || '') : '';
+      return location.origin + '/' + (repo ? repo + '/' : '');
+    }
   </script>
 </body>
 </html>
+
 
 
 
