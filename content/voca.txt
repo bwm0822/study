@@ -178,7 +178,7 @@
 177	pet	[pɛt]	寵物	[名詞]	I have a pet dog.	我有一隻寵物狗。
 178	bear	[bɛr]	熊	[名詞]	The bear is big.	熊很大。
 179	cat	[kæt]	貓	[名詞]	The cat is cute.	這隻貓很可愛。
-180	chicken	[ˈtʃɪkɪn]	雞	[名詞]	The chicken is small.	小雞很小。
+180	chicken	[ˈtʃɪkən]	雞	[名詞]	The chicken is small.	小雞很小。
 181	cow	[kaʊ]	牛	[名詞]	The cow eats grass.	牛吃草。
 182	dog	[dɔg]	狗	[名詞]	The dog runs fast.	狗跑得很快。
 183	elephant	[ˈɛləfənt]	大象	[名詞]	The elephant is big.	大象很大。
