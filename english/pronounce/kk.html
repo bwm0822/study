@@ -12,10 +12,7 @@
       --col-w-desc   : 30%;
       --col-w-words  : 32%;
       --navbar-h     : 56px;
-
-      /* 新增：控制列每欄寬度（原 33.3333% → 現在 30%） */
       --tts-col-w    : 30%;
-      /* 新增：控制列間距（原 .6rem → 現在 .5rem） */
       --tts-gap      : .5rem;
     }
 
@@ -77,7 +74,6 @@
         --col-w-symbol :15%;
         --col-w-desc   :23%;
         --col-w-words  :30%;
-        /* 手機也沿用較窄欄寬；如需更緊可改 28% */
         --tts-col-w    : 30%;
       }
     }
@@ -111,11 +107,11 @@
           </div>
           <div class="tts-col">
             <label class="me-1">模式</label>
-            <div class="btn-group btn-group-sm w-100" role="group" aria-label="mode">
-              <button id="modeNormal"  type="button" class="btn btn-outline-light active">正常</button>
-              <button id="modePron"    type="button" class="btn btn-outline-light">發音</button>
-              <button id="modeLetters" type="button" class="btn btn-outline-light">字母</button>
-            </div>
+            <select id="modeSelect" class="form-select form-select-sm tts-select bg-dark text-white border-secondary">
+              <option value="normal">正常</option>
+              <option value="pron">發音</option>
+              <option value="letters">字母</option>
+            </select>
           </div>
         </div>
       </div>
@@ -133,6 +129,7 @@
     // ====== 語音控制 ======
     const selEn = document.getElementById('selEn');
     const selZh = document.getElementById('selZh');
+    const modeSelect = document.getElementById('modeSelect');
     let voices = [];
     function populateVoices(){
       voices = speechSynthesis.getVoices() || [];
@@ -197,24 +194,17 @@
     const tocMenu    = document.getElementById('tocMenu');
     const player     = document.getElementById('player');
 
-    // ====== 模式（預設正常） ======
-    const modeBtns = {
-      normal : document.getElementById('modeNormal'),
-      pron   : document.getElementById('modePron'),
-      letters: document.getElementById('modeLetters'),
-    };
-    let mode = 'normal';   // 'normal' | 'pron' | 'letters'
+    // ====== 模式（每次載入固定為 normal） ======
+    let mode = 'normal';  // 'normal' | 'pron' | 'letters'
+    modeSelect.value = 'normal';
     let parsedCache = [];
 
     function setMode(next){
       mode = next;
-      Object.values(modeBtns).forEach(b=>b.classList.remove('active'));
-      modeBtns[mode === 'pron' ? 'pron' : mode === 'letters' ? 'letters' : 'normal'].classList.add('active');
+      modeSelect.value = mode;
       render(parsedCache, mode); // 依模式重繪
     }
-    modeBtns.normal.addEventListener('click', ()=>setMode('normal'));
-    modeBtns.pron.addEventListener('click',   ()=>setMode('pron'));
-    modeBtns.letters.addEventListener('click',()=>setMode('letters'));
+    modeSelect.addEventListener('change', ()=> setMode(modeSelect.value));
 
     // ====== 載入資料 ======
     fetch(TXT_URL + '?c=' + Date.now())
@@ -336,7 +326,7 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
       const table = document.createElement('table');
       table.className = 'table table-dark table-hover align-middle section-table';
 
-      // 表頭：用 colspan 讓外觀對齊（body 一律維持 4 欄）
+      // 表頭
       let headHtml = '';
       if (mode === 'pron'){
         headHtml = `
@@ -665,6 +655,8 @@ b\t[ b ]\tkk.mp3\t3.7\t4.4\t有聲雙唇塞音\tbed, bad [反義]`;
   </script>
 </body>
 </html>
+
+
 
 
 
