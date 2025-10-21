@@ -122,7 +122,7 @@
 121	free	[fri]	免費的	[形容詞]	The water is free.	這水是免費的。
 122	color	[ˈkʌlɚ]	顏色	[名詞]	What color do you like?	你喜歡什麼顏色？
 123	black	[blæk]	黑色	[形容詞]	The ball is black.	這顆球是黑色。
-124	white	[waɪt]	白色	[形容詞]	The ball is white.	這顆球是白色。
+124	white	[hwaɪt]	白色	[形容詞]	The ball is white.	這顆球是白色。
 125	red	[rɛd]	紅色	[形容詞]	The ball is red.	這顆球是紅色。
 126	orange	[ˈɔrɪndʒ]	橘色	[形容詞]	The ball is orange.	這顆球是橘色。
 127	yellow	[ˈjɛlo]	黃色	[形容詞]	The ball is yellow.	這顆球是黃色。
