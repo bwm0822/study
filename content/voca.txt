@@ -244,11 +244,11 @@
 243	peach	[pitʃ]	桃子	[名詞]	The peach is sweet.	桃子很甜。
 244	food	[fud]	食物	[名詞]	The food is yummy.	這些食物很好吃。
 245	beef	[bif]	牛肉	[名詞]	Beef is tasty.	牛肉很好吃。
-246	chicken	[ˈtʃɪkɪn]	雞肉	[名詞]	We eat chicken for dinner.	我們晚餐吃雞肉。
+246	chicken	[ˈtʃɪkən]	雞肉	[名詞]	We eat chicken for dinner.	我們晚餐吃雞肉。
 247	duck	[dʌk]	鴨肉	[名詞]	Mom cooks duck.	媽媽煮鴨肉。
 248	fish	[fɪʃ]	魚肉	[名詞]	The fish is fresh.	魚很新鮮。
 249	pork	[pɔrk]	豬肉	[名詞]	Pork is on the plate.	盤子上有豬肉。
-250	noodles	[ˈnudəlz]	麵	[名詞]	I like noodles.	我喜歡吃麵。
+250	noodles	[ˈnudḷz]	麵	[名詞]	I like noodles.	我喜歡吃麵。
 251	egg	[ɛg]	蛋	[名詞]	I have an egg.	我有一顆蛋。
 252	rice	[raɪs]	飯	[名詞]	I eat rice.	我吃白飯。
 253	salad	[ˈsælɪd]	沙拉	[名詞]	She makes a salad.	她做沙拉。
