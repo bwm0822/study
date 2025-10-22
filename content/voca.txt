@@ -251,7 +251,7 @@
 250	noodles	[ˈnudḷz]	麵	[名詞]	I like noodles.	我喜歡吃麵。
 251	egg	[ɛg]	蛋	[名詞]	I have an egg.	我有一顆蛋。
 252	rice	[raɪs]	飯	[名詞]	I eat rice.	我吃白飯。
-253	salad	[ˈsælɪd]	沙拉	[名詞]	She makes a salad.	她做沙拉。
+253	salad	[ˈsæləd]	沙拉	[名詞]	She makes a salad.	她做沙拉。
 254	soup	[sup]	湯	[名詞]	The soup is hot.	湯很熱。
 255	cake	[kek]	蛋糕	[名詞]	This cake is big.	這個蛋糕很大。
 256	candy	[ˈkændɪ]	糖果	[名詞]	Candy is sweet.	糖果很甜。
