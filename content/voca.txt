@@ -255,7 +255,7 @@
 254	soup	[sup]	湯	[名詞]	The soup is hot.	湯很熱。
 255	cake	[kek]	蛋糕	[名詞]	This cake is big.	這個蛋糕很大。
 256	candy	[ˈkændɪ]	糖果	[名詞]	Candy is sweet.	糖果很甜。
-257	chocolate	[ˈtʃɑklɪt]	巧克力	[名詞]	I love chocolate.	我喜歡巧克力。
+257	chocolate	[ˈtʃɔkəlɪt]	巧克力	[名詞]	I love chocolate.	我喜歡巧克力。
 258	cookie	[ˈkʊkɪ]	餅乾	[名詞]	I eat a cookie.	我吃一片餅乾。
 259	bread	[brɛd]	麵包	[名詞]	We bake bread.	我們烤麵包。
 260	ice cream	[ˈaɪs ˌkrim]	冰淇淋	[名詞]	We eat ice cream.	我們吃冰淇淋。
@@ -298,7 +298,7 @@
 297	wall	[wɔl]	牆壁	[名詞]	The wall is white.	牆是白色的。
 298	window	[ˈwɪndo]	窗戶	[名詞]	Open the window.	把窗戶打開。
 299	dining room	[ˈdaɪnɪŋ ˌrum]	餐廳	[名詞]	We eat in the dining room.	我們在餐廳吃飯。
-300	table	[ˈtebəl]	桌子	[名詞]	The table is round.	這張桌子是圓的。
+300	table	[ˈtebḷ]	桌子	[名詞]	The table is round.	這張桌子是圓的。
 301	kitchen	[ˈkɪtʃɪn]	廚房	[名詞]	Mom is in the kitchen.	媽媽在廚房。
 302	refrigerator	[rɪˈfrɪdʒəˌretɚ]	冰箱	[名詞]	The refrigerator is cold.	冰箱很冷。
 303	bedroom	[ˈbɛdˌrum]	臥室	[名詞]	My bedroom is small.	我的臥室很小。
