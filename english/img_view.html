@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Image Viewer</title>
+<style>
+    /* body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #000;
+        height: 100vh;
+    } */
+
+    body {
+            margin: 0;
+            background:#000;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+    img {
+        max-width: 250vw;
+        max-height: 250vh;
+    }
+
+    #error {
+        color: white;
+        font-size: 20px;
+    }
+</style>
+</head>
+<body>
+
+<div id="content"></div>
+
+<script>
+// 取得 URL ?src=xxxx
+const params = new URLSearchParams(window.location.search);
+const src = params.get("src");
+
+const container = document.getElementById("content");
+
+if (!src) {
+    container.innerHTML = '<div id="error">❌ 沒有提供圖片路徑 ?src=xxx</div>';
+} else {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = "image";
+    container.appendChild(img);
+}
+</script>
+
+</body>
+</html>
