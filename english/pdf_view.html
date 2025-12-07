@@ -41,9 +41,17 @@ const container = document.getElementById("content");
 if (!src) {
     container.innerHTML = '<div id="error">❌ 沒有提供 PDF 路徑 ?src=xxx</div>';
 } else {
-    const iframe = document.createElement("iframe");
-    iframe.src = src + "#toolbar=0";  // 可選：隱藏工具列（Chrome 有效）
-    container.appendChild(iframe);
+    const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        // 📱 手機：直接開啟 PDF（整個分頁變成 PDF 檢視器）
+        window.location.href = src;
+    } else {
+        // 🖥️ 桌機：用 iframe 內嵌
+        const iframe = document.createElement("iframe");
+        iframe.src = src + "#toolbar=0";
+        container.appendChild(iframe);
+    }
 }
 </script>
 
