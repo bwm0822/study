@@ -1,0 +1,13 @@
+{
+  "name": "excel-to-json",
+  "version": "1.0.0",
+  "description": "Convert Excel sheets to JSON",
+  "main": "convert.js",
+  "scripts": {
+    "convert": "node convert.js",
+    "start": "npx http-server -p 8000"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}
