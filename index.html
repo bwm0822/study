@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>英文學習系統</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="學習網">
+    <title>學習系統</title>
     <style>
         * {
             margin: 0;
@@ -89,6 +91,17 @@
 
         .settings-dropdown.active {
             display: block;
+        }
+
+        #softwareSubmenu {
+            position: absolute !important;
+            right: 100% !important;
+            top: 0 !important;
+            left: auto !important;
+            margin-top: 0 !important;
+            width: 150px !important;
+            z-index: 101 !important;
+            margin-right: 4px;
         }
 
         .settings-option {
@@ -275,7 +288,10 @@
 <body>
     <div class="title-bar">
         <div class="title">學習網</div>
-        <button class="settings-btn" onclick="toggleSettingsMenu()">⚙️</button>
+        <button class="settings-btn" onclick="toggleSettingsMenu()">
+          ⚙️
+          <span id="settingsNotification" style="position: absolute; top: 2px; right: 4px; width: 8px; height: 8px; background: #e74c3c; border-radius: 50%; display: none;"></span>
+        </button>
         <div class="settings-dropdown" id="settingsDropdown">
             <button class="settings-option" onclick="showAbout()">ℹ️ 資訊</button>
             <button class="settings-option" onclick="showPronunciationSettings()">🔊 發音</button>
@@ -289,7 +305,24 @@
                 <span style="color: #b8b8b8; text-align: left; flex: 1;">隨機測驗</span>
             </div>
             <button class="settings-option" onclick="showStorageRecords()">📋 紀錄</button>
-            <button class="settings-option" onclick="updateApp()">🔄 更新</button>
+            <label class="settings-option" style="display: flex; align-items: center; justify-content: flex-start; padding: 12px 16px; background: none; border: none; cursor: pointer; gap: 10px; margin: 0;">
+                <input type="checkbox" id="offlineBrowsingCheckbox" style="width: 18px; height: 18px; cursor: pointer;" onchange="toggleOfflineBrowsing()">
+                <span style="color: #b8b8b8; text-align: left; flex: 1; cursor: pointer;">📡 離線瀏覽</span>
+            </label>
+            <div style="position: relative;">
+                <button class="settings-option" onclick="showSoftwareMenu(event)">
+                  💻 軟體 →
+                </button>
+                <!-- 軟體子菜單 -->
+                <div class="settings-dropdown" id="softwareSubmenu" style="display: none;">
+                    <button class="settings-option" onclick="checkForUpdates();">🔍 檢查更新</button>
+                    <button class="settings-option" id="softwareUpdateBtn" onclick="updateApp();" style="position: relative;">
+                      🔄 更新
+                      <span id="softwareUpdateNotification" style="position: absolute; top: 6px; right: 8px; width: 8px; height: 8px; background: #e74c3c; border-radius: 50%; display: none;"></span>
+                    </button>
+                    <button class="settings-option" onclick="showSWManager();">🔧 Service Worker</button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="container">
@@ -419,6 +452,65 @@
         </div>
     </div>
 
+    <!-- Service Worker 管理視窗 -->
+    <div id="swManagerModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: #1a1a1a; border-radius: 8px; width: 100%; max-width: 600px; height: calc(100vh - 40px); color: white; display: flex; flex-direction: column; overflow: hidden;">
+            <!-- 頭部 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #4a4a4a; flex-shrink: 0;">
+                <span style="font-weight: bold; font-size: 1.5em;">🔧 Service Worker 管理</span>
+            </div>
+
+            <!-- 主區域 -->
+            <div style="padding: 20px; flex: 1; overflow-y: auto; display: flex; flex-direction: column;">
+                <!-- 狀態信息 -->
+                <div style="background: #2a2a2a; border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #667eea; flex-shrink: 0;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9em;">
+                        <div>
+                            <div style="color: #999; font-size: 0.85em; margin-bottom: 5px; font-weight: bold;">狀態</div>
+                            <div style="font-size: 1.1em; font-weight: bold;">
+                                <span id="swStatus">正在檢測...</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="color: #999; font-size: 0.85em; margin-bottom: 5px; font-weight: bold;">版本</div>
+                            <div style="font-size: 1.1em; font-weight: bold;">
+                                <span id="swVersion">v1.0.0</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="color: #999; font-size: 0.85em; margin-bottom: 5px; font-weight: bold;">Scope</div>
+                            <div style="font-size: 0.95em; color: #b8b8b8;">
+                                <span id="swScope">/</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="color: #999; font-size: 0.85em; margin-bottom: 5px; font-weight: bold;">快取大小</div>
+                            <div style="font-size: 0.95em; color: #b8b8b8;">
+                                <span id="cacheSize">計算中...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快取列表 -->
+                <div style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+                    <div style="font-weight: bold; margin-bottom: 8px; font-size: 1em; flex-shrink: 0;">
+                        📦 已快取的資源
+                        <span id="swCacheInfo" style="color: #999; font-size: 0.85em; margin-left: 10px;">app-v1.0.1-static • 資源數: 0</span>
+                    </div>
+                    <div id="swCacheList" style="background: #2a2a2a; border-radius: 8px; flex: 1; overflow-y: auto; padding: 12px; font-size: 0.9em;">
+                        <div style="text-align: center; color: #666;">正在加載...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 操作按鈕 -->
+            <div style="display: flex; gap: 10px; padding: 20px; border-top: 1px solid #4a4a4a; flex-shrink: 0;">
+                <button onclick="closeSWManagerModal()" style="flex: 1; padding: 12px; background: #666; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1em;">關閉</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Gist 設定對話框 -->
     <div id="gistSettingModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 1001; align-items: center; justify-content: center;">
         <div style="background: #333; border-radius: 8px; padding: 30px; max-width: 500px; width: 90%; color: white;">
@@ -484,21 +576,384 @@
     </div>
 
     <script>
+        // ==================== Service Worker 管理 ====================
+
+        let swRegistration = null;
+        let swUpdateAvailable = false;
+        let currentCacheVersion = 'app-v1.0.1-static';  // 需要與 service-worker.js 保持一致
+
+        // 切換離線瀏覽
+        async function toggleOfflineBrowsing() {
+          const checkbox = document.getElementById('offlineBrowsingCheckbox');
+          const isEnabled = checkbox.checked;
+
+          // 保存設定到 localStorage
+          const settings = JSON.parse(localStorage.getItem('setting') || '{}');
+          settings.offlineBrowsing = isEnabled;
+          localStorage.setItem('setting', JSON.stringify(settings));
+
+          if (isEnabled) {
+            // 啟用 Service Worker
+            if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                  swRegistration = registration;
+                  console.log('[🌐] 離線瀏覽已啟用');
+
+                  // 清除舊的無用快取
+                  caches.keys().then((cacheNames) => {
+                    cacheNames.forEach((cacheName) => {
+                      if (cacheName !== currentCacheVersion) {
+                        caches.delete(cacheName);
+                        console.log('[🌐] 清除舊快取:', cacheName);
+                      }
+                    });
+                  });
+
+                  // 預加載靜態資源
+                  const staticAssets = [
+                    '/',
+                    '/index.html',
+                    '/english.html',
+                    '/chinese.html',
+                    '/json/english.json',
+                    '/json/chinese.json'
+                  ];
+
+                  caches.open(currentCacheVersion).then((cache) => {
+                    staticAssets.forEach((url) => {
+                      cache.add(url).catch((error) => {
+                        console.log(`[SW] 預加載 ${url} 失敗:`, error.message);
+                      });
+                    });
+                  });
+
+                  alert('✅ 離線瀏覽已啟用\n正在預加載資源...');
+                })
+                .catch((error) => {
+                  console.error('[❌] Service Worker 註冊失敗:', error);
+                  checkbox.checked = false;
+                  settings.offlineBrowsing = false;
+                  localStorage.setItem('setting', JSON.stringify(settings));
+                  alert('❌ 啟用失敗: ' + error.message);
+                });
+            }
+          } else {
+            // 禁用 Service Worker - 同時清除快取
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            if (registrations.length > 0) {
+              await registrations[0].unregister();
+              swRegistration = null;
+            }
+
+            // 清除所有快取
+            if ('caches' in window) {
+              const cacheNames = await caches.keys();
+              for (const cacheName of cacheNames) {
+                await caches.delete(cacheName);
+              }
+            }
+
+            console.log('[🌐] 離線瀏覽已禁用，快取已清除');
+            alert('✅ 離線瀏覽已禁用\n所有快取已清除，應用將需要網路連接');
+          }
+        }
+
+        // 初始化離線瀏覽狀態
+        async function initOfflineBrowsingCheckbox() {
+          const checkbox = document.getElementById('offlineBrowsingCheckbox');
+          const settings = JSON.parse(localStorage.getItem('setting') || '{}');
+          const savedOfflineBrowsing = settings.offlineBrowsing !== false;
+
+          checkbox.checked = savedOfflineBrowsing;
+
+          // 如果設定啟用但 SW 未註冊，則自動啟用
+          if (savedOfflineBrowsing) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            if (registrations.length === 0 && 'serviceWorker' in navigator) {
+              navigator.serviceWorker.register('/service-worker.js').catch((error) => {
+                console.error('[❌] 自動註冊 Service Worker 失敗:', error);
+              });
+            }
+          }
+        }
+
+        // 初始化 Service Worker
+        function initServiceWorker() {
+          if ('serviceWorker' in navigator) {
+            // 檢查離線瀏覽設定
+            const settings = JSON.parse(localStorage.getItem('setting') || '{}');
+            const offlineBrowsingEnabled = settings.offlineBrowsing !== false;
+
+            // 如果離線瀏覽被禁用，跳過註冊
+            if (!offlineBrowsingEnabled) {
+              console.log('[🌐] 離線瀏覽已禁用，不註冊 Service Worker');
+              return;
+            }
+
+            // 頁面加載時檢查是否有待更新
+            const savedUpdateState = localStorage.getItem('swUpdateAvailable') === 'true';
+            if (savedUpdateState) {
+              swUpdateAvailable = true;
+              showUpdateNotification();
+            }
+
+            navigator.serviceWorker.register('/service-worker.js')
+              .then((registration) => {
+                swRegistration = registration;
+                updateSWStatus();
+
+                // 監聽更新
+                registration.addEventListener('updatefound', () => {
+                  const newWorker = registration.installing;
+                  newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                      swUpdateAvailable = true;
+                      localStorage.setItem('swUpdateAvailable', 'true');
+                      showUpdateNotification();
+                    }
+                  });
+                });
+
+                // 定期檢查更新（每小時）
+                setInterval(() => {
+                  registration.update();
+                }, 60 * 60 * 1000);
+              })
+              .catch((error) => {
+                console.log('Service Worker 註冊失敗:', error);
+              });
+
+            // 監聽 Service Worker 控制器變更
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+              swUpdateAvailable = false;
+              localStorage.removeItem('swUpdateAvailable');
+              hideUpdateNotification();
+              updateSWStatus();
+            });
+
+            // 監聽 Service Worker 訊息
+            navigator.serviceWorker.addEventListener('message', (event) => {
+              if (event.data.type === 'SW_UPDATED') {
+                console.log('Service Worker 已更新到:', event.data.version);
+                updateSWStatus();
+              }
+            });
+          }
+        }
+
+        // 更新 Service Worker 狀態
+        function updateSWStatus() {
+          navigator.serviceWorker.getRegistrations().then((registrations) => {
+            const statusEl = document.getElementById('swStatus');
+            const scopeEl = document.getElementById('swScope');
+            const versionEl = document.getElementById('swVersion');
+
+            if (registrations.length > 0) {
+              const reg = registrations[0];
+              statusEl.textContent = '✅ 已啟用';
+              statusEl.style.color = '#52d273';
+              scopeEl.textContent = reg.scope;
+              updateCacheSize();
+              loadCacheList();
+              extractVersionFromCache(versionEl);
+            } else {
+              statusEl.textContent = '❌ 已停用';
+              statusEl.style.color = '#e74c3c';
+              scopeEl.textContent = '-';
+              versionEl.textContent = '-';
+              document.getElementById('cacheSize').textContent = '0 MB';
+              document.getElementById('swCacheList').innerHTML = '<div style="text-align: center; color: #666;">無快取</div>';
+            }
+          });
+        }
+
+        // 從快取名稱中提取最新版本號
+        async function extractVersionFromCache(versionEl) {
+          if (!('caches' in window)) return;
+          try {
+            const cacheNames = await caches.keys();
+            // 找出所有版本號並取最新的
+            const versions = cacheNames
+              .map((name) => {
+                const match = name.match(/app-(v[\d.]+)/);
+                return match ? match[1] : null;
+              })
+              .filter(Boolean);
+
+            if (versions.length > 0) {
+              // 排序版本號（字符串比較，簡單但有效）
+              const latestVersion = versions.sort().pop();
+              if (versionEl) versionEl.textContent = latestVersion;
+            }
+          } catch (error) {
+            console.log('無法提取版本號:', error);
+          }
+        }
+
+        // 計算快取大小
+        async function updateCacheSize() {
+          if ('estimate' in navigator.storage) {
+            const estimate = await navigator.storage.estimate();
+            const usedMB = (estimate.usage / (1024 * 1024)).toFixed(2);
+            document.getElementById('cacheSize').textContent = `${usedMB} MB`;
+          }
+        }
+
+        // 載入快取列表
+        async function loadCacheList() {
+          const cacheList = document.getElementById('swCacheList');
+          const cacheInfo = document.getElementById('swCacheInfo');
+
+          if (!('caches' in window)) {
+            cacheList.innerHTML = '<div style="color: #e74c3c;">不支持 Cache API</div>';
+            return;
+          }
+
+          try {
+            const cacheNames = await caches.keys();
+            if (cacheNames.length === 0) {
+              cacheList.innerHTML = '<div style="text-align: center; color: #666;">無快取</div>';
+              cacheInfo.textContent = '無快取版本';
+              return;
+            }
+
+            let html = '';
+            let totalResources = 0;
+
+            for (const cacheName of cacheNames) {
+              const cache = await caches.open(cacheName);
+              const keys = await cache.keys();
+              totalResources += keys.length;
+
+              html += `
+                <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #3a3a3a;">
+                  <div style="font-weight: bold; color: #667eea; margin-bottom: 8px; font-size: 0.95em;">${cacheName}</div>
+                  <div style="color: #999; font-size: 0.85em; margin-bottom: 8px;">資源數: ${keys.length}</div>
+                  ${keys.map(r => `<div style="color: #666; font-size: 0.8em; padding-left: 10px;">📄 ${new URL(r.url).pathname}</div>`).join('')}
+                </div>
+              `;
+            }
+
+            // 更新標題資訊
+            cacheInfo.textContent = `共 ${cacheNames.length} 個版本 • 總資源數: ${totalResources}`;
+            cacheList.innerHTML = html;
+          } catch (error) {
+            cacheList.innerHTML = `<div style="color: #e74c3c;">載入失敗: ${error.message}</div>`;
+          }
+        }
+
+        // 顯示更新通知（紅點）
+        function showUpdateNotification() {
+          const softwareUpdateNotification = document.getElementById('softwareUpdateNotification');
+          const settingsNotification = document.getElementById('settingsNotification');
+          if (softwareUpdateNotification) softwareUpdateNotification.style.display = 'block';
+          if (settingsNotification) settingsNotification.style.display = 'block';
+        }
+
+        // 隱藏更新通知
+        function hideUpdateNotification() {
+          const softwareUpdateNotification = document.getElementById('softwareUpdateNotification');
+          const settingsNotification = document.getElementById('settingsNotification');
+          if (softwareUpdateNotification) softwareUpdateNotification.style.display = 'none';
+          if (settingsNotification) settingsNotification.style.display = 'none';
+        }
+
+        // 停用 Service Worker
+        async function toggleServiceWorker() {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          if (registrations.length > 0) {
+            if (confirm('確定要停用 Service Worker 嗎？\n（快取會被保留，可稍後恢復）')) {
+              await registrations[0].unregister();
+              updateSWStatus();
+              alert('已停用 Service Worker');
+            }
+          }
+        }
+
+        // 刪除 Service Worker
+        async function deleteServiceWorker() {
+          if (confirm('確定要刪除 Service Worker 嗎？\n（所有快取和資料都會被清除，無法撤銷）')) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            for (const reg of registrations) {
+              await reg.unregister();
+            }
+
+            if ('caches' in window) {
+              const cacheNames = await caches.keys();
+              for (const cacheName of cacheNames) {
+                await caches.delete(cacheName);
+              }
+            }
+
+            updateSWStatus();
+            alert('已刪除 Service Worker 和所有快取');
+          }
+        }
+
+        // 重新啟用 Service Worker
+        async function refreshServiceWorker() {
+          if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            if (registrations.length === 0) {
+              navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                  swRegistration = registration;
+                  updateSWStatus();
+                  alert('Service Worker 已重新啟用');
+                })
+                .catch((error) => {
+                  alert('啟用失敗: ' + error.message);
+                });
+            } else {
+              registrations[0].update()
+                .then(() => {
+                  updateSWStatus();
+                  alert('已檢查更新');
+                });
+            }
+          }
+        }
+
+        // 顯示 Service Worker 管理面板
+        function showSWManager() {
+          document.getElementById('settingsDropdown').classList.remove('active');
+          document.getElementById('swManagerModal').style.display = 'flex';
+          updateSWStatus();
+        }
+
+        // 關閉 Service Worker 管理面板
+        function closeSWManagerModal() {
+          document.getElementById('swManagerModal').style.display = 'none';
+        }
+
         function goToEnglish() {
-            window.location.href = 'english.html';
+            window.location.href = '/english.html';
         }
 
         function goChinese() {
-            window.location.href = 'chinese.html';
+            window.location.href = '/chinese.html';
         }
 
         function toggleSettingsMenu() {
             const dropdown = document.getElementById('settingsDropdown');
             dropdown.classList.toggle('active');
+            closeSoftwareMenu();  // 關閉軟體子菜單
+        }
+
+        function showSoftwareMenu(event) {
+            event.stopPropagation();  // 防止事件冒泡關閉主菜單
+            const submenu = document.getElementById('softwareSubmenu');
+            const isHidden = submenu.style.display === 'none' || submenu.style.display === '';
+            submenu.style.display = isHidden ? 'block' : 'none';
+        }
+
+        function closeSoftwareMenu() {
+            document.getElementById('softwareSubmenu').style.display = 'none';
         }
 
         function showAbout() {
-            alert('學習網\n版本：2026.07.28\n\n功能：\n• 英文學習\n• 中文成語與改錯');
+            alert('學習系統\n版本：2026.07.30\n\n功能：\n• 英文學習\n• 中文成語與改錯');
         }
 
         function showPronunciationSettings() {
@@ -1051,7 +1506,7 @@
                 const timestamp = new Date().toLocaleString('zh-TW');
                 const content = JSON.stringify(allData, null, 2);
                 const userPart = userName ? ` (${userName})` : '';
-                const descriptionText = `英文學習備份${userPart} - ${timestamp}`;
+                const descriptionText = `學習系統備份${userPart} - ${timestamp}`;
 
                 if (!gistId) {
                     // 創建新 Gist (改用 /gists 端點)
@@ -1067,7 +1522,7 @@
                             description: descriptionText,
                             public: false,
                             files: {
-                                'english-study-backup.json': {
+                                'study-system-backup.json': {
                                     content: content
                                 }
                             }
@@ -1101,7 +1556,7 @@
                         body: JSON.stringify({
                             description: descriptionText,
                             files: {
-                                'english-study-backup.json': {
+                                'study-system-backup.json': {
                                     content: content
                                 }
                             }
@@ -1162,10 +1617,10 @@
                 }
 
                 const gist = await response.json();
-                const file = gist.files['english-study-backup.json'];
+                const file = gist.files['study-system-backup.json'];
 
                 if (!file) {
-                    alert('❌ 找不到備份文件 (english-study-backup.json)');
+                    alert('❌ 找不到備份文件 (study-system-backup.json)');
                     return;
                 }
 
@@ -1209,14 +1664,61 @@
             }
         }
 
+        // 檢查是否有新版本
+        function checkForUpdates() {
+            document.getElementById('settingsDropdown').classList.remove('active');
+
+            navigator.serviceWorker.getRegistrations().then((registrations) => {
+                if (registrations.length === 0) {
+                    alert('❌ Service Worker 未啟用');
+                    return;
+                }
+
+                const reg = registrations[0];
+                reg.update().then(() => {
+                    // 檢查是否有 waiting 的新版本
+                    if (reg.waiting) {
+                        swUpdateAvailable = true;
+                        localStorage.setItem('swUpdateAvailable', 'true');
+                        showUpdateNotification();
+                        alert('✅ 偵測到新版本\n\n請點擊[更新]按鈕來應用更新');
+                    } else if (reg.active) {
+                        swUpdateAvailable = false;
+                        localStorage.removeItem('swUpdateAvailable');
+                        hideUpdateNotification();
+                        alert('✅ 當前已是最新版本');
+                    }
+                });
+            });
+        }
+
+        // 應用更新
         function updateApp() {
-            if (confirm('即將清除快取並更新應用。確認更新嗎？')) {
-                if ('caches' in window) {
-                    caches.keys().then(names => {
-                        names.forEach(name => caches.delete(name));
+            if (swUpdateAvailable) {
+                if (confirm('即將更新應用並重新載入。確認嗎？')) {
+                    localStorage.removeItem('swUpdateAvailable');
+                    navigator.serviceWorker.getRegistrations().then((registrations) => {
+                        if (registrations.length > 0 && registrations[0].waiting) {
+                            const newWorker = registrations[0].waiting;
+                            newWorker.postMessage({ type: 'SKIP_WAITING' });
+
+                            // 監聽控制器變更並重新載入
+                            let reloadScheduled = false;
+                            const onControllerChange = () => {
+                                if (!reloadScheduled) {
+                                    reloadScheduled = true;
+                                    navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 100);
+                                }
+                            };
+                            navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+                        }
                     });
                 }
-                location.reload(true);
+            } else {
+                alert('❌ 無新版本可用\n\n請先點擊[檢查更新]');
             }
         }
 
@@ -1278,6 +1780,31 @@
         // 頁面加載時初始化localStorage
         initializeLocalStorage();
 
+        // 網路狀態監控
+        function setupOfflineDetection() {
+          window.addEventListener('online', () => {
+            console.log('[App] 網路已連接');
+            document.body.style.opacity = '1';
+          });
+
+          window.addEventListener('offline', () => {
+            console.log('[App] 已進入離線模式');
+            // 可選：顯示離線提示
+          });
+
+          // 初始狀態
+          if (!navigator.onLine) {
+            console.log('[App] 當前為離線狀態');
+          }
+        }
+
+        // 初始化 Service Worker
+        window.addEventListener('load', () => {
+            setupOfflineDetection();
+            initServiceWorker();
+            initOfflineBrowsingCheckbox();
+        });
+
         // 初始化發音設定全局變量（與chinese.html一致）
         const settings = JSON.parse(localStorage.getItem('setting') || '{}');
         let pronunciationLang = settings.pronunciationLang || 'en-US';
@@ -1310,9 +1837,23 @@
         // 點擊外部時關閉菜單
         document.addEventListener('click', function(event) {
             const dropdown = document.getElementById('settingsDropdown');
+            const softwareSubmenu = document.getElementById('softwareSubmenu');
             const btn = event.target.closest('.settings-btn');
-            if (!btn && dropdown.classList.contains('active')) {
+
+            if (!dropdown || !softwareSubmenu) return;
+
+            const inDropdown = dropdown.contains(event.target);
+            const inSubmenu = softwareSubmenu.contains(event.target);
+
+            // 點擊設定按鈕以外且不在菜單內時關閉
+            if (!btn && !inDropdown && !inSubmenu && dropdown.classList.contains('active')) {
                 dropdown.classList.remove('active');
+                closeSoftwareMenu();
+            }
+
+            // 點擊軟體菜單以外時關閉子菜單
+            if (!inSubmenu && !event.target.closest('button[onclick*="showSoftwareMenu"]')) {
+                closeSoftwareMenu();
             }
         });
 

@@ -1,0 +1,50 @@
+========================================
+离线导航问题 - 快速参考
+========================================
+
+问题: 离线时从 english.html 或 chinese.html 导航回 index.html 失败
+
+根本原因: Service Worker 中第160行的 Promise 处理错误
+---------
+
+错误代码:
+  const cached = cache.match(fallback);
+  if (cached) return cached;
+  ↑ Promise 总是 truthy，直接返回 Promise 而不是响应！
+
+修复内容: service-worker.js
+---------
+
+1. 第191-222行: 修正 Fallback 逻辑中的 Promise 处理
+   - 使用 async/await 正确处理 Promise
+   - 包裹在立即执行的异步函数中
+
+2. 第130-169行: 添加 URL 规范化
+   - 规范化导航路径（'' → '/'）
+   - 为根路径创建备选匹配列表
+   - 逐个尝试多个 URL 变体
+
+3. 第172-181行: 改进网络请求错误处理
+   - 添加调试日志
+
+修复类型: 关键修复
+---------
+- 异步处理错误（Promise 处理不当）
+- URL 匹配不足（缺少规范化）
+- 缺乏调试日志
+
+测试步骤:
+---------
+1. 打开开发工具 (F12)
+2. 离线模式: Network → Offline (勾选)
+3. 从 english.html 点击"首頁"按钮
+4. 预期: 页面成功加载，Console 显示 [SW] 日志
+
+无需修改 HTML 文件！
+---------
+导航代码保持不变：
+  onclick="window.location.href='/index.html'"
+
+Service Worker 现在能正确拦截和处理请求。
+
+文件状态: ✅ 已修复并验证语法正确

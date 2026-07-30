@@ -1,0 +1,12 @@
+{
+  "name": "學習網",
+  "short_name": "學習網",
+  "description": "英文和中文學習應用程式",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#2d2d45",
+  "theme_color": "#667eea",
+  "categories": ["education", "productivity"]
+}
