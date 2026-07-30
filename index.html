@@ -96,9 +96,9 @@
         #softwareSubmenu {
             position: absolute !important;
             right: 100% !important;
-            top: 0 !important;
+            bottom: 0 !important;
+            top: auto !important;
             left: auto !important;
-            margin-top: 0 !important;
             width: 150px !important;
             z-index: 101 !important;
             margin-right: 4px;
@@ -288,10 +288,12 @@
 <body>
     <div class="title-bar">
         <div class="title">學習網</div>
-        <button class="settings-btn" onclick="toggleSettingsMenu()">
-          ⚙️
-          <span id="settingsNotification" style="position: absolute; top: 2px; right: 4px; width: 8px; height: 8px; background: #e74c3c; border-radius: 50%; display: none;"></span>
-        </button>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span id="updateLabel" style="background: #e74c3c; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.9em; font-weight: bold; display: none;">更新</span>
+            <button class="settings-btn" onclick="toggleSettingsMenu()">
+              ⚙️
+            </button>
+        </div>
         <div class="settings-dropdown" id="settingsDropdown">
             <button class="settings-option" onclick="showAbout()">ℹ️ 資訊</button>
             <button class="settings-option" onclick="showPronunciationSettings()">🔊 發音</button>
@@ -310,8 +312,9 @@
                 <span style="color: #b8b8b8; text-align: left; flex: 1; cursor: pointer;">📡 離線瀏覽</span>
             </label>
             <div style="position: relative;">
-                <button class="settings-option" onclick="showSoftwareMenu(event)">
-                  💻 軟體 →
+                <button class="settings-option" onclick="showSoftwareMenu(event)" style="position: relative;">
+                  ◀ 💻 軟體
+                  <span id="softwareMenuNotification" style="position: absolute; top: 6px; right: 8px; width: 8px; height: 8px; background: #e74c3c; border-radius: 50%; display: none;"></span>
                 </button>
                 <!-- 軟體子菜單 -->
                 <div class="settings-dropdown" id="softwareSubmenu" style="display: none;">
@@ -320,7 +323,7 @@
                       🔄 更新
                       <span id="softwareUpdateNotification" style="position: absolute; top: 6px; right: 8px; width: 8px; height: 8px; background: #e74c3c; border-radius: 50%; display: none;"></span>
                     </button>
-                    <button class="settings-option" onclick="showSWManager();">🔧 Service Worker</button>
+                    <button class="settings-option" onclick="showSWManager();">🔧 SW</button>
                 </div>
             </div>
         </div>
@@ -843,20 +846,24 @@
           }
         }
 
-        // 顯示更新通知（紅點）
+        // 顯示更新通知
         function showUpdateNotification() {
+          const updateLabel = document.getElementById('updateLabel');
           const softwareUpdateNotification = document.getElementById('softwareUpdateNotification');
-          const settingsNotification = document.getElementById('settingsNotification');
+          const softwareMenuNotification = document.getElementById('softwareMenuNotification');
+          if (updateLabel) updateLabel.style.display = 'block';
           if (softwareUpdateNotification) softwareUpdateNotification.style.display = 'block';
-          if (settingsNotification) settingsNotification.style.display = 'block';
+          if (softwareMenuNotification) softwareMenuNotification.style.display = 'block';
         }
 
         // 隱藏更新通知
         function hideUpdateNotification() {
+          const updateLabel = document.getElementById('updateLabel');
           const softwareUpdateNotification = document.getElementById('softwareUpdateNotification');
-          const settingsNotification = document.getElementById('settingsNotification');
+          const softwareMenuNotification = document.getElementById('softwareMenuNotification');
+          if (updateLabel) updateLabel.style.display = 'none';
           if (softwareUpdateNotification) softwareUpdateNotification.style.display = 'none';
-          if (settingsNotification) settingsNotification.style.display = 'none';
+          if (softwareMenuNotification) softwareMenuNotification.style.display = 'none';
         }
 
         // 停用 Service Worker
