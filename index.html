@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#667eea">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -598,7 +598,7 @@
           if (isEnabled) {
             // 啟用 Service Worker
             if ('serviceWorker' in navigator) {
-              navigator.serviceWorker.register('/service-worker.js')
+              navigator.serviceWorker.register('./service-worker.js')
                 .then((registration) => {
                   swRegistration = registration;
                   console.log('[🌐] 離線瀏覽已啟用');
@@ -674,7 +674,7 @@
           if (savedOfflineBrowsing) {
             const registrations = await navigator.serviceWorker.getRegistrations();
             if (registrations.length === 0 && 'serviceWorker' in navigator) {
-              navigator.serviceWorker.register('/service-worker.js').catch((error) => {
+              navigator.serviceWorker.register('./service-worker.js').catch((error) => {
                 console.error('[❌] 自動註冊 Service Worker 失敗:', error);
               });
             }
@@ -701,7 +701,7 @@
               showUpdateNotification();
             }
 
-            navigator.serviceWorker.register('/service-worker.js')
+            navigator.serviceWorker.register('./service-worker.js')
               .then((registration) => {
                 swRegistration = registration;
                 updateSWStatus();
@@ -903,7 +903,7 @@
           if ('serviceWorker' in navigator) {
             const registrations = await navigator.serviceWorker.getRegistrations();
             if (registrations.length === 0) {
-              navigator.serviceWorker.register('/service-worker.js')
+              navigator.serviceWorker.register('./service-worker.js')
                 .then((registration) => {
                   swRegistration = registration;
                   updateSWStatus();
