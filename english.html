@@ -1933,6 +1933,7 @@
         // 單字視窗相關變數
         let currentFilteredWords = [];
         let modalCurrentWordIndex = -1;
+        let activeTagWordsModal = null;
 
         // ============================================
         // localStorage 版本控制與遷移系統
@@ -4841,9 +4842,29 @@
         }
 
         function closeWordModal() {
+            const wordToFocus = (modalCurrentWordIndex >= 0 && modalCurrentWordIndex < currentFilteredWords.length)
+                ? currentFilteredWords[modalCurrentWordIndex]
+                : null;
+
             document.getElementById('wordModal').style.display = 'none';
             currentFilteredWords = [];
             modalCurrentWordIndex = -1;
+
+            if (activeTagWordsModal) {
+                activeTagWordsModal.style.display = 'flex';
+
+                if (wordToFocus) {
+                    const wordKey = `${wordToFocus.sheet}/${wordToFocus.tag}/${wordToFocus.單字}`;
+                    const wordRow = activeTagWordsModal.querySelector(`[data-word-key="${wordKey}"]`);
+                    if (wordRow) {
+                        wordRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        wordRow.style.backgroundColor = '#5a5a72';
+                        setTimeout(() => {
+                            wordRow.style.backgroundColor = '';
+                        }, 1000);
+                    }
+                }
+            }
         }
 
         function displayWordInModal(wordIndex, filteredWords) {
@@ -5005,7 +5026,12 @@
                 cursor: pointer;
                 font-weight: bold;
             `;
-            closeBtn.onclick = () => modal.remove();
+            closeBtn.onclick = () => {
+                modal.remove();
+                if (activeTagWordsModal === modal) {
+                    activeTagWordsModal = null;
+                }
+            };
 
             topBar.appendChild(title);
             topBar.appendChild(closeBtn);
@@ -5089,7 +5115,8 @@
                 sentenceBtn.textContent = 'ⓘ';
                 sentenceBtn.onclick = (e) => {
                     e.stopPropagation();
-                    modal.remove();
+                    modal.style.display = 'none';
+                    activeTagWordsModal = modal;
                     openWordModal(index, tagWords);
                 };
 
