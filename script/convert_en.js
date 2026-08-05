@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 // 讀取Excel文件
-const filePath = path.join(__dirname, '..', 'docs', 'test.xlsx');
+const filePath = path.join(__dirname, '..', 'docs', 'english.xlsx');
 const workbook = XLSX.readFile(filePath);
 
 // 要轉換的sheet列表
