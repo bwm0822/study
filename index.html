@@ -550,6 +550,7 @@
                 <div style="display: flex; gap: 8px;">
                     <button onclick="showExportDialog()" style="padding: 8px 16px; background: #52d273; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1.2em;">💾 匯出</button>
                     <button onclick="showImportDialog()" style="padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1.2em;">📥 匯入</button>
+                    <button onclick="showConvertDialog()" style="padding: 8px 16px; background: #9b59b6; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1.2em;">🔄 轉換</button>
                     <button id="deleteCurrentBtn" onclick="deleteCurrentStorage()" style="padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1.2em;" disabled>🗑️</button>
                 </div>
             </div>
@@ -574,6 +575,26 @@
             <!-- 底部 -->
             <div style="padding: 15px 20px; border-top: 1px solid #4a4a4a; display: flex; gap: 10px;">
                 <button onclick="closeStorageModal()" style="flex: 1; padding: 10px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1.1em;">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 資料轉換視窗 -->
+    <div id="convertModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 1002; align-items: center; justify-content: center;">
+        <div style="background: #333; border-radius: 8px; padding: 30px; max-width: 520px; width: 90%; color: white;">
+            <div style="margin-bottom: 20px;">
+                <span style="font-weight: bold; font-size: 1.2em;">🔄 分頁改名資料轉換</span>
+            </div>
+
+            <div style="color: #ccc; font-size: 0.95em; line-height: 1.6;">
+                <p style="margin-bottom: 12px;">english.xlsx 的部分分頁已改名，這會導致舊的「⭐我的最愛」「測驗紀錄」「測驗歷史紀錄」找不到對應資料。此轉換會更新 <code style="background: #222; padding: 1px 5px; border-radius: 3px;">english</code> 資料中 favorite / quiz 的 key 前綴，以及 quizSessions 裡每筆結果的分頁名稱，讓舊紀錄對應到新分頁名稱：</p>
+                <ul id="convertRuleList" style="margin: 0 0 12px 20px; padding: 0;"></ul>
+                <p style="color: #999; font-size: 0.85em;">💡 只會更動 key 的分頁名稱前綴，單字、tag、資料內容本身不會被修改。</p>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button onclick="runSheetRenameConversion()" style="flex: 1; padding: 12px; background: #52d273; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1.1em;">✅ 確定轉換</button>
+                <button onclick="closeConvertDialog()" style="flex: 1; padding: 12px; background: #666; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">取消</button>
             </div>
         </div>
     </div>
@@ -1392,6 +1413,92 @@
             document.getElementById('storageModal').style.display = 'none';
         }
 
+        // ==================== 分頁改名資料轉換 ====================
+        // english.xlsx 分頁改名對照表：舊分頁名稱 -> 新分頁名稱
+        const SHEET_RENAME_MAP = {
+            '進階文法': '家-進階文法',
+            'GEPT': '家-GEPT',
+            '全民英檢(上)': '英-全民英檢(上)',
+            '文法進階篇': '英-文法進階篇'
+        };
+
+        function showConvertDialog() {
+            const list = document.getElementById('convertRuleList');
+            list.innerHTML = Object.entries(SHEET_RENAME_MAP)
+                .map(([oldName, newName]) => `<li>${oldName} → ${newName}</li>`)
+                .join('');
+            document.getElementById('convertModal').style.display = 'flex';
+        }
+
+        function closeConvertDialog() {
+            document.getElementById('convertModal').style.display = 'none';
+        }
+
+        // 將 favorite/quiz 物件中以舊分頁名稱開頭的 key（格式：分頁/tag/單字）改成新分頁名稱
+        function migrateSheetRenameKeys(obj) {
+            if (!obj) return 0;
+            let count = 0;
+            const renamed = {};
+            for (const key in obj) {
+                let newKey = key;
+                for (const oldName in SHEET_RENAME_MAP) {
+                    const prefix = oldName + '/';
+                    if (key.startsWith(prefix)) {
+                        newKey = SHEET_RENAME_MAP[oldName] + '/' + key.slice(prefix.length);
+                        count++;
+                        break;
+                    }
+                }
+                renamed[newKey] = obj[key];
+            }
+            Object.keys(obj).forEach(key => delete obj[key]);
+            Object.assign(obj, renamed);
+            return count;
+        }
+
+        // 將 quizSessions（測驗歷史紀錄）裡每筆結果的 sheet 欄位改成新分頁名稱
+        function migrateQuizSessionsSheets(quizSessions) {
+            if (!Array.isArray(quizSessions)) return 0;
+            let count = 0;
+            quizSessions.forEach(session => {
+                if (!session || !Array.isArray(session.results)) return;
+                session.results.forEach(result => {
+                    if (result && SHEET_RENAME_MAP[result.sheet]) {
+                        result.sheet = SHEET_RENAME_MAP[result.sheet];
+                        count++;
+                    }
+                });
+            });
+            return count;
+        }
+
+        function runSheetRenameConversion() {
+            try {
+                const stored = localStorage.getItem('english');
+                if (!stored) {
+                    alert('沒有找到 english 資料，無需轉換');
+                    closeConvertDialog();
+                    return;
+                }
+
+                const englishData = JSON.parse(stored);
+                const favoriteCount = migrateSheetRenameKeys(englishData.favorite);
+                const quizCount = migrateSheetRenameKeys(englishData.quiz);
+                const sessionCount = migrateQuizSessionsSheets(englishData.quizSessions);
+
+                localStorage.setItem('english', JSON.stringify(englishData));
+                closeConvertDialog();
+                alert(`✅ 轉換完成！\n\n我的最愛：更新 ${favoriteCount} 筆\n測驗紀錄：更新 ${quizCount} 筆\n測驗歷史紀錄：更新 ${sessionCount} 筆`);
+
+                if (document.getElementById('storageModal').style.display !== 'none') {
+                    showStorageRecords();
+                }
+            } catch (e) {
+                console.error('[轉換] 失敗:', e);
+                alert('❌ 轉換失敗：' + e.message);
+            }
+        }
+
         function closeGistSettingModal() {
             document.getElementById('gistSettingModal').style.display = 'none';
         }
@@ -1876,6 +1983,7 @@
             const pronunciationModal = document.getElementById('pronunciationModal');
             const specialPronunciationModal = document.getElementById('specialPronunciationModal');
             const gistSettingModal = document.getElementById('gistSettingModal');
+            const convertModal = document.getElementById('convertModal');
             if (event.target === storageModal) {
                 closeStorageModal();
             }
@@ -1887,6 +1995,9 @@
             }
             if (event.target === gistSettingModal) {
                 closeGistSettingModal();
+            }
+            if (event.target === convertModal) {
+                closeConvertDialog();
             }
         });
     </script>
