@@ -1225,16 +1225,22 @@
 
             if (Array.isArray(obj)) {
                 if (obj.length === 0) return '[]';
-                const id = 'arr_' + Math.random().toString(36).substr(2, 9);
                 let html = '';
                 if (depth === 0) {
+                    const id = 'arr_' + Math.random().toString(36).substr(2, 9);
                     html = `<span class="json-toggle" onclick="toggleJSON('${id}')">▶</span> `;
+                    html += `[<br/><span id="${id}" class="json-content" style="display: none;">`;
+                    obj.forEach((item, idx) => {
+                        html += `<div style="margin-left: 20px;">${formatJSON(item, depth + 1)}</div>`;
+                    });
+                    html += `</span><div>${indent}]</div>`;
+                } else {
+                    html = `[<br/>`;
+                    obj.forEach((item, idx) => {
+                        html += `<div style="margin-left: 20px;">${formatJSON(item, depth + 1)}</div>`;
+                    });
+                    html += `<div>${indent}]</div>`;
                 }
-                html += `[<br/><span id="${id}" class="json-content" style="display: none;">`;
-                obj.forEach((item, idx) => {
-                    html += `<div style="margin-left: 20px;">${formatJSON(item, depth + 1)}</div>`;
-                });
-                html += `</span><div>${indent}]</div>`;
                 return html;
             }
 
