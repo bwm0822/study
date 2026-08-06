@@ -1,0 +1,49 @@
+{
+  "母音": [
+    { "symbol": "i", "exampleWord": "eat [it]、seat [sit]", "audio": "docs/kk/i.mp3" },
+    { "symbol": "ɪ", "exampleWord": "it [ɪt]、fit [fɪt]", "audio": "docs/kk/ɪ.mp3" },
+    { "symbol": "e", "exampleWord": "eight [et]、day [de]", "audio": "docs/kk/e.mp3" },
+    { "symbol": "ɛ", "exampleWord": "egg [ɛg]、bed [bɛd]", "audio": "docs/kk/ɛ.mp3" },
+    { "symbol": "æ", "exampleWord": "apple [ˈæpl̩]、cat [kæt]", "audio": "docs/kk/æ.mp3" },
+    { "symbol": "ɑ", "exampleWord": "father [ˈfɑðɚ]、hot [hɑt]", "audio": "docs/kk/ɑ.mp3" },
+    { "symbol": "ɔ", "exampleWord": "all [ɔl]、dog [dɔg]", "audio": "docs/kk/ɔ.mp3" },
+    { "symbol": "o", "exampleWord": "open [ˈopən]、go [go]", "audio": "docs/kk/o.mp3" },
+    { "symbol": "ʊ", "exampleWord": "book [bʊk]、foot [fʊt]", "audio": "docs/kk/ʊ.mp3" },
+    { "symbol": "u", "exampleWord": "boot [but]、food [fud]", "audio": "docs/kk/u.mp3" },
+    { "symbol": "ʌ", "exampleWord": "up [ʌp]、cup [kʌp]", "audio": "docs/kk/ʌ.mp3" },
+    { "symbol": "ɚ", "exampleWord": "teacher [ˈtitʃɚ]、water [ˈwɔtɚ]", "audio": "docs/kk/ɚ.mp3" },
+    { "symbol": "ɝ", "exampleWord": "bird [bɝd]、girl [gɝl]", "audio": "docs/kk/ɝ.mp3" },
+    { "symbol": "ə", "exampleWord": "about [əˈbaʊt]、sofa [ˈsofə]", "audio": "docs/kk/ə.mp3" }
+  ],
+  "雙母音": [
+    { "symbol": "aɪ", "exampleWord": "eye [aɪ]、time [taɪm]", "audio": "docs/kk/aɪ.mp3" },
+    { "symbol": "aʊ", "exampleWord": "cow [kaʊ]、house [haʊs]", "audio": "docs/kk/aʊ.mp3" },
+    { "symbol": "ɔɪ", "exampleWord": "boy [bɔɪ]、toy [tɔɪ]", "audio": "docs/kk/ɔɪ.mp3" }
+  ],
+  "子音": [
+    { "symbol": "p", "exampleWord": "pen [pɛn]、park [pɑrk]", "audio": "docs/kk/p.mp3" },
+    { "symbol": "b", "exampleWord": "book [bʊk]、ball [bɔl]", "audio": "docs/kk/b.mp3" },
+    { "symbol": "t", "exampleWord": "top [tɑp]、table [ˈtebl̩]", "audio": "docs/kk/t.mp3" },
+    { "symbol": "d", "exampleWord": "dog [dɔg]、door [dɔr]", "audio": "docs/kk/d.mp3" },
+    { "symbol": "k", "exampleWord": "cat [kæt]、key [ki]", "audio": "docs/kk/k.mp3" },
+    { "symbol": "g", "exampleWord": "go [go]、gate [get]", "audio": "docs/kk/ɡ.mp3" },
+    { "symbol": "f", "exampleWord": "fish [fɪʃ]、fun [fʌn]", "audio": "docs/kk/f.mp3" },
+    { "symbol": "v", "exampleWord": "van [væn]、voice [vɔɪs]", "audio": "docs/kk/v.mp3" },
+    { "symbol": "θ", "exampleWord": "think [θɪŋk]、three [θri]", "audio": "docs/kk/θ.mp3" },
+    { "symbol": "ð", "exampleWord": "this [ðɪs]、that [ðæt]", "audio": "docs/kk/ð.mp3" },
+    { "symbol": "s", "exampleWord": "sun [sʌn]、sit [sɪt]", "audio": "docs/kk/s.mp3" },
+    { "symbol": "z", "exampleWord": "zoo [zu]、zero [ˈziro]", "audio": "docs/kk/z.mp3" },
+    { "symbol": "ʃ", "exampleWord": "shoe [ʃu]、ship [ʃɪp]", "audio": "docs/kk/ʃ.mp3" },
+    { "symbol": "ʒ", "exampleWord": "vision [ˈvɪʒən]、casual [ˈkæʒuəl]", "audio": "docs/kk/ʒ.mp3" },
+    { "symbol": "h", "exampleWord": "hat [hæt]、happy [ˈhæpi]", "audio": "docs/kk/h.mp3" },
+    { "symbol": "tʃ", "exampleWord": "chair [tʃɛr]、teach [titʃ]", "audio": "docs/kk/tʃ.mp3" },
+    { "symbol": "dʒ", "exampleWord": "jump [dʒʌmp]、job [dʒɑb]", "audio": "docs/kk/dʒ.mp3" },
+    { "symbol": "m", "exampleWord": "man [mæn]、him [hɪm]", "audio": "docs/kk/m.mp3" },
+    { "symbol": "n", "exampleWord": "no [no]、ten [tɛn]", "audio": "docs/kk/n.mp3" },
+    { "symbol": "ŋ", "exampleWord": "sing [sɪŋ]、king [kɪŋ]", "audio": "docs/kk/ŋ.mp3" },
+    { "symbol": "l", "exampleWord": "leg [lɛg]、ball [bɔl]", "audio": "docs/kk/l.mp3" },
+    { "symbol": "r", "exampleWord": "red [rɛd]、car [kɑr]", "audio": "docs/kk/r.mp3" },
+    { "symbol": "w", "exampleWord": "wet [wɛt]、win [wɪn]", "audio": "docs/kk/w.mp3" },
+    { "symbol": "j", "exampleWord": "yes [jɛs]、year [jɪr]", "audio": "docs/kk/j.mp3" }
+  ]
+}

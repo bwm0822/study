@@ -996,6 +996,103 @@
             color: #b8b8b8;
         }
 
+        .phonetics-container {
+            flex: 1;
+            overflow-y: auto;
+            background: #3a3a52;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            color: #b8b8b8;
+            padding: 20px;
+        }
+
+        .phonetics-group-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #000;
+            background: #ffa500;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 20px 0 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .phonetics-group-title:hover {
+            background: #ffb733;
+        }
+
+        .phonetics-group-title:first-child {
+            margin-top: 0;
+        }
+
+        .phonetics-group-arrow {
+            display: inline-block;
+            font-size: 0.8em;
+        }
+
+        .phonetics-grid {
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .phonetics-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 10px 15px;
+            transition: background 0.2s;
+        }
+
+        .phonetics-card:nth-child(odd) {
+            background: #2a2a52;
+        }
+
+        .phonetics-card:nth-child(even) {
+            background: #323260;
+        }
+
+        .phonetics-card:hover {
+            background: #4a4a68;
+        }
+
+        .phonetics-symbol {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #ffa500;
+            cursor: pointer;
+            user-select: none;
+            min-width: 80px;
+            flex-shrink: 0;
+        }
+
+        .phonetics-symbol:hover {
+            text-decoration: underline;
+        }
+
+        .phonetics-word {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #b8b8b8;
+            user-select: none;
+        }
+
+        .phonetics-word-text {
+            cursor: pointer;
+        }
+
+        .phonetics-word-text:hover {
+            text-decoration: underline;
+        }
+
+        .phonetics-word-kk {
+            font-size: 0.9em;
+            font-weight: normal;
+            color: #ffa500;
+        }
+
         .word-row {
             display: flex;
             border-bottom: 1px solid #4a4a60;
@@ -1619,6 +1716,7 @@
                     <option value="review">複習</option>
                     <option value="quiz">測驗</option>
                     <option value="statistics">統計</option>
+                    <option value="phonetics">音標</option>
                     <option value="add">自訂</option>
                 </select>
             </div>
@@ -1722,6 +1820,9 @@
                 <div class="chinese-content" id="chineseContent"></div>
             </div>
         </div>
+
+        <!-- 音標模式 -->
+        <div class="phonetics-container" id="phoneticsContainer" style="display: none;"></div>
 
         <!-- 資訊視窗 -->
         <div class="word-modal" id="aboutModal" style="display: none;">
@@ -1915,6 +2016,7 @@
         let selectedTags = new Map(); // {sheetName: Set<tag>}
         let currentMode = 'normal'; // 'normal' or 'review' or 'quiz'
         let searchKeyword = ''; // 搜尋關鍵詞
+        let kkPhoneticsData = null; // KK 音標對照表快取
         let normalModeSheetNames = new Set(); // 記錄一般/複習模式的 sheet 名稱
         let normalModeCheckStates = {}; // 保存 normal 模式 sheet 的狀態 {sheetName: checked}
         let normalModeTagStates = {}; // 保存 normal 模式 tag 的狀態 {sheetName: {tagName: checked}}
@@ -2517,6 +2619,7 @@
             const refreshBtn = document.getElementById('refreshBtn');
             const startQuizBtn = document.getElementById('startQuizBtn');
             const stats = document.getElementById('stats');
+            const phoneticsContainer = document.getElementById('phoneticsContainer');
 
             // 清除搜尋關鍵詞
             searchKeyword = '';
@@ -2525,7 +2628,27 @@
                 if (searchInput) searchInput.value = '';
             }
 
-            if (mode === 'review') {
+            // 除音標模式外，其餘模式一律隱藏音標容器
+            phoneticsContainer.style.display = mode === 'phonetics' ? 'block' : 'none';
+
+            if (mode === 'phonetics') {
+                stopStoryPlayback();
+                wordsContainer.style.display = 'none';
+                quizContainer.style.display = 'none';
+                tagFilterContainer.style.display = 'none';
+                const reviewTagFilterContainerP = document.getElementById('reviewTagFilterContainer');
+                if (reviewTagFilterContainerP) reviewTagFilterContainerP.style.display = 'none';
+                quizTagFilterContainer.style.display = 'none';
+                searchFilterContainer.style.display = 'none';
+                refreshBtn.style.display = 'none';
+                startQuizBtn.style.display = 'none';
+                stats.style.display = 'none';
+                document.getElementById('chineseContainer').style.display = 'none';
+                document.getElementById('chineseButtonsTop').style.display = 'none';
+                document.getElementById('addWordBtn').style.display = 'none';
+                document.getElementById('exportBtn').style.display = 'none';
+                renderPhonetics();
+            } else if (mode === 'review') {
                 stopStoryPlayback();
                 wordsContainer.style.display = 'block';
                 quizContainer.style.display = 'none';
@@ -3262,6 +3385,84 @@
             utterance.rate = pronunciationRate;
             speechSynthesis.cancel();
             speechSynthesis.speak(utterance);
+        }
+
+        function playKKAudio(audioPath) {
+            const audio = new Audio(audioPath);
+            audio.play().catch(err => console.log('KK 音標音檔播放失敗:', err));
+        }
+
+        async function loadKKPhonetics() {
+            if (kkPhoneticsData) return kkPhoneticsData;
+            const response = await fetch('./json/kk-phonetics.json');
+            kkPhoneticsData = await response.json();
+            return kkPhoneticsData;
+        }
+
+        async function renderPhonetics() {
+            const container = document.getElementById('phoneticsContainer');
+            container.innerHTML = '';
+
+            const data = await loadKKPhonetics();
+
+            ['母音', '雙母音', '子音'].forEach(groupName => {
+                const items = data[groupName];
+                if (!items || items.length === 0) return;
+
+                const title = document.createElement('div');
+                title.className = 'phonetics-group-title';
+                title.innerHTML = `<span class="phonetics-group-arrow">▼</span> ${groupName}（${items.length}）`;
+                container.appendChild(title);
+
+                const grid = document.createElement('div');
+                grid.className = 'phonetics-grid';
+
+                title.onclick = () => {
+                    const collapsed = grid.style.display === 'none';
+                    grid.style.display = collapsed ? 'flex' : 'none';
+                    title.querySelector('.phonetics-group-arrow').textContent = collapsed ? '▼' : '▶';
+                };
+
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'phonetics-card';
+
+                    const symbolEl = document.createElement('div');
+                    symbolEl.className = 'phonetics-symbol';
+                    symbolEl.textContent = `[ ${item.symbol} ]`;
+                    symbolEl.onclick = () => playKKAudio(item.audio);
+
+                    const wordEl = document.createElement('div');
+                    wordEl.className = 'phonetics-word';
+                    const pairRegex = /([^\s\[\]、]+)\s*\[([^\]]+)\]/g;
+                    let pairMatch;
+                    let isFirstPair = true;
+                    while ((pairMatch = pairRegex.exec(item.exampleWord)) !== null) {
+                        const [, exWord, exPhonetic] = pairMatch;
+                        if (!isFirstPair) {
+                            wordEl.appendChild(document.createTextNode('、'));
+                        }
+                        isFirstPair = false;
+
+                        const wordTextEl = document.createElement('span');
+                        wordTextEl.className = 'phonetics-word-text';
+                        wordTextEl.textContent = exWord;
+                        wordTextEl.onclick = () => playPronunciation(exWord);
+                        wordEl.appendChild(wordTextEl);
+
+                        const kkEl = document.createElement('span');
+                        kkEl.className = 'phonetics-word-kk';
+                        kkEl.textContent = ` [ ${exPhonetic} ]`;
+                        wordEl.appendChild(kkEl);
+                    }
+
+                    card.appendChild(symbolEl);
+                    card.appendChild(wordEl);
+                    grid.appendChild(card);
+                });
+
+                container.appendChild(grid);
+            });
         }
 
         function renderWords() {
