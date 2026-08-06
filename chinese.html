@@ -4140,7 +4140,7 @@
         let pronunciationLang = settings.pronunciationLang || 'en-US';
         let pronunciationRate = settings.pronunciationRate || 1.0;
         let randomQuiz = settings.randomQuiz !== false; // 預設為 true
-        let allowRetest = localStorage.getItem('allowRetest') === 'true'; // 預設為 false
+        let allowRetest = settings.allowRetest || false;
 
         // 獲取歷史記錄，支援舊格式（boolean陣列）和新格式（數值）
         function getQuizHistory(historyKey) {
@@ -8026,17 +8026,20 @@
                                 font-weight: bold;
                                 color: white;
                             "></div>
-                            <button onclick="continueChineseQuiz()" style="
-                                padding: 10px 25px;
-                                background: #667eea;
-                                color: white;
-                                border: none;
-                                border-radius: 4px;
-                                cursor: pointer;
-                                font-weight: bold;
-                                font-size: 1.2em;
-                                white-space: nowrap;
-                            ">下一個</button>
+                            <div style="display: flex; gap: 10px;">
+                                <button id="chineseRetestBtn" class="retest-btn" onclick="retestChineseWord()" style="display: none;">重測</button>
+                                <button onclick="continueChineseQuiz()" style="
+                                    padding: 10px 25px;
+                                    background: #667eea;
+                                    color: white;
+                                    border: none;
+                                    border-radius: 4px;
+                                    cursor: pointer;
+                                    font-weight: bold;
+                                    font-size: 1.2em;
+                                    white-space: nowrap;
+                                ">下一個</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -8108,6 +8111,26 @@
             inputField.disabled = true;
             inputField.style.backgroundColor = '#999999';
             resultContainer.style.display = 'flex';
+
+            const retestBtn = document.getElementById('chineseRetestBtn');
+            if (retestBtn) {
+                retestBtn.style.display = (!isCorrect && allowRetest) ? 'block' : 'none';
+            }
+        }
+
+        function retestChineseWord() {
+            // 移除剛剛記錄的錯誤結果，重新作答同一題
+            chineseQuizResults.pop();
+            const quizMethod = document.getElementById('chineseQuizMethodSelect').value;
+            if (quizMethod === 'idiom-explanation') {
+                showChineseQuizExplanation();
+            } else if (quizMethod === 'idiom-sentence') {
+                showChineseQuizSentence();
+            } else if (quizMethod === 'gaicuo-hint') {
+                showGaicuoQuizHint();
+            } else if (quizMethod === 'gaicuo-standard') {
+                showGaicuoQuizStandard();
+            }
         }
 
         function continueChineseQuiz() {
@@ -8206,17 +8229,20 @@
                                 font-weight: bold;
                                 color: white;
                             "></div>
-                            <button onclick="continueChineseQuiz()" style="
-                                padding: 10px 25px;
-                                background: #667eea;
-                                color: white;
-                                border: none;
-                                border-radius: 4px;
-                                cursor: pointer;
-                                font-weight: bold;
-                                font-size: 1.2em;
-                                white-space: nowrap;
-                            ">下一個</button>
+                            <div style="display: flex; gap: 10px;">
+                                <button id="chineseRetestBtn" class="retest-btn" onclick="retestChineseWord()" style="display: none;">重測</button>
+                                <button onclick="continueChineseQuiz()" style="
+                                    padding: 10px 25px;
+                                    background: #667eea;
+                                    color: white;
+                                    border: none;
+                                    border-radius: 4px;
+                                    cursor: pointer;
+                                    font-weight: bold;
+                                    font-size: 1.2em;
+                                    white-space: nowrap;
+                                ">下一個</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -8304,17 +8330,20 @@
                                 font-weight: bold;
                                 color: white;
                             "></div>
-                            <button onclick="continueChineseQuiz()" style="
-                                padding: 10px 25px;
-                                background: #667eea;
-                                color: white;
-                                border: none;
-                                border-radius: 4px;
-                                cursor: pointer;
-                                font-weight: bold;
-                                font-size: 1.2em;
-                                white-space: nowrap;
-                            ">下一個</button>
+                            <div style="display: flex; gap: 10px;">
+                                <button id="chineseRetestBtn" class="retest-btn" onclick="retestChineseWord()" style="display: none;">重測</button>
+                                <button onclick="continueChineseQuiz()" style="
+                                    padding: 10px 25px;
+                                    background: #667eea;
+                                    color: white;
+                                    border: none;
+                                    border-radius: 4px;
+                                    cursor: pointer;
+                                    font-weight: bold;
+                                    font-size: 1.2em;
+                                    white-space: nowrap;
+                                ">下一個</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -8405,17 +8434,20 @@
                                 font-weight: bold;
                                 color: white;
                             "></div>
-                            <button onclick="continueChineseQuiz()" style="
-                                padding: 10px 25px;
-                                background: #667eea;
-                                color: white;
-                                border: none;
-                                border-radius: 4px;
-                                cursor: pointer;
-                                font-weight: bold;
-                                font-size: 1.2em;
-                                white-space: nowrap;
-                            ">下一個</button>
+                            <div style="display: flex; gap: 10px;">
+                                <button id="chineseRetestBtn" class="retest-btn" onclick="retestChineseWord()" style="display: none;">重測</button>
+                                <button onclick="continueChineseQuiz()" style="
+                                    padding: 10px 25px;
+                                    background: #667eea;
+                                    color: white;
+                                    border: none;
+                                    border-radius: 4px;
+                                    cursor: pointer;
+                                    font-weight: bold;
+                                    font-size: 1.2em;
+                                    white-space: nowrap;
+                                ">下一個</button>
+                            </div>
                         </div>
                     </div>
                 </div>
