@@ -1093,6 +1093,85 @@
             color: #ffa500;
         }
 
+        .rules-notes {
+            background: #2a2a52;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #b8b8b8;
+        }
+
+        .rule-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 12px 15px;
+        }
+
+        .rule-row:nth-child(odd) {
+            background: #2a2a52;
+        }
+
+        .rule-row:nth-child(even) {
+            background: #323260;
+        }
+
+        .rule-pattern {
+            width: 130px;
+            flex-shrink: 0;
+            font-weight: bold;
+            color: #b8b8b8;
+            font-size: 1.5em;
+            word-break: normal;
+            overflow-wrap: normal;
+        }
+
+        .rule-phonetic {
+            min-width: 100px;
+            flex-shrink: 0;
+            color: #ffa500;
+            font-size: 1.4em;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .rule-phonetic:hover {
+            text-decoration: underline;
+        }
+
+        .rule-desc {
+            width: 130px;
+            flex-shrink: 0;
+            color: #999;
+            font-size: 1.2em;
+            word-break: normal;
+            overflow-wrap: normal;
+        }
+
+        .rule-examples {
+            flex: 1;
+            min-width: 0;
+            font-size: 1.2em;
+        }
+
+        .rule-examples span {
+            cursor: pointer;
+        }
+
+        .rule-examples span:hover {
+            text-decoration: underline;
+        }
+
+        .rule-note {
+            width: 100%;
+            margin-top: 4px;
+            font-size: 1.2em;
+            color: #888;
+        }
+
         .word-row {
             display: flex;
             border-bottom: 1px solid #4a4a60;
@@ -1717,6 +1796,7 @@
                     <option value="quiz">測驗</option>
                     <option value="statistics">統計</option>
                     <option value="phonetics">音標</option>
+                    <option value="rules">發音規則</option>
                     <option value="add">自訂</option>
                 </select>
             </div>
@@ -1823,6 +1903,9 @@
 
         <!-- 音標模式 -->
         <div class="phonetics-container" id="phoneticsContainer" style="display: none;"></div>
+
+        <!-- 發音規則模式 -->
+        <div class="phonetics-container" id="rulesContainer" style="display: none;"></div>
 
         <!-- 資訊視窗 -->
         <div class="word-modal" id="aboutModal" style="display: none;">
@@ -2017,6 +2100,7 @@
         let currentMode = 'normal'; // 'normal' or 'review' or 'quiz'
         let searchKeyword = ''; // 搜尋關鍵詞
         let kkPhoneticsData = null; // KK 音標對照表快取
+        let pronunciationRulesData = null; // 發音規則快取
         let normalModeSheetNames = new Set(); // 記錄一般/複習模式的 sheet 名稱
         let normalModeCheckStates = {}; // 保存 normal 模式 sheet 的狀態 {sheetName: checked}
         let normalModeTagStates = {}; // 保存 normal 模式 tag 的狀態 {sheetName: {tagName: checked}}
@@ -2620,6 +2704,7 @@
             const startQuizBtn = document.getElementById('startQuizBtn');
             const stats = document.getElementById('stats');
             const phoneticsContainer = document.getElementById('phoneticsContainer');
+            const rulesContainer = document.getElementById('rulesContainer');
 
             // 清除搜尋關鍵詞
             searchKeyword = '';
@@ -2630,6 +2715,8 @@
 
             // 除音標模式外，其餘模式一律隱藏音標容器
             phoneticsContainer.style.display = mode === 'phonetics' ? 'block' : 'none';
+            // 除發音規則模式外，其餘模式一律隱藏發音規則容器
+            rulesContainer.style.display = mode === 'rules' ? 'block' : 'none';
 
             if (mode === 'phonetics') {
                 stopStoryPlayback();
@@ -2648,6 +2735,23 @@
                 document.getElementById('addWordBtn').style.display = 'none';
                 document.getElementById('exportBtn').style.display = 'none';
                 renderPhonetics();
+            } else if (mode === 'rules') {
+                stopStoryPlayback();
+                wordsContainer.style.display = 'none';
+                quizContainer.style.display = 'none';
+                tagFilterContainer.style.display = 'none';
+                const reviewTagFilterContainerR = document.getElementById('reviewTagFilterContainer');
+                if (reviewTagFilterContainerR) reviewTagFilterContainerR.style.display = 'none';
+                quizTagFilterContainer.style.display = 'none';
+                searchFilterContainer.style.display = 'none';
+                refreshBtn.style.display = 'none';
+                startQuizBtn.style.display = 'none';
+                stats.style.display = 'none';
+                document.getElementById('chineseContainer').style.display = 'none';
+                document.getElementById('chineseButtonsTop').style.display = 'none';
+                document.getElementById('addWordBtn').style.display = 'none';
+                document.getElementById('exportBtn').style.display = 'none';
+                renderRules();
             } else if (mode === 'review') {
                 stopStoryPlayback();
                 wordsContainer.style.display = 'block';
@@ -3387,9 +3491,20 @@
             speechSynthesis.speak(utterance);
         }
 
-        function playKKAudio(audioPath) {
+        function playKKAudio(audioPath, fallbackWord) {
             const audio = new Audio(audioPath);
-            audio.play().catch(err => console.log('KK 音標音檔播放失敗:', err));
+            let handled = false;
+            const fallback = (err) => {
+                if (handled) return;
+                handled = true;
+                if (fallbackWord) {
+                    playPronunciation(fallbackWord);
+                } else {
+                    console.log('KK 音標音檔播放失敗:', err);
+                }
+            };
+            audio.addEventListener('error', fallback);
+            audio.play().catch(fallback);
         }
 
         async function loadKKPhonetics() {
@@ -3397,6 +3512,13 @@
             const response = await fetch('./json/kk-phonetics.json');
             kkPhoneticsData = await response.json();
             return kkPhoneticsData;
+        }
+
+        async function loadPronunciationRules() {
+            if (pronunciationRulesData) return pronunciationRulesData;
+            const response = await fetch('./json/pronunciation-rules.json');
+            pronunciationRulesData = await response.json();
+            return pronunciationRulesData;
         }
 
         async function renderPhonetics() {
@@ -3462,6 +3584,82 @@
                 });
 
                 container.appendChild(grid);
+            });
+        }
+
+        async function renderRules() {
+            const container = document.getElementById('rulesContainer');
+            container.innerHTML = '';
+
+            const sections = await loadPronunciationRules();
+
+            sections.forEach(section => {
+                const title = document.createElement('div');
+                title.className = 'phonetics-group-title';
+                title.innerHTML = `<span class="phonetics-group-arrow">▼</span> ${section.分類}（${section.規則.length}）`;
+                container.appendChild(title);
+
+                const body = document.createElement('div');
+                body.className = 'phonetics-grid';
+
+                title.onclick = () => {
+                    const collapsed = body.style.display === 'none';
+                    body.style.display = collapsed ? 'flex' : 'none';
+                    title.querySelector('.phonetics-group-arrow').textContent = collapsed ? '▼' : '▶';
+                };
+
+                if (section.說明 && section.說明.length > 0) {
+                    const notesEl = document.createElement('div');
+                    notesEl.className = 'rules-notes';
+                    notesEl.innerHTML = section.說明.map(n => `・${n}`).join('<br>');
+                    body.appendChild(notesEl);
+                }
+
+                section.規則.forEach(rule => {
+                    const row = document.createElement('div');
+                    row.className = 'rule-row';
+
+                    const patternEl = document.createElement('div');
+                    patternEl.className = 'rule-pattern';
+                    // 同一個拼字組合內的空格改用不斷行空格，避免換行時拆散同一個組合（只允許在「、」處換行）
+                    patternEl.textContent = rule.母音.split('、').map(part => part.replace(/ /g, ' ')).join('、');
+                    row.appendChild(patternEl);
+
+                    const phoneticEl = document.createElement('div');
+                    phoneticEl.className = 'rule-phonetic';
+                    phoneticEl.textContent = rule.音標;
+                    const cleanSymbol = rule.音標.replace(/[\[\]]/g, '').trim();
+                    const fallbackWord = rule.範例 && rule.範例[0];
+                    phoneticEl.onclick = () => playKKAudio(`docs/kk/${cleanSymbol}.mp3`, fallbackWord);
+                    row.appendChild(phoneticEl);
+
+                    const descEl = document.createElement('div');
+                    descEl.className = 'rule-desc';
+                    descEl.textContent = rule.說明 || '';
+                    row.appendChild(descEl);
+
+                    const examplesEl = document.createElement('div');
+                    examplesEl.className = 'rule-examples';
+                    (rule.範例 || []).forEach((word, idx) => {
+                        if (idx > 0) examplesEl.appendChild(document.createTextNode('、'));
+                        const wordSpan = document.createElement('span');
+                        wordSpan.textContent = word;
+                        wordSpan.onclick = () => playPronunciation(word);
+                        examplesEl.appendChild(wordSpan);
+                    });
+                    row.appendChild(examplesEl);
+
+                    if (rule.備註) {
+                        const noteEl = document.createElement('div');
+                        noteEl.className = 'rule-note';
+                        noteEl.textContent = `※ ${rule.備註}`;
+                        row.appendChild(noteEl);
+                    }
+
+                    body.appendChild(row);
+                });
+
+                container.appendChild(body);
             });
         }
 
