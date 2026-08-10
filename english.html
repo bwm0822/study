@@ -1571,6 +1571,17 @@
             background: #999;
         }
 
+        .dict-suggestion-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            color: #b8b8b8;
+        }
+
+        .dict-suggestion-item:hover {
+            background: #5a5a72;
+            color: white;
+        }
+
         #quizAnswer {
             background: #f44336 !important;
             color: white !important;
@@ -1845,7 +1856,8 @@
             <button class="refresh-btn" id="refreshBtn" onclick="refreshReview()" style="display: none; margin-left: auto;">刷新</button>
             <button class="start-quiz-btn" id="startQuizBtn" onclick="startQuiz()" style="display: none; margin-left: auto;">開始測驗</button>
             <button class="refresh-btn" id="addWordBtn" onclick="openAddWordModal()" style="display: none; margin-left: auto;">新增</button>
-            <button class="refresh-btn" id="exportBtn" onclick="exportCustomWords()" style="display: none; margin-left: auto;">匯出</button>
+            <button class="refresh-btn" id="exportBtn" onclick="exportCustomWords()" style="display: none;">匯出</button>
+            <button class="refresh-btn" id="dictionaryBtn" onclick="openDictionaryModal()" style="display: none;">📖 字典</button>
         </div>
 
         <div class="words-container" id="wordsContainer"></div>
@@ -2088,6 +2100,34 @@
                 </div>
                 <div class="word-modal-footer">
                     <button class="modal-nav-btn" onclick="saveCustomWord()" style="flex: 1;">保存</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 字典視窗 -->
+        <div class="word-modal" id="dictionaryModal" style="display: none;">
+            <div class="word-modal-content">
+                <div class="word-modal-header">
+                    <span style="font-weight: bold; font-size: 1.2em;">📖 字典</span>
+                    <button class="modal-close-btn" onclick="closeDictionaryModal()">關閉</button>
+                </div>
+                <div style="position: relative; flex-shrink: 0; padding: 20px 20px 0 20px;">
+                    <input type="text" id="dictSearchInput" placeholder="輸入英文單字..." autocomplete="off"
+                        style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #666; box-sizing: border-box; font-size: 1.1em;"
+                        oninput="onDictSearchInput()" onkeydown="onDictSearchKeydown(event)">
+                    <div id="dictSuggestionsList" style="display: none; position: absolute; top: 100%; left: 20px; right: 20px; background: #4a4a62; border: 1px solid #5a5a72; border-radius: 4px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); z-index: 1001; max-height: 220px; overflow-y: auto; margin-top: 4px;"></div>
+                </div>
+                <div class="word-modal-body" style="gap: 15px;">
+                    <div id="dictDetailContainer" style="display: none; flex-direction: column; gap: 10px;">
+                        <div class="modal-word" id="dictModalWord"></div>
+                        <div class="modal-phonetic" id="dictModalPhonetic"></div>
+                        <div class="modal-info">
+                            <span id="dictModalPos" class="modal-pos"></span>
+                            <span id="dictModalChinese" class="modal-chinese"></span>
+                        </div>
+                        <div class="modal-example" id="dictModalExample"></div>
+                        <div class="modal-translation" id="dictModalTranslation"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2717,6 +2757,8 @@
             phoneticsContainer.style.display = mode === 'phonetics' ? 'block' : 'none';
             // 除發音規則模式外，其餘模式一律隱藏發音規則容器
             rulesContainer.style.display = mode === 'rules' ? 'block' : 'none';
+            // 除自訂模式外，其餘模式一律隱藏字典按鈕
+            document.getElementById('dictionaryBtn').style.display = mode === 'add' ? 'block' : 'none';
 
             if (mode === 'phonetics') {
                 stopStoryPlayback();
@@ -5696,6 +5738,8 @@
             'ŋ': 'ŋ',
             'l': 'l',
             'r': 'r',
+            'ɹ': 'r',
+            'ɡ': 'g',
             'w': 'w',
             'j': 'j'
         };
@@ -5703,8 +5747,8 @@
         function convertIPAtoKK(ipaPhonetic) {
             if (!ipaPhonetic) return '';
 
-            // 移除空格、冒號、長音符號
-            let result = ipaPhonetic.trim().replace(/[:ːˑ]/g, '');
+            // 移除冒號、長音符號、破擦音連音符號（如 d͡ʒ 的 ͡）、音節分隔點、選擇性發音的括號
+            let result = ipaPhonetic.trim().replace(/[:ːˑ͡.()]/g, '');
 
             // 先轉換雙元音和複合音素（需要在單個音素之前）
             const complexSounds = ['aɪ', 'aʊ', 'ɔɪ', 'oʊ', 'eɪ', 'tʃ', 'dʒ', 'ɪr', 'ər', 'ɝr'];
@@ -5747,6 +5791,156 @@
             return data[0].map(segment => segment[0]).join('');
         }
 
+        const POS_MAP = {
+            'noun': 'n.',
+            'verb': 'v.',
+            'adjective': 'adj.',
+            'adverb': 'adv.',
+            'preposition': 'prep.',
+            'pronoun': 'pron.',
+            'conjunction': 'conj.',
+            'interjection': 'int.'
+        };
+
+        // 從一組 meanings/definitions 裡挑詞性+例句：依序找第一個「例句裡真的有出現這個單字」的詞義，
+        // 避免像 by/bee/bye 這種同音異義詞被資料源混在一起時抓到不相關的字義；
+        // 找不到符合的才退回「第一個有例句的詞義」。同一個詞義裡如果有多個候選例句，挑最短的，
+        // 避免抓到又長又難的句子——但只在同一個詞義內比長短，不會因此換到別的詞性/字義。
+        function pickPosAndExample(meanings, word, posMap) {
+            const wordLower = word.toLowerCase();
+            const shortestExampleIn = (meaning, matchesWord) => {
+                const candidates = (meaning.definitions || []).filter(d => d.example && matchesWord(d.example));
+                if (candidates.length === 0) return null;
+                return candidates.reduce((shortest, d) => d.example.length < shortest.example.length ? d : shortest).example;
+            };
+            const findWithExample = (matchesWord) => {
+                for (const meaning of meanings) {
+                    const example = shortestExampleIn(meaning, matchesWord);
+                    if (example) return { example, partOfSpeech: meaning.partOfSpeech };
+                }
+                return null;
+            };
+            const picked = findWithExample(ex => ex.toLowerCase().includes(wordLower)) || findWithExample(() => true);
+
+            if (picked) {
+                return { pos: posMap[picked.partOfSpeech] || picked.partOfSpeech || '', example: picked.example };
+            }
+            if (meanings[0]?.partOfSpeech) {
+                return { pos: posMap[meanings[0].partOfSpeech] || meanings[0].partOfSpeech, example: '' };
+            }
+            return { pos: '', example: '' };
+        }
+
+        // 把 freedictionaryapi.com 的 entries[].senses[] 轉成 pickPosAndExample 看得懂的
+        // meanings[].definitions[] 形狀。excludeTags 可以濾掉古語/過時的義項，避免例句挑到罕用的舊用法。
+        function buildMeaningsFromEntries(entries, excludeTags) {
+            return entries.map(entry => ({
+                partOfSpeech: entry.partOfSpeech,
+                definitions: (entry.senses || [])
+                    .filter(sense => !excludeTags || !(sense.tags || []).some(t => excludeTags.includes(t)))
+                    .map(sense => ({ example: (sense.examples || [])[0] || '' }))
+            }));
+        }
+
+        // 主要資料源：freedictionaryapi.com（一樣是 Wiktionary 資料，但用不同服務商，架構更乾淨）。
+        // 相較舊的 dictionaryapi.dev，它不會把同音異義詞（如 by/bee/bye）混在同一筆詞義裡，
+        // 而且實測穩定很多；查無此字時回傳 200 + 空陣列，不是 404。
+        async function fetchPrimaryDictionaryEntry(word) {
+            const response = await fetchWithRetry(`https://freedictionaryapi.com/api/v1/entries/en/${encodeURIComponent(word.toLowerCase())}`);
+            if (!response.ok) throw new Error('找不到單字');
+
+            const data = await response.json();
+            const entries = data?.entries || [];
+            if (entries.length === 0) throw new Error('找不到單字');
+
+            // 音標：優先選「/.../ 」包起來的標準音位發音（phonemic），而不是「[...]」窄式音標
+            // （phonetic，常是特定腔調的細節轉寫，如 without 的安大略/加拿大腔 [wɪɾ̥ˈəu̯t] 就沒有地區標籤，
+            // 曾經誤判成「沒標籤 = 標準發音」而選到它）。
+            let phonetic = '';
+            for (const entry of entries) {
+                const pronunciations = entry.pronunciations || [];
+                const pron = pronunciations.find(p => p.type === 'ipa' && p.text?.startsWith('/'))
+                    || pronunciations.find(p => p.type === 'ipa')
+                    || pronunciations[0];
+                if (pron?.text) {
+                    phonetic = pron.text;
+                    break;
+                }
+            }
+            if (phonetic) {
+                phonetic = phonetic.replace(/^[\/\[]|[\/\]]*$/g, '');
+                // 轉換 IPA 到 KK 音標
+                phonetic = '[' + convertIPAtoKK(phonetic) + ']';
+            }
+
+            // 詞性 + 例句：優先跳過古語/過時的義項，找不到例句才連過時的也一起納入考慮
+            let { pos, example } = pickPosAndExample(buildMeaningsFromEntries(entries, ['obsolete', 'dated', 'archaic']), word, POS_MAP);
+            if (!example) {
+                ({ pos, example } = pickPosAndExample(buildMeaningsFromEntries(entries, null), word, POS_MAP));
+            }
+
+            return { phonetic, pos, example };
+        }
+
+        function stripHtmlTags(html) {
+            return html.replace(/<[^>]+>/g, '').trim();
+        }
+
+        // 備援資料源：Wiktionary 官方 REST API，在 dictionaryapi.dev 失敗時使用。
+        // 這個 endpoint 沒有音標，例句/釋義是帶標籤的 HTML，需要另外清乾淨；
+        // partOfSpeech 是大寫（"Verb"），轉小寫後才能對上 POS_MAP。
+        async function fetchWiktionaryFallback(word) {
+            const response = await fetchWithRetry(`https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(word.toLowerCase())}`);
+            if (!response.ok) throw new Error('找不到單字');
+
+            const data = await response.json();
+            const entries = (data?.en || []).map(entry => ({
+                partOfSpeech: (entry.partOfSpeech || '').toLowerCase(),
+                definitions: (entry.definitions || []).map(def => ({
+                    example: (def.examples || []).map(stripHtmlTags).find(Boolean) || ''
+                }))
+            }));
+
+            const { pos, example } = pickPosAndExample(entries, word, POS_MAP);
+            return { phonetic: '', pos, example };
+        }
+
+        // 查字典 + 翻譯的共用邏輯，同時供「新增單字」自動填寫與「字典」查詢視窗使用
+        async function fetchWordDetails(word) {
+            let entryInfo;
+            try {
+                entryInfo = await fetchPrimaryDictionaryEntry(word);
+            } catch (primaryError) {
+                try {
+                    entryInfo = await fetchWiktionaryFallback(word);
+                    if (!entryInfo.pos && !entryInfo.example) throw primaryError;
+                } catch (e) {
+                    throw primaryError;
+                }
+            }
+            const { phonetic, pos, example } = entryInfo;
+
+            // 中文欄位：直接翻譯單字本身（而非整句英文釋義），意思更貼近字典的簡潔用法
+            let chinese = '';
+            try {
+                chinese = await translateToZhTW(word);
+            } catch (e) {
+                // 翻譯失敗，保持空
+            }
+
+            // 例句翻譯
+            let translation = '';
+            if (example) {
+                try {
+                    translation = await translateToZhTW(example);
+                } catch (e) {
+                    // 翻譯失敗，保持空
+                }
+            }
+
+            return { phonetic, pos, chinese, example, translation };
+        }
+
         async function autoFillAllInfo() {
             const word = document.getElementById('addWordInput').value.trim();
             if (!word) {
@@ -5771,73 +5965,22 @@
             translationInput.disabled = true;
 
             try {
-                // 用 Free Dictionary API 獲取詞義、音標和例句
-                const response = await fetchWithRetry(`https://api.dictionaryapi.dev/api/v2/entries/en/${word.toLowerCase()}`);
-                if (!response.ok) throw new Error('找不到單字');
+                const details = await fetchWordDetails(word);
 
-                const data = await response.json();
-                const entry = data[0];
+                phoneticInput.value = details.phonetic;
 
-                // 填充音標
-                let phonetic = entry?.phonetic || entry?.phonetics?.[0]?.text || '';
-                if (phonetic) {
-                    phonetic = phonetic.replace(/^[\/\[]|[\/\]]*$/g, '');
-                    // 轉換 IPA 到 KK 音標
-                    phonetic = convertIPAtoKK(phonetic);
-                    phoneticInput.value = '[' + phonetic + ']';
-                }
-
-                // 填充詞性
-                if (entry?.meanings?.[0]?.partOfSpeech) {
-                    const posMap = {
-                        'noun': 'n.',
-                        'verb': 'v.',
-                        'adjective': 'adj.',
-                        'adverb': 'adv.',
-                        'preposition': 'prep.',
-                        'pronoun': 'pron.',
-                        'conjunction': 'conj.',
-                        'interjection': 'int.'
-                    };
-                    const pos = posMap[entry.meanings[0].partOfSpeech] || entry.meanings[0].partOfSpeech;
-                    // 設置對應的詞性複選框
+                if (details.pos) {
                     posCheckboxes.forEach(cb => {
-                        if (cb.value === pos) {
+                        if (cb.value === details.pos) {
                             cb.checked = true;
                         }
                     });
                     updatePosDisplay();
                 }
 
-                // 填充例句：掃過所有詞義，取第一個「真的有附例句」的定義，避免抓到冷門義項的空例句
-                let example = '';
-                for (const meaning of entry?.meanings || []) {
-                    const defWithExample = meaning.definitions?.find(d => d.example);
-                    if (defWithExample) {
-                        example = defWithExample.example;
-                        break;
-                    }
-                }
-                if (example) {
-                    exampleInput.value = example;
-                }
-
-                // 中文欄位：直接翻譯單字本身（而非整句英文釋義），意思更貼近字典的簡潔用法
-                try {
-                    chineseInput.value = await translateToZhTW(word);
-                } catch (e) {
-                    chineseInput.value = entry?.meanings?.[0]?.definitions?.[0]?.definition || '';
-                }
-
-                // 填充例句翻譯
-                if (example) {
-                    try {
-                        translationInput.value = await translateToZhTW(example);
-                    } catch (e) {
-                        // 翻譯失敗，保持空
-                    }
-                }
-
+                chineseInput.value = details.chinese;
+                exampleInput.value = details.example;
+                translationInput.value = details.translation;
             } catch (error) {
                 alert('無法自動填寫：' + error.message);
                 phoneticInput.value = '';
@@ -5885,6 +6028,126 @@
                 phoneticInput.disabled = false;
             }
         }
+
+        // ======== 字典查詢視窗 ========
+        let commonWordsList = null;
+        let commonWordsLoadPromise = null;
+
+        function loadCommonWordsList() {
+            if (commonWordsList) return Promise.resolve(commonWordsList);
+            if (!commonWordsLoadPromise) {
+                commonWordsLoadPromise = fetch('json/word-suggestions.json')
+                    .then(res => res.json())
+                    .then(list => {
+                        commonWordsList = list;
+                        return list;
+                    });
+            }
+            return commonWordsLoadPromise;
+        }
+
+        function openDictionaryModal() {
+            document.getElementById('dictionaryModal').style.display = 'flex';
+            document.getElementById('dictSearchInput').value = '';
+            document.getElementById('dictSuggestionsList').style.display = 'none';
+            document.getElementById('dictDetailContainer').style.display = 'none';
+            document.getElementById('dictSearchInput').focus();
+            loadCommonWordsList();
+        }
+
+        function closeDictionaryModal() {
+            document.getElementById('dictionaryModal').style.display = 'none';
+        }
+
+        function renderDictSuggestions(matches) {
+            const list = document.getElementById('dictSuggestionsList');
+            list.innerHTML = '';
+            if (matches.length === 0) {
+                list.style.display = 'none';
+                return;
+            }
+            matches.forEach(word => {
+                const item = document.createElement('div');
+                item.className = 'dict-suggestion-item';
+                item.textContent = word;
+                item.onclick = () => {
+                    document.getElementById('dictSearchInput').value = word;
+                    list.style.display = 'none';
+                    lookupDictionaryWord(word);
+                };
+                list.appendChild(item);
+            });
+            list.style.display = 'block';
+        }
+
+        async function onDictSearchInput() {
+            const query = document.getElementById('dictSearchInput').value.trim().toLowerCase();
+            if (!query) {
+                document.getElementById('dictSuggestionsList').style.display = 'none';
+                return;
+            }
+            const words = await loadCommonWordsList();
+            const matches = words.filter(w => w.startsWith(query)).slice(0, 8);
+            renderDictSuggestions(matches);
+        }
+
+        function onDictSearchKeydown(event) {
+            if (event.key === 'Enter') {
+                const word = document.getElementById('dictSearchInput').value.trim();
+                document.getElementById('dictSuggestionsList').style.display = 'none';
+                if (word) lookupDictionaryWord(word);
+            }
+        }
+
+        async function lookupDictionaryWord(word) {
+            const detailContainer = document.getElementById('dictDetailContainer');
+            const wordEl = document.getElementById('dictModalWord');
+            const phoneticEl = document.getElementById('dictModalPhonetic');
+            const posEl = document.getElementById('dictModalPos');
+            const chineseEl = document.getElementById('dictModalChinese');
+            const exampleEl = document.getElementById('dictModalExample');
+            const translationEl = document.getElementById('dictModalTranslation');
+
+            detailContainer.style.display = 'flex';
+            wordEl.textContent = word;
+            wordEl.style.cursor = 'pointer';
+            wordEl.onclick = () => playPronunciation(word);
+            phoneticEl.textContent = '查詢中...';
+            phoneticEl.style.cursor = 'pointer';
+            phoneticEl.onclick = () => playPronunciation(word);
+            posEl.textContent = '';
+            chineseEl.textContent = '';
+            exampleEl.textContent = '';
+            exampleEl.style.cursor = '';
+            exampleEl.onclick = null;
+            translationEl.textContent = '';
+
+            try {
+                const details = await fetchWordDetails(word);
+                phoneticEl.textContent = details.phonetic;
+                posEl.textContent = details.pos;
+                chineseEl.textContent = details.chinese;
+                exampleEl.textContent = details.example;
+                if (details.example) {
+                    exampleEl.style.cursor = 'pointer';
+                    exampleEl.onclick = () => playPronunciation(details.example);
+                }
+                translationEl.textContent = details.translation;
+            } catch (error) {
+                phoneticEl.textContent = '';
+                chineseEl.textContent = '查無此字';
+            }
+        }
+
+        // 點擊建議清單以外的地方時收合下拉選單
+        document.addEventListener('click', (event) => {
+            const list = document.getElementById('dictSuggestionsList');
+            const input = document.getElementById('dictSearchInput');
+            if (!list || list.style.display === 'none') return;
+            if (event.target !== input && !list.contains(event.target)) {
+                list.style.display = 'none';
+            }
+        });
 
         function saveCustomWord() {
             const word = document.getElementById('addWordInput').value.trim();
