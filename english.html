@@ -1856,7 +1856,6 @@
             <button class="refresh-btn" id="refreshBtn" onclick="refreshReview()" style="display: none; margin-left: auto;">刷新</button>
             <button class="start-quiz-btn" id="startQuizBtn" onclick="startQuiz()" style="display: none; margin-left: auto;">開始測驗</button>
             <button class="refresh-btn" id="addWordBtn" onclick="openAddWordModal()" style="display: none; margin-left: auto;">新增</button>
-            <button class="refresh-btn" id="exportBtn" onclick="exportCustomWords()" style="display: none;">匯出</button>
             <button class="refresh-btn" id="dictionaryBtn" onclick="openDictionaryModal()" style="display: none;">📖 字典</button>
         </div>
 
@@ -1972,8 +1971,7 @@
                             • 🔊 單字發音（點擊音標或單字）<br>
                             • 正確率追蹤（基於最近5次測驗）<br>
                             • 多語言發音支援<br>
-                            • [自動] 按鈕：自動填充詞義、音標、詞性、例句（IPA→KK轉換）<br>
-                            • 自訂單字匯出為 JSON 檔案
+                            • [自動] 按鈕：自動填充詞義、音標、詞性、例句（IPA→KK轉換）
                         </div>
                     </div>
                 </div>
@@ -2129,6 +2127,8 @@
                         <div class="modal-translation" id="dictModalTranslation"></div>
                     </div>
                 </div>
+                <button id="dictAddToListBtn" onclick="addDictionaryResultToForm()"
+                    style="display: none; position: fixed; bottom: 24px; right: 24px; background: #4CAF50; color: white; border: none; border-radius: 24px; padding: 12px 24px; font-size: 1.1em; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); z-index: 1002;">➕ 新增</button>
             </div>
         </div>
     </div>
@@ -2775,7 +2775,6 @@
                 document.getElementById('chineseContainer').style.display = 'none';
                 document.getElementById('chineseButtonsTop').style.display = 'none';
                 document.getElementById('addWordBtn').style.display = 'none';
-                document.getElementById('exportBtn').style.display = 'none';
                 renderPhonetics();
             } else if (mode === 'rules') {
                 stopStoryPlayback();
@@ -2792,7 +2791,6 @@
                 document.getElementById('chineseContainer').style.display = 'none';
                 document.getElementById('chineseButtonsTop').style.display = 'none';
                 document.getElementById('addWordBtn').style.display = 'none';
-                document.getElementById('exportBtn').style.display = 'none';
                 renderRules();
             } else if (mode === 'review') {
                 stopStoryPlayback();
@@ -2809,7 +2807,6 @@
                 document.getElementById('chineseContainer').style.display = 'none';
                 document.getElementById('chineseButtonsTop').style.display = 'none';
                 document.getElementById('addWordBtn').style.display = 'none';
-                document.getElementById('exportBtn').style.display = 'none';
                 initReviewPanel();
                 updateReviewDropdownButton();
                 renderWords();
@@ -2828,7 +2825,6 @@
                 document.getElementById('chineseContainer').style.display = 'none';
                 document.getElementById('chineseButtonsTop').style.display = 'none';
                 document.getElementById('addWordBtn').style.display = 'none';
-                document.getElementById('exportBtn').style.display = 'none';
                 document.getElementById('quizStartPanel').style.display = 'flex';
                 document.getElementById('quizSession').style.display = 'none';
                 document.getElementById('quizResult').style.display = 'none';
@@ -2848,7 +2844,6 @@
                 document.getElementById('chineseContainer').style.display = 'none';
                 document.getElementById('chineseButtonsTop').style.display = 'none';
                 document.getElementById('addWordBtn').style.display = 'none';
-                document.getElementById('exportBtn').style.display = 'none';
                 renderStatistics();
             } else if (mode === 'chinese') {
                 wordsContainer.style.display = 'none';
@@ -2864,7 +2859,6 @@
                 startQuizBtn.style.display = 'none';
                 stats.style.display = 'none';
                 document.getElementById('addWordBtn').style.display = 'none';
-                document.getElementById('exportBtn').style.display = 'none';
                 showChineseIdioms();
             } else if (mode === 'add') {
                 stopStoryPlayback();
@@ -2881,7 +2875,6 @@
                 startQuizBtn.style.display = 'none';
                 stats.style.display = 'none';
                 document.getElementById('addWordBtn').style.display = 'block';
-                document.getElementById('exportBtn').style.display = 'block';
                 renderCustomWords();
             } else {
                 stopStoryPlayback();
@@ -2898,7 +2891,6 @@
                 startQuizBtn.style.display = 'none';
                 stats.style.display = 'block';
                 document.getElementById('addWordBtn').style.display = 'none';
-                document.getElementById('exportBtn').style.display = 'none';
                 // 改變標籤回「選擇單元」
                 tagFilterContainer.querySelector('label').textContent = '選擇單元：';
                 // 顯示所有sheet項目
@@ -6051,12 +6043,36 @@
             document.getElementById('dictSearchInput').value = '';
             document.getElementById('dictSuggestionsList').style.display = 'none';
             document.getElementById('dictDetailContainer').style.display = 'none';
+            document.getElementById('dictAddToListBtn').style.display = 'none';
+            lastDictionaryLookup = null;
             document.getElementById('dictSearchInput').focus();
             loadCommonWordsList();
         }
 
         function closeDictionaryModal() {
             document.getElementById('dictionaryModal').style.display = 'none';
+        }
+
+        // 把字典查到的資料帶進「新增單字」表單，跳過使用者重打一次
+        function addDictionaryResultToForm() {
+            if (!lastDictionaryLookup) return;
+            const { word, phonetic, pos, chinese, example, translation } = lastDictionaryLookup;
+
+            closeDictionaryModal();
+            openAddWordModal();
+
+            document.getElementById('addWordInput').value = word;
+            document.getElementById('addPhoneticInput').value = phonetic;
+            document.getElementById('addChineseInput').value = chinese;
+            document.getElementById('addExampleInput').value = example;
+            document.getElementById('addTranslationInput').value = translation;
+
+            if (pos) {
+                document.querySelectorAll('#addPosDropdownMenu input.pos-checkbox').forEach(cb => {
+                    cb.checked = (cb.value === pos);
+                });
+                updatePosDisplay();
+            }
         }
 
         function renderDictSuggestions(matches) {
@@ -6099,6 +6115,8 @@
             }
         }
 
+        let lastDictionaryLookup = null;
+
         async function lookupDictionaryWord(word) {
             const detailContainer = document.getElementById('dictDetailContainer');
             const wordEl = document.getElementById('dictModalWord');
@@ -6107,7 +6125,10 @@
             const chineseEl = document.getElementById('dictModalChinese');
             const exampleEl = document.getElementById('dictModalExample');
             const translationEl = document.getElementById('dictModalTranslation');
+            const addBtn = document.getElementById('dictAddToListBtn');
 
+            lastDictionaryLookup = null;
+            addBtn.style.display = 'none';
             detailContainer.style.display = 'flex';
             wordEl.textContent = word;
             wordEl.style.cursor = 'pointer';
@@ -6133,6 +6154,9 @@
                     exampleEl.onclick = () => playPronunciation(details.example);
                 }
                 translationEl.textContent = details.translation;
+
+                lastDictionaryLookup = { word, ...details };
+                addBtn.style.display = 'block';
             } catch (error) {
                 phoneticEl.textContent = '';
                 chineseEl.textContent = '查無此字';
@@ -6428,26 +6452,6 @@
 
                 container.appendChild(row);
             });
-        }
-
-        function exportCustomWords() {
-            const customWords = getCustomWords();
-            if (customWords.length === 0) {
-                alert('沒有任何自訂可導出');
-                return;
-            }
-
-            const exportData = { '自訂': customWords };
-            const jsonString = JSON.stringify(exportData, null, 2);
-            const blob = new Blob([jsonString], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'custom_words.json';
-            link.click();
-            URL.revokeObjectURL(url);
-
-            alert('已導出 custom_words.json');
         }
 
         // ======== 編輯/刪除單字函數 ========
