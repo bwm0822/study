@@ -7733,6 +7733,45 @@
 
                 container.appendChild(quizAccuracyFilterContainer);
 
+                // 添加 sheet 全選/清除 按鈕
+                const quizSheetButtonsRow = document.createElement('div');
+                quizSheetButtonsRow.className = 'sheet-group-header';
+                quizSheetButtonsRow.style.borderBottom = '1px solid #eee';
+                quizSheetButtonsRow.style.paddingBottom = '10px';
+                quizSheetButtonsRow.style.marginBottom = '10px';
+
+                const quizSheetSelectBtn = document.createElement('button');
+                quizSheetSelectBtn.textContent = '全選';
+                quizSheetSelectBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('#sheetGroupsContainer .sheet-checkbox').forEach(cb => {
+                        cb.checked = true;
+                        chineseSheetStates[cb.dataset.sheetName] = true;
+                    });
+                    updateChineseIdiomFilter();
+                    if (window.calculateQuizCount) {
+                        window.calculateQuizCount();
+                    }
+                };
+
+                const quizSheetClearBtn = document.createElement('button');
+                quizSheetClearBtn.textContent = '清除';
+                quizSheetClearBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('#sheetGroupsContainer .sheet-checkbox').forEach(cb => {
+                        cb.checked = false;
+                        chineseSheetStates[cb.dataset.sheetName] = false;
+                    });
+                    updateChineseIdiomFilter();
+                    if (window.calculateQuizCount) {
+                        window.calculateQuizCount();
+                    }
+                };
+
+                quizSheetButtonsRow.appendChild(quizSheetSelectBtn);
+                quizSheetButtonsRow.appendChild(quizSheetClearBtn);
+                container.appendChild(quizSheetButtonsRow);
+
                 // 收集所有 sheet（成語和改錯）
                 const allSheets = new Set([
                     ...Object.keys(data.成語),
@@ -7795,8 +7834,15 @@
                         e.stopPropagation();
                         document.querySelectorAll(`input[data-sheet="${sheetName}"]`).forEach(cb => {
                             cb.checked = true;
+                            if (!idiomModeTagStates[sheetName]) {
+                                idiomModeTagStates[sheetName] = {};
+                            }
+                            idiomModeTagStates[sheetName][cb.dataset.tag] = true;
                         });
                         updateChineseIdiomFilter();
+                        if (window.calculateQuizCount) {
+                            window.calculateQuizCount();
+                        }
                     };
 
                     const clearAllBtn = document.createElement('button');
@@ -7805,8 +7851,15 @@
                         e.stopPropagation();
                         document.querySelectorAll(`input[data-sheet="${sheetName}"]`).forEach(cb => {
                             cb.checked = false;
+                            if (!idiomModeTagStates[sheetName]) {
+                                idiomModeTagStates[sheetName] = {};
+                            }
+                            idiomModeTagStates[sheetName][cb.dataset.tag] = false;
                         });
                         updateChineseIdiomFilter();
+                        if (window.calculateQuizCount) {
+                            window.calculateQuizCount();
+                        }
                     };
 
                     buttonsRow.appendChild(selectAllBtn);
