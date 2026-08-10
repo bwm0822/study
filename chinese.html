@@ -1751,6 +1751,12 @@
                     <option value="gaicuo-standard">改錯-標準</option>
                 </select>
             </div>
+            <div style="position: relative; margin-left: auto;">
+                <button class="tag-dropdown-btn" id="chineseQuizRecordsBtn" style="display: none; background: #667eea; padding: 6px 16px; font-size: 1.1em; min-width: auto;" onclick="toggleChineseQuizRecordsDropdown()">紀錄 <span>▼</span></button>
+                <div id="chineseQuizRecordsDropdown" class="tag-dropdown-menu" style="display: none; position: absolute; top: 100%; left: auto; right: 0; min-width: 250px;">
+                    <div id="chineseQuizRecordsDropdownList"></div>
+                </div>
+            </div>
             <div class="search-filter" id="searchFilterContainer" style="display: none;">
                 <input type="text" id="searchInput" placeholder="搜尋單字..." class="search-input">
             </div>
@@ -7638,6 +7644,7 @@
         let chineseQuizWords = [];
         let chineseQuizIndex = 0;
         let chineseQuizResults = [];
+        let shouldSaveChineseQuizSession = true; // 查看歷史紀錄時設為 false，避免重複保存
 
         function showChineseQuizSetup() {
             document.getElementById('chineseContainer').style.display = 'flex';
@@ -7947,6 +7954,11 @@
                 // 隱藏成語計數，顯示測驗計數
                 document.getElementById('tagCountDisplay').style.display = 'none';
                 document.getElementById('quizTagCountDisplay').style.display = 'block';
+                // 顯示測驗紀錄按鈕
+                const chineseQuizRecordsBtn = document.getElementById('chineseQuizRecordsBtn');
+                if (chineseQuizRecordsBtn) {
+                    chineseQuizRecordsBtn.style.display = 'block';
+                }
 
                 // 顯示開始測驗按鈕
                 let html = `
@@ -8087,6 +8099,7 @@
         }
 
         function startChineseQuiz() {
+            shouldSaveChineseQuizSession = true;
             const quizMethod = document.getElementById('chineseQuizMethodSelect').value;
             const checkedBoxes = document.querySelectorAll('.sheet-checkbox:checked');
 
@@ -8660,15 +8673,23 @@
         }
 
         function showChineseQuizResults() {
-            // 保存測驗結果到 localStorage
-            chineseQuizResults.forEach(result => {
-                const sheetName = result.word.sheet || currentChineseSheet;
-                const key = `${sheetName}/${result.word.成語}`;
-                saveChineseQuizResultToStorage(key, result.isCorrect);
-            });
+            // 只在真正的測驗完成時保存，不在查看紀錄時保存
+            if (shouldSaveChineseQuizSession) {
+                // 保存測驗結果到 localStorage
+                chineseQuizResults.forEach(result => {
+                    const sheetName = result.word.sheet || currentChineseSheet;
+                    const key = `${sheetName}/${result.word.成語}`;
+                    saveChineseQuizResultToStorage(key, result.isCorrect);
+                });
+            }
 
             const correctCount = chineseQuizResults.filter(r => r.isCorrect).length;
             const accuracy = chineseQuizResults.length > 0 ? Math.round((correctCount / chineseQuizResults.length) * 100) : 0;
+
+            if (shouldSaveChineseQuizSession) {
+                const quizMethod = document.getElementById('chineseQuizMethodSelect').value;
+                saveChineseQuizSessionRecord(chineseQuizResults, accuracy, correctCount, quizMethod);
+            }
 
             const container = document.getElementById('chineseContent');
             container.innerHTML = '';
@@ -8794,6 +8815,127 @@
 
             container.appendChild(resultWordsDiv);
         }
+
+        // 中文測驗紀錄管理函數（參考 english.html 測驗模式的紀錄功能）
+        function saveChineseQuizSessionRecord(testedResults, accuracy, correctCount, quizMethod) {
+            try {
+                let chineseData = {};
+                const stored = localStorage.getItem('chinese');
+                if (stored) {
+                    chineseData = JSON.parse(stored);
+                }
+                if (!chineseData.quizSessions) {
+                    chineseData.quizSessions = [];
+                }
+
+                const session = {
+                    timestamp: new Date().toLocaleString('zh-TW'),
+                    accuracy: accuracy,
+                    correctCount: correctCount,
+                    totalCount: testedResults.length,
+                    quizMethod: quizMethod,
+                    results: testedResults.map(r => ({
+                        成語: r.word.成語,
+                        sheet: r.word.sheet,
+                        tag: r.word.tag,
+                        isCorrect: r.isCorrect,
+                        userAnswer: r.userAnswer
+                    }))
+                };
+
+                chineseData.quizSessions.push(session);
+                if (chineseData.quizSessions.length > 5) {
+                    chineseData.quizSessions.shift();
+                }
+
+                localStorage.setItem('chinese', JSON.stringify(chineseData));
+            } catch (e) {
+                console.error('保存中文測驗會話失敗:', e);
+            }
+        }
+
+        function loadChineseQuizSessions() {
+            try {
+                const chineseData = localStorage.getItem('chinese');
+                if (chineseData) {
+                    const data = JSON.parse(chineseData);
+                    return data.quizSessions || [];
+                }
+            } catch (e) {
+                console.error('加載中文測驗會話失敗:', e);
+            }
+            return [];
+        }
+
+        const CHINESE_QUIZ_METHOD_LABELS = {
+            'idiom-explanation': '成語-解釋',
+            'idiom-sentence': '成語-造句',
+            'gaicuo-hint': '改錯-提示',
+            'gaicuo-standard': '改錯-標準'
+        };
+
+        function toggleChineseQuizRecordsDropdown() {
+            const dropdown = document.getElementById('chineseQuizRecordsDropdown');
+            if (dropdown.style.display === 'none') {
+                showChineseQuizRecordsDropdown();
+            } else {
+                dropdown.style.display = 'none';
+            }
+        }
+
+        function showChineseQuizRecordsDropdown() {
+            const sessions = loadChineseQuizSessions();
+            const dropdown = document.getElementById('chineseQuizRecordsDropdown');
+            const dropdownList = document.getElementById('chineseQuizRecordsDropdownList');
+
+            if (sessions.length === 0) {
+                dropdownList.innerHTML = '<div style="padding: 12px 16px; color: #666; text-align: center;">暫無測驗紀錄</div>';
+            } else {
+                dropdownList.innerHTML = '';
+                // 反轉順序，最新的在上面
+                const reversedSessions = [...sessions].reverse();
+                reversedSessions.forEach((session) => {
+                    const item = document.createElement('div');
+                    item.style.cssText = 'padding: 10px 16px; cursor: pointer; border-bottom: 1px solid #4a4a62; transition: background 0.2s;';
+                    item.onmouseover = function() { this.style.background = '#3a3a52'; };
+                    item.onmouseout = function() { this.style.background = 'transparent'; };
+                    item.onclick = () => {
+                        // 準備該測驗的結果數據給 showChineseQuizResults() 使用
+                        chineseQuizResults = session.results.map(r => ({
+                            word: { 成語: r.成語, sheet: r.sheet, tag: r.tag },
+                            userAnswer: r.userAnswer,
+                            isCorrect: r.isCorrect
+                        }));
+
+                        // 不保存紀錄（只是查看已保存的紀錄）
+                        shouldSaveChineseQuizSession = false;
+
+                        showChineseQuizResults();
+                        dropdown.style.display = 'none';
+                    };
+
+                    const methodLabel = CHINESE_QUIZ_METHOD_LABELS[session.quizMethod];
+                    item.innerHTML = `
+                        <div style="color: #b8b8b8; font-size: 0.9em; margin-bottom: 5px;">${session.timestamp}${methodLabel ? ' · ' + methodLabel : ''}</div>
+                        <div style="color: ${session.accuracy >= 80 ? '#4CAF50' : session.accuracy >= 60 ? '#FF9800' : '#f44336'}; font-weight: bold;">
+                            正確率: ${session.accuracy}% (${session.correctCount}/${session.totalCount})
+                        </div>
+                    `;
+
+                    dropdownList.appendChild(item);
+                });
+            }
+
+            dropdown.style.display = 'block';
+        }
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('chineseQuizRecordsDropdown');
+            const btn = document.getElementById('chineseQuizRecordsBtn');
+            if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
 
         // 移除標點符號和空格
         function removePunctuation(text) {
