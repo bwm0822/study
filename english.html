@@ -1811,6 +1811,7 @@
                     <option value="add">自訂</option>
                 </select>
             </div>
+            <button class="refresh-btn" id="dictionaryBtn" onclick="openDictionaryModal()" style="display: none; margin-left: 10px;">📖 字典</button>
             <div class="chinese-buttons" id="chineseButtonsTop" style="display: none; gap: 10px; margin-left: 20px;">
                 <button class="chinese-mode-btn-top" onclick="showChineseIdioms()">成語</button>
                 <button class="chinese-mode-btn-top" onclick="showChineseStories()">故事</button>
@@ -1856,7 +1857,6 @@
             <button class="refresh-btn" id="refreshBtn" onclick="refreshReview()" style="display: none; margin-left: auto;">刷新</button>
             <button class="start-quiz-btn" id="startQuizBtn" onclick="startQuiz()" style="display: none; margin-left: auto;">開始測驗</button>
             <button class="refresh-btn" id="addWordBtn" onclick="openAddWordModal()" style="display: none; margin-left: auto;">新增</button>
-            <button class="refresh-btn" id="dictionaryBtn" onclick="openDictionaryModal()" style="display: none;">📖 字典</button>
         </div>
 
         <div class="words-container" id="wordsContainer"></div>
@@ -5689,6 +5689,7 @@
             'ʌ': 'ʌ',
             'ɑ': 'ɑ',
             'ɔ': 'ɔ',
+            'ɒ': 'ɑ',
             'o': 'o',
             'ʊ': 'ʊ',
             'u': 'u',
@@ -5847,11 +5848,14 @@
 
             // 音標：優先選「/.../ 」包起來的標準音位發音（phonemic），而不是「[...]」窄式音標
             // （phonetic，常是特定腔調的細節轉寫，如 without 的安大略/加拿大腔 [wɪɾ̥ˈəu̯t] 就沒有地區標籤，
-            // 曾經誤判成「沒標籤 = 標準發音」而選到它）。
+            // 曾經誤判成「沒標籤 = 標準發音」而選到它）。KK 音標是美式發音系統，同樣是「/.../」時
+            // 要避開英式 Received Pronunciation（如 dog 的 /dɒɡ/），優先選美式或沒標腔調的版本。
+            const isBritish = tags => (tags || []).some(t => /received pronunciation|british|^uk$/i.test(t));
             let phonetic = '';
             for (const entry of entries) {
                 const pronunciations = entry.pronunciations || [];
-                const pron = pronunciations.find(p => p.type === 'ipa' && p.text?.startsWith('/'))
+                const pron = pronunciations.find(p => p.type === 'ipa' && p.text?.startsWith('/') && !isBritish(p.tags))
+                    || pronunciations.find(p => p.type === 'ipa' && p.text?.startsWith('/'))
                     || pronunciations.find(p => p.type === 'ipa')
                     || pronunciations[0];
                 if (pron?.text) {
