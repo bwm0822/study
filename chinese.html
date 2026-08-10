@@ -4857,6 +4857,55 @@
             }
         }
 
+        // 成語/改錯測驗模式的星號、正確率篩選（參考 english.html 測驗模式的選擇單元）
+        function getChineseQuizFilter() {
+            const starCheckbox = document.getElementById('chinese-quiz-star-filter');
+            const accuracyCheckbox = document.getElementById('chinese-quiz-accuracy-filter-checkbox');
+            const accuracySelect = document.getElementById('chinese-quiz-accuracy-filter-select');
+
+            const filterByStar = starCheckbox ? starCheckbox.checked : false;
+            let filterByAccuracy = null; // true = 只顯示答對, false = 只顯示答錯
+            let showUntested = false; // 只顯示沒測過的
+            let showAll = false; // 顯示全部
+
+            if (accuracyCheckbox && accuracyCheckbox.checked && accuracySelect) {
+                if (accuracySelect.value === '全部') {
+                    showAll = true;
+                } else if (accuracySelect.value === '--') {
+                    showUntested = true;
+                } else if (accuracySelect.value === '答對') {
+                    filterByAccuracy = true;
+                } else if (accuracySelect.value === '答錯') {
+                    filterByAccuracy = false;
+                }
+            }
+
+            const active = filterByStar || filterByAccuracy !== null || showUntested || showAll;
+
+            const test = (sheetName, item) => {
+                const key = `${sheetName}/${item.成語}`;
+
+                if (filterByStar && getChineseFavoriteFromStorage(key) !== true) {
+                    return false;
+                }
+
+                const result = getChineseQuizResultFromStorage(key);
+                if (filterByAccuracy !== null) {
+                    return result === filterByAccuracy;
+                }
+                if (showUntested) {
+                    return result === null;
+                }
+                if (showAll) {
+                    return true;
+                }
+                // 只勾選星號、未指定正確率條件 => 已通過上面的星號檢查
+                return filterByStar;
+            };
+
+            return { active, test };
+        }
+
         function getFavoriteFromStorage(favoriteKey) {
             try {
                 const englishData = localStorage.getItem('english');
@@ -7608,6 +7657,82 @@
                     submenu.remove();
                 });
 
+                // 添加星號篩選
+                const quizStarItem = document.createElement('div');
+                quizStarItem.className = 'tag-checkbox-item';
+                quizStarItem.style.borderBottom = '1px solid #eee';
+                quizStarItem.style.paddingBottom = '10px';
+                quizStarItem.style.marginBottom = '10px';
+
+                const quizStarCheckbox = document.createElement('input');
+                quizStarCheckbox.type = 'checkbox';
+                quizStarCheckbox.id = 'chinese-quiz-star-filter';
+                quizStarCheckbox.addEventListener('change', () => {
+                    if (window.calculateQuizCount) window.calculateQuizCount();
+                });
+
+                const quizStarLabel = document.createElement('span');
+                quizStarLabel.textContent = '☆ 僅限有星號';
+
+                quizStarItem.appendChild(quizStarCheckbox);
+                quizStarItem.appendChild(quizStarLabel);
+                quizStarItem.onclick = (e) => {
+                    if (e.target !== quizStarCheckbox) {
+                        quizStarCheckbox.checked = !quizStarCheckbox.checked;
+                        quizStarCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                };
+                container.appendChild(quizStarItem);
+
+                // 添加正確率過濾 checkbox + 下拉菜單
+                const quizAccuracyFilterContainer = document.createElement('div');
+                quizAccuracyFilterContainer.className = 'tag-checkbox-item';
+                quizAccuracyFilterContainer.style.borderBottom = '1px solid #eee';
+                quizAccuracyFilterContainer.style.paddingBottom = '10px';
+                quizAccuracyFilterContainer.style.marginBottom = '10px';
+
+                const quizAccuracyCheckbox = document.createElement('input');
+                quizAccuracyCheckbox.type = 'checkbox';
+                quizAccuracyCheckbox.id = 'chinese-quiz-accuracy-filter-checkbox';
+                quizAccuracyCheckbox.addEventListener('change', () => {
+                    if (window.calculateQuizCount) window.calculateQuizCount();
+                });
+
+                const quizAccuracyLabel = document.createElement('span');
+                quizAccuracyLabel.textContent = '正確率';
+
+                const quizAccuracySelect = document.createElement('select');
+                quizAccuracySelect.id = 'chinese-quiz-accuracy-filter-select';
+                quizAccuracySelect.style.padding = '4px 8px';
+                quizAccuracySelect.style.borderRadius = '3px';
+                quizAccuracySelect.style.border = '1px solid #ddd';
+                quizAccuracySelect.style.cursor = 'pointer';
+                quizAccuracySelect.style.marginLeft = '5px';
+
+                ['全部', '--', '答對', '答錯'].forEach(optionValue => {
+                    const option = document.createElement('option');
+                    option.value = optionValue;
+                    option.textContent = optionValue;
+                    quizAccuracySelect.appendChild(option);
+                });
+
+                quizAccuracySelect.addEventListener('change', () => {
+                    if (window.calculateQuizCount) window.calculateQuizCount();
+                });
+
+                quizAccuracyFilterContainer.appendChild(quizAccuracyCheckbox);
+                quizAccuracyFilterContainer.appendChild(quizAccuracyLabel);
+                quizAccuracyFilterContainer.appendChild(quizAccuracySelect);
+
+                quizAccuracyFilterContainer.onclick = (e) => {
+                    if (e.target !== quizAccuracyCheckbox && e.target !== quizAccuracySelect) {
+                        quizAccuracyCheckbox.checked = !quizAccuracyCheckbox.checked;
+                        quizAccuracyCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                };
+
+                container.appendChild(quizAccuracyFilterContainer);
+
                 // 收集所有 sheet（成語和改錯）
                 const allSheets = new Set([
                     ...Object.keys(data.成語),
@@ -7831,6 +7956,16 @@
                 window.calculateQuizCount = () => {
                     if (!window.quizModeData) return;
 
+                    const filter = getChineseQuizFilter();
+                    const display = document.getElementById('quizTagCountDisplay');
+
+                    // 沒勾選星號且沒勾選正確率 => 無顯示（參考 english.html 測驗模式）
+                    if (!filter.active) {
+                        if (display) {
+                            display.textContent = '請至少勾選「星號」或「正確率」其中一個';
+                        }
+                        return;
+                    }
 
                     // 1. 獲取 enabled sheets
                     const enabledSheets = new Set();
@@ -7857,7 +7992,7 @@
                         if (sheetData) {
                             const selectedTags = selectedSheetTags.get(sheetName);
                             sheetData.forEach(item => {
-                                if (selectedTags && selectedTags.has(item.tag || '')) {
+                                if (selectedTags && selectedTags.has(item.tag || '') && filter.test(sheetName, item)) {
 
                                     idiomCount++;
                                 }
@@ -7872,7 +8007,7 @@
                         if (sheetData) {
                             const selectedTags = selectedSheetTags.get(sheetName);
                             sheetData.forEach(item => {
-                                if (selectedTags && selectedTags.has(item.tag || '')) {
+                                if (selectedTags && selectedTags.has(item.tag || '') && filter.test(sheetName, item)) {
 
                                     gaicuoCount++;
                                 }
@@ -7880,7 +8015,6 @@
                         }
                     });
 
-                    const display = document.getElementById('quizTagCountDisplay');
                     if (display) {
                         display.textContent = `成語：${idiomCount}，改錯：${gaicuoCount}`;
                     }
@@ -7908,6 +8042,13 @@
                 return;
             }
 
+            // 沒勾選星號且沒勾選正確率 => 不開始測驗（參考 english.html 測驗模式）
+            const filter = getChineseQuizFilter();
+            if (!filter.active) {
+                alert('請至少勾選「星號」或「正確率」其中一個');
+                return;
+            }
+
             loadChineseData().then(data => {
                 chineseQuizWords = [];
 
@@ -7926,8 +8067,8 @@
                     if (dataSource[sheetName]) {
                         const selectedTags = chineseSelectedTags.get(sheetName);
                         const filteredWords = dataSource[sheetName].filter(word => {
-                            if (!selectedTags) return true;
-                            return selectedTags.has(word.tag || '');
+                            if (selectedTags && !selectedTags.has(word.tag || '')) return false;
+                            return filter.test(sheetName, word);
                         });
                         chineseQuizWords = chineseQuizWords.concat(filteredWords);
                     }
