@@ -5721,6 +5721,32 @@
             return result;
         }
 
+        // 部分免費 API（如 dictionaryapi.dev）在負載高時會偶發 502，且錯誤回應常常不附 CORS header，
+        // 瀏覽器會誤報成 CORS 錯誤。用短暫重試吸收這種暫時性失敗。
+        async function fetchWithRetry(url, retries = 2, delayMs = 500) {
+            let lastError;
+            for (let i = 0; i <= retries; i++) {
+                try {
+                    const response = await fetch(url);
+                    if (response.ok) return response;
+                    // 4xx 是明確的用戶端錯誤（如查無此字），重試也沒用，直接放棄
+                    if (response.status >= 400 && response.status < 500) return response;
+                    lastError = new Error(`伺服器錯誤 (${response.status})`);
+                } catch (e) {
+                    lastError = e;
+                }
+                if (i < retries) await new Promise(r => setTimeout(r, delayMs));
+            }
+            throw lastError;
+        }
+
+        async function translateToZhTW(text) {
+            const response = await fetchWithRetry(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-TW&dt=t&q=${encodeURIComponent(text)}`);
+            if (!response.ok) throw new Error('翻譯失敗');
+            const data = await response.json();
+            return data[0].map(segment => segment[0]).join('');
+        }
+
         async function autoFillAllInfo() {
             const word = document.getElementById('addWordInput').value.trim();
             if (!word) {
@@ -5746,7 +5772,7 @@
 
             try {
                 // 用 Free Dictionary API 獲取詞義、音標和例句
-                const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word.toLowerCase()}`);
+                const response = await fetchWithRetry(`https://api.dictionaryapi.dev/api/v2/entries/en/${word.toLowerCase()}`);
                 if (!response.ok) throw new Error('找不到單字');
 
                 const data = await response.json();
@@ -5783,34 +5809,30 @@
                     updatePosDisplay();
                 }
 
-                // 填充例句
-                const example = entry?.meanings?.[0]?.definitions?.[0]?.example || '';
+                // 填充例句：掃過所有詞義，取第一個「真的有附例句」的定義，避免抓到冷門義項的空例句
+                let example = '';
+                for (const meaning of entry?.meanings || []) {
+                    const defWithExample = meaning.definitions?.find(d => d.example);
+                    if (defWithExample) {
+                        example = defWithExample.example;
+                        break;
+                    }
+                }
                 if (example) {
                     exampleInput.value = example;
                 }
 
-                // 獲取中文翻譯
-                const definition = entry?.meanings?.[0]?.definitions?.[0]?.definition || '';
-                if (definition) {
-                    try {
-                        const zhResponse = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(definition)}&langpair=en|zh-TW`);
-                        const zhData = await zhResponse.json();
-                        if (zhData.responseStatus === 200) {
-                            chineseInput.value = zhData.responseData.translatedText || '';
-                        }
-                    } catch (e) {
-                        chineseInput.value = definition;
-                    }
+                // 中文欄位：直接翻譯單字本身（而非整句英文釋義），意思更貼近字典的簡潔用法
+                try {
+                    chineseInput.value = await translateToZhTW(word);
+                } catch (e) {
+                    chineseInput.value = entry?.meanings?.[0]?.definitions?.[0]?.definition || '';
                 }
 
-                // 填充翻譯
+                // 填充例句翻譯
                 if (example) {
                     try {
-                        const exampleZhResponse = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(example)}&langpair=en|zh-TW`);
-                        const exampleZhData = await exampleZhResponse.json();
-                        if (exampleZhData.responseStatus === 200) {
-                            translationInput.value = exampleZhData.responseData.translatedText || '';
-                        }
+                        translationInput.value = await translateToZhTW(example);
                     } catch (e) {
                         // 翻譯失敗，保持空
                     }
@@ -5841,7 +5863,7 @@
             phoneticInput.disabled = true;
 
             try {
-                const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word.toLowerCase()}`);
+                const response = await fetchWithRetry(`https://api.dictionaryapi.dev/api/v2/entries/en/${word.toLowerCase()}`);
                 if (!response.ok) throw new Error('找不到單字');
 
                 const data = await response.json();
