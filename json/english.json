@@ -14467,6 +14467,606 @@
       "中文": "唱歌(過去分詞)",
       "例句": "The national anthem was sung proudly by the fans.",
       "翻譯": "球迷們自豪地唱起了國歌。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "animal",
+      "音標": "[ˈænɪməl]",
+      "詞性": "n.",
+      "中文": "動物",
+      "例句": "A dog is an animal.",
+      "翻譯": "狗是一種動物。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "dog",
+      "音標": "[dɔg]",
+      "詞性": "n.",
+      "中文": "狗",
+      "例句": "The dog is barking loudly.",
+      "翻譯": "那隻狗大聲地叫。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "cat",
+      "音標": "[kæt]",
+      "詞性": "n.",
+      "中文": "貓",
+      "例句": "The cat is sleeping on the sofa.",
+      "翻譯": "貓正在沙發上睡覺。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "bird",
+      "音標": "[bɝd]",
+      "詞性": "n.",
+      "中文": "鳥",
+      "例句": "The bird can fly very high.",
+      "翻譯": "那隻鳥可以飛得很高。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "rabbit",
+      "音標": "[ˈræbɪt]",
+      "詞性": "n.",
+      "中文": "兔子",
+      "例句": "The rabbit likes to eat carrots.",
+      "翻譯": "兔子喜歡吃紅蘿蔔。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "lion",
+      "音標": "[ˈlaɪən]",
+      "詞性": "n.",
+      "中文": "獅子",
+      "例句": "The lion is the king of the jungle.",
+      "翻譯": "獅子是叢林之王。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "tiger",
+      "音標": "[ˈtaɪgɚ]",
+      "詞性": "n.",
+      "中文": "老虎",
+      "例句": "The tiger has orange and black stripes.",
+      "翻譯": "老虎有橘色和黑色的條紋。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "elephant",
+      "音標": "[ˈɛləfənt]",
+      "詞性": "n.",
+      "中文": "大象",
+      "例句": "The elephant has a long nose.",
+      "翻譯": "大象有長長的鼻子。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "monkey",
+      "音標": "[ˈmʌŋki]",
+      "詞性": "n.",
+      "中文": "猴子",
+      "例句": "The monkey is climbing the tree.",
+      "翻譯": "猴子正在爬樹。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "horse",
+      "音標": "[hɔrs]",
+      "詞性": "n.",
+      "中文": "馬",
+      "例句": "She likes to ride a horse.",
+      "翻譯": "她喜歡騎馬。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "cow",
+      "音標": "[kaʊ]",
+      "詞性": "n.",
+      "中文": "牛",
+      "例句": "The cow gives us milk.",
+      "翻譯": "牛給我們牛奶。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "pig",
+      "音標": "[pɪg]",
+      "詞性": "n.",
+      "中文": "豬",
+      "例句": "The pig is eating in the mud.",
+      "翻譯": "豬正在泥巴裡吃東西。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "sheep",
+      "音標": "[ʃip]",
+      "詞性": "n.",
+      "中文": "羊",
+      "例句": "The sheep are eating grass in the field.",
+      "翻譯": "羊群正在田野裡吃草。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "duck",
+      "音標": "[dʌk]",
+      "詞性": "n.",
+      "中文": "鴨子",
+      "例句": "The duck is swimming in the pond.",
+      "翻譯": "鴨子正在池塘裡游泳。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "chicken",
+      "音標": "[ˈtʃɪkɪn]",
+      "詞性": "n.",
+      "中文": "雞",
+      "例句": "The chicken laid an egg this morning.",
+      "翻譯": "那隻雞今天早上下了一顆蛋。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "mouse",
+      "音標": "[maʊs]",
+      "詞性": "n.",
+      "中文": "老鼠",
+      "例句": "The mouse ran into the hole.",
+      "翻譯": "老鼠跑進洞裡。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "bear",
+      "音標": "[bɛr]",
+      "詞性": "n.",
+      "中文": "熊",
+      "例句": "The bear is sleeping in the cave.",
+      "翻譯": "熊正在洞穴裡睡覺。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "snake",
+      "音標": "[snek]",
+      "詞性": "n.",
+      "中文": "蛇",
+      "例句": "Be careful, there is a snake in the grass.",
+      "翻譯": "小心，草叢裡有一條蛇。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "zoo",
+      "音標": "[zu]",
+      "詞性": "n.",
+      "中文": "動物園",
+      "例句": "We are going to the zoo this weekend.",
+      "翻譯": "我們這週末要去動物園。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "giraffe",
+      "音標": "[dʒəˈræf]",
+      "詞性": "n.",
+      "中文": "長頸鹿",
+      "例句": "The giraffe has a very long neck.",
+      "翻譯": "長頸鹿有一個非常長的脖子。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "zebra",
+      "音標": "[ˈzibrə]",
+      "詞性": "n.",
+      "中文": "斑馬",
+      "例句": "The zebra has black and white stripes.",
+      "翻譯": "斑馬有黑白相間的條紋。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "kangaroo",
+      "音標": "[ˌkæŋgəˈru]",
+      "詞性": "n.",
+      "中文": "袋鼠",
+      "例句": "The kangaroo can jump very far.",
+      "翻譯": "袋鼠可以跳得很遠。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "panda",
+      "音標": "[ˈpændə]",
+      "詞性": "n.",
+      "中文": "貓熊",
+      "例句": "The panda likes to eat bamboo.",
+      "翻譯": "貓熊喜歡吃竹子。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "wolf",
+      "音標": "[wʊlf]",
+      "詞性": "n.",
+      "中文": "狼",
+      "例句": "The wolf howled at the moon.",
+      "翻譯": "那隻狼對著月亮嚎叫。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "fox",
+      "音標": "[fɑks]",
+      "詞性": "n.",
+      "中文": "狐狸",
+      "例句": "The fox is very clever.",
+      "翻譯": "狐狸非常聰明。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "deer",
+      "音標": "[dɪr]",
+      "詞性": "n.",
+      "中文": "鹿",
+      "例句": "We saw a deer in the forest.",
+      "翻譯": "我們在森林裡看到一隻鹿。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "squirrel",
+      "音標": "[ˈskwɝəl]",
+      "詞性": "n.",
+      "中文": "松鼠",
+      "例句": "The squirrel is collecting nuts.",
+      "翻譯": "松鼠正在收集堅果。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "frog",
+      "音標": "[frɔg]",
+      "詞性": "n.",
+      "中文": "青蛙",
+      "例句": "The frog jumped into the pond.",
+      "翻譯": "青蛙跳進池塘裡。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "turtle",
+      "音標": "[ˈtɝtl]",
+      "詞性": "n.",
+      "中文": "烏龜",
+      "例句": "The turtle walks very slowly.",
+      "翻譯": "烏龜走得非常慢。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "owl",
+      "音標": "[aʊl]",
+      "詞性": "n.",
+      "中文": "貓頭鷹",
+      "例句": "The owl sleeps during the day.",
+      "翻譯": "貓頭鷹白天睡覺。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "eagle",
+      "音標": "[ˈigl]",
+      "詞性": "n.",
+      "中文": "老鷹",
+      "例句": "The eagle flew high in the sky.",
+      "翻譯": "老鷹在天空中高飛。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-陸生動物",
+      "單字": "penguin",
+      "音標": "[ˈpɛŋgwɪn]",
+      "詞性": "n.",
+      "中文": "企鵝",
+      "例句": "Penguins live in cold places.",
+      "翻譯": "企鵝住在寒冷的地方。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "mosquito",
+      "音標": "[məˈskito]",
+      "詞性": "n.",
+      "中文": "蚊子",
+      "例句": "The mosquito bit me on the arm.",
+      "翻譯": "蚊子咬了我的手臂。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "fly",
+      "音標": "[flaɪ]",
+      "詞性": "n.",
+      "中文": "蒼蠅",
+      "例句": "There is a fly on the table.",
+      "翻譯": "桌上有一隻蒼蠅。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "ladybug",
+      "音標": "[ˈleɪdiˌbʌg]",
+      "詞性": "n.",
+      "中文": "瓢蟲",
+      "例句": "The ladybug has red and black spots.",
+      "翻譯": "瓢蟲有紅色和黑色的斑點。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "dragonfly",
+      "音標": "[ˈdrægənˌflaɪ]",
+      "詞性": "n.",
+      "中文": "蜻蜓",
+      "例句": "The dragonfly flew over the pond.",
+      "翻譯": "蜻蜓飛過池塘。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "grasshopper",
+      "音標": "[ˈgræsˌhɑpɚ]",
+      "詞性": "n.",
+      "中文": "蚱蜢",
+      "例句": "The grasshopper jumped into the grass.",
+      "翻譯": "蚱蜢跳進草叢裡。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "beetle",
+      "音標": "[ˈbitl]",
+      "詞性": "n.",
+      "中文": "甲蟲",
+      "例句": "The beetle has a hard shell.",
+      "翻譯": "甲蟲有堅硬的外殼。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "moth",
+      "音標": "[mɔθ]",
+      "詞性": "n.",
+      "中文": "蛾",
+      "例句": "The moth flew around the light.",
+      "翻譯": "蛾繞著燈飛。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "cockroach",
+      "音標": "[ˈkɑkˌroʊtʃ]",
+      "詞性": "n.",
+      "中文": "蟑螂",
+      "例句": "I saw a cockroach in the kitchen.",
+      "翻譯": "我在廚房看到一隻蟑螂。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "cricket",
+      "音標": "[ˈkrɪkɪt]",
+      "詞性": "n.",
+      "中文": "蟋蟀",
+      "例句": "The cricket sings at night.",
+      "翻譯": "蟋蟀在晚上鳴叫。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "caterpillar",
+      "音標": "[ˈkætɚˌpɪlɚ]",
+      "詞性": "n.",
+      "中文": "毛毛蟲",
+      "例句": "The caterpillar will become a butterfly.",
+      "翻譯": "毛毛蟲將會變成蝴蝶。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "butterfly",
+      "音標": "[ˈbʌtɚˌflaɪ]",
+      "詞性": "n.",
+      "中文": "蝴蝶",
+      "例句": "The butterfly flew from flower to flower.",
+      "翻譯": "蝴蝶從一朵花飛到另一朵花。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "bee",
+      "音標": "[bi]",
+      "詞性": "n.",
+      "中文": "蜜蜂",
+      "例句": "The bee is collecting honey.",
+      "翻譯": "蜜蜂正在採蜜。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "ant",
+      "音標": "[ænt]",
+      "詞性": "n.",
+      "中文": "螞蟻",
+      "例句": "The ants are carrying food to their nest.",
+      "翻譯": "螞蟻正把食物搬到牠們的窩。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-昆蟲",
+      "單字": "spider",
+      "音標": "[ˈspaɪdɚ]",
+      "詞性": "n.",
+      "中文": "蜘蛛",
+      "例句": "The spider is weaving a web.",
+      "翻譯": "蜘蛛正在織網。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "octopus",
+      "音標": "[ˈɑktəpəs]",
+      "詞性": "n.",
+      "中文": "章魚",
+      "例句": "The octopus has eight arms.",
+      "翻譯": "章魚有八隻腳。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "crab",
+      "音標": "[kræb]",
+      "詞性": "n.",
+      "中文": "螃蟹",
+      "例句": "The crab is walking sideways on the beach.",
+      "翻譯": "螃蟹正在沙灘上橫著走。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "jellyfish",
+      "音標": "[ˈdʒɛliˌfɪʃ]",
+      "詞性": "n.",
+      "中文": "水母",
+      "例句": "The jellyfish stung the swimmer.",
+      "翻譯": "水母螫了那個游泳的人。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "starfish",
+      "音標": "[ˈstɑrˌfɪʃ]",
+      "詞性": "n.",
+      "中文": "海星",
+      "例句": "We found a starfish on the beach.",
+      "翻譯": "我們在沙灘上發現了一隻海星。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "seahorse",
+      "音標": "[ˈsiˌhɔrs]",
+      "詞性": "n.",
+      "中文": "海馬",
+      "例句": "The seahorse swims very slowly.",
+      "翻譯": "海馬游得非常慢。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "squid",
+      "音標": "[skwɪd]",
+      "詞性": "n.",
+      "中文": "魷魚/烏賊",
+      "例句": "The squid can change its color.",
+      "翻譯": "魷魚可以改變牠的顏色。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "lobster",
+      "音標": "[ˈlɑbstɚ]",
+      "詞性": "n.",
+      "中文": "龍蝦",
+      "例句": "The lobster has big claws.",
+      "翻譯": "龍蝦有大大的螯。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "seal",
+      "音標": "[sil]",
+      "詞性": "n.",
+      "中文": "海豹",
+      "例句": "The seal is resting on the rock.",
+      "翻譯": "海豹正在岩石上休息。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "clam",
+      "音標": "[klæm]",
+      "詞性": "n.",
+      "中文": "蛤蜊",
+      "例句": "We dug clams on the beach.",
+      "翻譯": "我們在沙灘上挖蛤蜊。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "sea turtle",
+      "音標": "[si ˈtɝtl]",
+      "詞性": "n.",
+      "中文": "海龜",
+      "例句": "The sea turtle swam back to the ocean.",
+      "翻譯": "海龜游回大海。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "dolphin",
+      "音標": "[ˈdɑlfɪn]",
+      "詞性": "n.",
+      "中文": "海豚",
+      "例句": "The dolphin can swim very fast.",
+      "翻譯": "海豚游泳游得很快。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "whale",
+      "音標": "[weɪl]",
+      "詞性": "n.",
+      "中文": "鯨魚",
+      "例句": "The whale is the biggest animal in the sea.",
+      "翻譯": "鯨魚是海裡最大的動物。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "shark",
+      "音標": "[ʃɑrk]",
+      "詞性": "n.",
+      "中文": "鯊魚",
+      "例句": "The shark has sharp teeth.",
+      "翻譯": "鯊魚有銳利的牙齒。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "動物-海洋生物",
+      "單字": "fish",
+      "音標": "[fɪʃ]",
+      "詞性": "n.",
+      "中文": "魚",
+      "例句": "The fish is swimming in the tank.",
+      "翻譯": "魚正在水缸裡游泳。"
     }
   ]
 }
