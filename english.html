@@ -953,6 +953,33 @@
             height: 16px;
         }
 
+        .grammar-tag-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .grammar-tag-item-name {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .grammar-tag-quiz-btn {
+            flex-shrink: 0;
+            background: #667eea;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 3px 10px;
+            font-size: 0.85em;
+            cursor: pointer;
+        }
+
+        .grammar-tag-quiz-btn:hover {
+            background: #5568d3;
+        }
+
         .search-filter {
             display: flex;
             align-items: center;
@@ -2341,6 +2368,8 @@
         let pronunciationRulesData = null; // 發音規則快取
         let grammarData = null; // 文法資料快取
         let grammarUnitElements = {}; // {tag: 該單元標題的 DOM 元素}，供下拉選單跳轉
+        let grammarQuizElements = {}; // {tag: 該單元「小測驗」標題的 DOM 元素}，供下拉選單跳轉
+        let grammarUnitBodies = {}; // {tag: 該單元內容區 DOM 元素}，跳轉前需確保未收合
         let normalModeSheetNames = new Set(); // 記錄一般/複習模式的 sheet 名稱
         let normalModeCheckStates = {}; // 保存 normal 模式 sheet 的狀態 {sheetName: checked}
         let normalModeTagStates = {}; // 保存 normal 模式 tag 的狀態 {sheetName: {tagName: checked}}
@@ -3988,10 +4017,26 @@
             units.forEach(unit => {
                 const tag = getGrammarUnitTag(unit);
                 const item = document.createElement('div');
-                item.className = 'tag-checkbox-item';
+                item.className = 'tag-checkbox-item grammar-tag-item-row';
                 item.style.paddingLeft = '12px';
-                item.textContent = tag;
-                item.onclick = () => scrollToGrammarUnit(tag);
+
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'grammar-tag-item-name';
+                nameSpan.textContent = tag;
+                nameSpan.onclick = () => scrollToGrammarUnit(tag);
+                item.appendChild(nameSpan);
+
+                if (unit.quiz && unit.quiz.length > 0) {
+                    const quizBtn = document.createElement('button');
+                    quizBtn.className = 'grammar-tag-quiz-btn';
+                    quizBtn.textContent = '測驗';
+                    quizBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        scrollToGrammarQuiz(tag);
+                    };
+                    item.appendChild(quizBtn);
+                }
+
                 container.appendChild(item);
             });
         }
@@ -4001,6 +4046,15 @@
             menu.classList.toggle('active');
         }
 
+        function expandGrammarUnitBody(tag) {
+            const unitBody = grammarUnitBodies[tag];
+            if (!unitBody || unitBody.style.display !== 'none') return;
+            unitBody.style.display = 'block';
+            const unitTitle = grammarUnitElements[tag];
+            const arrow = unitTitle && unitTitle.querySelector('.phonetics-group-arrow');
+            if (arrow) arrow.textContent = '▼';
+        }
+
         function scrollToGrammarUnit(tag) {
             const menu = document.getElementById('grammarTagDropdownMenu');
             if (menu) menu.classList.remove('active');
@@ -4008,21 +4062,33 @@
             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
+        function scrollToGrammarQuiz(tag) {
+            const menu = document.getElementById('grammarTagDropdownMenu');
+            if (menu) menu.classList.remove('active');
+            expandGrammarUnitBody(tag);
+            const el = grammarQuizElements[tag];
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
         async function renderGrammar() {
             const container = document.getElementById('grammarContainer');
             container.innerHTML = '';
             grammarUnitElements = {};
+            grammarQuizElements = {};
+            grammarUnitBodies = {};
 
             const units = await loadGrammar();
 
             units.forEach(unit => {
+                const tag = getGrammarUnitTag(unit);
                 const unitTitle = document.createElement('div');
                 unitTitle.className = 'phonetics-group-title';
                 unitTitle.innerHTML = `<span class="phonetics-group-arrow">▼</span> ${unit.title}`;
                 container.appendChild(unitTitle);
-                grammarUnitElements[getGrammarUnitTag(unit)] = unitTitle;
+                grammarUnitElements[tag] = unitTitle;
 
                 const unitBody = document.createElement('div');
+                grammarUnitBodies[tag] = unitBody;
 
                 unitTitle.onclick = () => {
                     const collapsed = unitBody.style.display === 'none';
@@ -4055,6 +4121,7 @@
                     quizTitle.style.color = '#ffa500';
                     quizTitle.textContent = '小測驗';
                     unitBody.appendChild(quizTitle);
+                    grammarQuizElements[tag] = quizTitle;
 
                     const quizContainer = document.createElement('div');
                     unitBody.appendChild(quizContainer);
