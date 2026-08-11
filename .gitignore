@@ -32,3 +32,4 @@ temp/
 
 ~*.xlsx
 ~*.xlsm
+.inbox/
