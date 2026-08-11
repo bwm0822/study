@@ -1172,6 +1172,112 @@
             color: #888;
         }
 
+        .grammar-source {
+            font-size: 1em;
+            color: #888;
+            margin: -8px 0 16px;
+        }
+
+        .grammar-text {
+            font-size: 1.2em;
+            line-height: 1.9;
+            color: #d8d8d8;
+            margin: 0 0 14px;
+        }
+
+        .grammar-subheading {
+            font-size: 1.15em;
+            font-weight: bold;
+            color: #ffcc66;
+            margin: 18px 0 10px;
+        }
+
+        .grammar-pattern {
+            border: 1px dashed #6a6a8a;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin: 0 0 14px;
+            font-size: 1.15em;
+            color: #b8b8b8;
+            background: #2a2a52;
+        }
+
+        .grammar-example {
+            padding: 8px 14px;
+            margin: 0 0 10px;
+            border-left: 3px solid #ffa500;
+            background: #2a2a52;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .grammar-example-en {
+            font-size: 1.2em;
+            color: #e8e8e8;
+        }
+
+        .grammar-example-en.grammar-example-alt {
+            color: #b8b8b8;
+            font-size: 1.05em;
+        }
+
+        .grammar-example-zh {
+            font-size: 1.05em;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .grammar-example-note {
+            font-size: 0.95em;
+            color: #ffa500;
+            margin-top: 4px;
+        }
+
+        .grammar-note {
+            font-size: 1.05em;
+            color: #ffa500;
+            margin: 0 0 14px;
+        }
+
+        .grammar-quote {
+            background: #33335c;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 0 0 16px;
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #d8d8d8;
+        }
+
+        .grammar-quote-label {
+            font-weight: bold;
+            color: #ffcc66;
+            margin-right: 6px;
+        }
+
+        .grammar-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 0 16px;
+            font-size: 1.1em;
+        }
+
+        .grammar-table th,
+        .grammar-table td {
+            border: 1px solid #4a4a60;
+            padding: 8px 12px;
+            text-align: left;
+            color: #d8d8d8;
+        }
+
+        .grammar-table th {
+            background: #33335c;
+            color: #ffcc66;
+        }
+
+        .grammar-table tr:nth-child(odd) td {
+            background: #2a2a52;
+        }
+
         .word-row {
             display: flex;
             border-bottom: 1px solid #4a4a60;
@@ -1808,6 +1914,7 @@
                     <option value="statistics">統計</option>
                     <option value="phonetics">音標</option>
                     <option value="rules">發音規則</option>
+                    <option value="grammar">文法</option>
                     <option value="add">自訂</option>
                 </select>
             </div>
@@ -1847,6 +1954,15 @@
                     <button class="tag-dropdown-btn" id="quizRecordsBtn" style="display: none; background: #667eea; margin-left: 8px; padding: 6px 16px; font-size: 1.1em; min-width: auto;" onclick="toggleQuizRecordsDropdown()">紀錄 <span>▼</span></button>
                     <div id="quizRecordsDropdown" class="tag-dropdown-menu" style="display: none; position: absolute; top: 100%; left: 0; min-width: 250px;">
                         <div id="quizRecordsDropdownList"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tag-filter" id="grammarTagFilterContainer" style="display: none;">
+                <label>選擇單元：</label>
+                <div class="tag-filter-dropdown">
+                    <button class="tag-dropdown-btn" onclick="toggleGrammarDropdown()">跳至 <span>▼</span></button>
+                    <div class="tag-dropdown-menu" id="grammarTagDropdownMenu">
+                        <div id="grammarTagGroupsContainer"></div>
                     </div>
                 </div>
             </div>
@@ -1917,6 +2033,9 @@
 
         <!-- 發音規則模式 -->
         <div class="phonetics-container" id="rulesContainer" style="display: none;"></div>
+
+        <!-- 文法模式 -->
+        <div class="phonetics-container" id="grammarContainer" style="display: none;"></div>
 
         <!-- 資訊視窗 -->
         <div class="word-modal" id="aboutModal" style="display: none;">
@@ -2141,6 +2260,8 @@
         let searchKeyword = ''; // 搜尋關鍵詞
         let kkPhoneticsData = null; // KK 音標對照表快取
         let pronunciationRulesData = null; // 發音規則快取
+        let grammarData = null; // 文法資料快取
+        let grammarUnitElements = {}; // {tag: 該單元標題的 DOM 元素}，供下拉選單跳轉
         let normalModeSheetNames = new Set(); // 記錄一般/複習模式的 sheet 名稱
         let normalModeCheckStates = {}; // 保存 normal 模式 sheet 的狀態 {sheetName: checked}
         let normalModeTagStates = {}; // 保存 normal 模式 tag 的狀態 {sheetName: {tagName: checked}}
@@ -2490,7 +2611,7 @@
                     const customTags = [...new Set(customWords.map(w => w.tag))];
                     selectedTags.set('自訂', new Set(customTags));
 
-                    // 為自訂 sheet 創建下拉選單項目
+                    // 為自訂 sheet 創建下拉選單項目（不使用 checkbox，點擊 tag 直接跳轉，與其他 sheet 一致）
                     const sheetItem = document.createElement('div');
                     sheetItem.className = 'sheet-item normal-sheet-item';
 
@@ -2498,21 +2619,10 @@
                     sheetHeader.className = 'sheet-item-header';
                     sheetHeader.dataset.sheetName = '自訂';
 
-                    const sheetCheckbox = document.createElement('input');
-                    sheetCheckbox.type = 'checkbox';
-                    sheetCheckbox.checked = true;
-                    sheetCheckbox.dataset.sheetName = '自訂';
-                    sheetCheckbox.className = 'normal-sheet-checkbox';
-                    sheetCheckbox.onchange = updateFilter;
-                    sheetCheckbox.onclick = (e) => {
-                        e.stopPropagation();
-                    };
-
                     const nameSpan = document.createElement('span');
                     nameSpan.className = 'sheet-name';
                     nameSpan.textContent = '自訂';
 
-                    sheetHeader.appendChild(sheetCheckbox);
                     sheetHeader.appendChild(nameSpan);
 
                     const sheetSubmenu = document.createElement('div');
@@ -2520,74 +2630,44 @@
                     sheetSubmenu.dataset.sheetName = '自訂';
                     document.body.appendChild(sheetSubmenu);
 
-                    const buttonsRow = document.createElement('div');
-                    buttonsRow.className = 'sheet-group-header';
-
-                    const selectBtn = document.createElement('button');
-                    selectBtn.textContent = '全選';
-                    selectBtn.onclick = function(e) {
-                        e.stopPropagation();
-                        selectAllInSheet(e, '自訂');
-                    };
-
-                    const clearBtn = document.createElement('button');
-                    clearBtn.textContent = '清除';
-                    clearBtn.onclick = function(e) {
-                        e.stopPropagation();
-                        clearAllInSheet(e, '自訂');
-                    };
-
-                    buttonsRow.appendChild(selectBtn);
-                    buttonsRow.appendChild(clearBtn);
-                    sheetSubmenu.appendChild(buttonsRow);
-
                     customTags.forEach(tag => {
-                        const checkbox = document.createElement('input');
-                        checkbox.type = 'checkbox';
-                        checkbox.value = tag;
-                        checkbox.checked = true;
-                        checkbox.dataset.sheet = '自訂';
-                        checkbox.className = 'normal-tag-checkbox';
-                        checkbox.onchange = updateFilter;
-                        checkbox.onclick = (e) => {
+                        const tagItem = document.createElement('div');
+                        tagItem.className = 'tag-checkbox-item';
+                        tagItem.textContent = tag;
+                        tagItem.onclick = (e) => {
                             e.stopPropagation();
+                            scrollToTag('自訂', tag);
+                            sheetSubmenu.classList.remove('expanded');
                         };
 
-                        const label = document.createElement('div');
-                        label.className = 'tag-checkbox-item';
-                        label.appendChild(checkbox);
-                        const span = document.createElement('span');
-                        span.textContent = tag;
-                        label.appendChild(span);
-
-                        label.onclick = (e) => {
-                            e.stopPropagation();
-                            checkbox.checked = !checkbox.checked;
-                            updateFilter();
-                        };
-
-                        sheetSubmenu.appendChild(label);
+                        sheetSubmenu.appendChild(tagItem);
                     });
 
-                    sheetHeader.onclick = (e) => {
-                        if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
-                            e.stopPropagation();
+                    let customHideTimeout;
 
-                            document.querySelectorAll('.sheet-submenu.expanded').forEach(submenu => {
-                                if (submenu !== sheetSubmenu) {
-                                    submenu.classList.remove('expanded');
-                                }
-                            });
-
-                            sheetSubmenu.classList.toggle('expanded');
-
-                            if (sheetSubmenu.classList.contains('expanded')) {
-                                const rect = sheetHeader.getBoundingClientRect();
-                                sheetSubmenu.style.top = rect.top + 'px';
-                                sheetSubmenu.style.left = (rect.right + 5) + 'px';
+                    const showCustomSubmenu = () => {
+                        clearTimeout(customHideTimeout);
+                        document.querySelectorAll('.sheet-submenu.expanded').forEach(submenu => {
+                            if (submenu !== sheetSubmenu) {
+                                submenu.classList.remove('expanded');
                             }
-                        }
+                        });
+                        sheetSubmenu.classList.add('expanded');
+                        const rect = sheetHeader.getBoundingClientRect();
+                        sheetSubmenu.style.top = rect.top + 'px';
+                        sheetSubmenu.style.left = (rect.right + 5) + 'px';
                     };
+
+                    const hideCustomSubmenu = () => {
+                        customHideTimeout = setTimeout(() => {
+                            sheetSubmenu.classList.remove('expanded');
+                        }, 200);
+                    };
+
+                    sheetHeader.onmouseover = showCustomSubmenu;
+                    sheetHeader.onmouseout = hideCustomSubmenu;
+                    sheetSubmenu.onmouseover = showCustomSubmenu;
+                    sheetSubmenu.onmouseout = hideCustomSubmenu;
 
                     sheetItem.appendChild(sheetHeader);
                     container.appendChild(sheetItem);
@@ -2745,6 +2825,8 @@
             const stats = document.getElementById('stats');
             const phoneticsContainer = document.getElementById('phoneticsContainer');
             const rulesContainer = document.getElementById('rulesContainer');
+            const grammarContainer = document.getElementById('grammarContainer');
+            const grammarTagFilterContainer = document.getElementById('grammarTagFilterContainer');
 
             // 清除搜尋關鍵詞
             searchKeyword = '';
@@ -2757,6 +2839,10 @@
             phoneticsContainer.style.display = mode === 'phonetics' ? 'block' : 'none';
             // 除發音規則模式外，其餘模式一律隱藏發音規則容器
             rulesContainer.style.display = mode === 'rules' ? 'block' : 'none';
+            // 除文法模式外，其餘模式一律隱藏文法容器
+            grammarContainer.style.display = mode === 'grammar' ? 'block' : 'none';
+            // 除文法模式外，其餘模式一律隱藏文法單元篩選
+            grammarTagFilterContainer.style.display = mode === 'grammar' ? 'flex' : 'none';
             // 除自訂模式外，其餘模式一律隱藏字典按鈕
             document.getElementById('dictionaryBtn').style.display = mode === 'add' ? 'block' : 'none';
 
@@ -2792,6 +2878,22 @@
                 document.getElementById('chineseButtonsTop').style.display = 'none';
                 document.getElementById('addWordBtn').style.display = 'none';
                 renderRules();
+            } else if (mode === 'grammar') {
+                stopStoryPlayback();
+                wordsContainer.style.display = 'none';
+                quizContainer.style.display = 'none';
+                tagFilterContainer.style.display = 'none';
+                const reviewTagFilterContainerG = document.getElementById('reviewTagFilterContainer');
+                if (reviewTagFilterContainerG) reviewTagFilterContainerG.style.display = 'none';
+                quizTagFilterContainer.style.display = 'none';
+                searchFilterContainer.style.display = 'none';
+                refreshBtn.style.display = 'none';
+                startQuizBtn.style.display = 'none';
+                stats.style.display = 'none';
+                document.getElementById('chineseContainer').style.display = 'none';
+                document.getElementById('chineseButtonsTop').style.display = 'none';
+                document.getElementById('addWordBtn').style.display = 'none';
+                initGrammarPanel();
             } else if (mode === 'review') {
                 stopStoryPlayback();
                 wordsContainer.style.display = 'block';
@@ -2986,25 +3088,6 @@
         function toggleQuizDropdown() {
             const menu = document.getElementById('quizTagDropdownMenu');
             menu.classList.toggle('active');
-        }
-
-        function selectAllInSheet(event, sheetName) {
-            event.stopPropagation();
-            const checkboxes = document.querySelectorAll(`input[data-sheet="${sheetName}"]`);
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = true;
-            });
-            updateFilter();
-        }
-
-        function clearAllInSheet(event, sheetName) {
-            event.stopPropagation();
-            // 只清除該 sheet 的 checkbox
-            const checkboxes = document.querySelectorAll(`input[data-sheet="${sheetName}"]`);
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            updateFilter();
         }
 
         function updateFilter() {
@@ -3507,6 +3590,11 @@
             if (quizFilter && !quizFilter.contains(e.target)) {
                 document.getElementById('quizTagDropdownMenu').classList.remove('active');
             }
+            const grammarFilter = document.querySelector('#grammarTagFilterContainer');
+            if (grammarFilter && !grammarFilter.contains(e.target)) {
+                const grammarMenu = document.getElementById('grammarTagDropdownMenu');
+                if (grammarMenu) grammarMenu.classList.remove('active');
+            }
         });
 
         function playPronunciation(word) {
@@ -3694,6 +3782,194 @@
                 });
 
                 container.appendChild(body);
+            });
+        }
+
+        async function loadGrammar() {
+            if (grammarData) return grammarData;
+            const response = await fetch('./json/grammar.json');
+            grammarData = await response.json();
+            return grammarData;
+        }
+
+        function renderGrammarBlock(block, parent) {
+            switch (block.type) {
+                case 'text': {
+                    const el = document.createElement('div');
+                    el.className = 'grammar-text';
+                    el.textContent = block.text;
+                    parent.appendChild(el);
+                    break;
+                }
+                case 'subheading': {
+                    const el = document.createElement('div');
+                    el.className = 'grammar-subheading';
+                    el.textContent = block.text;
+                    parent.appendChild(el);
+                    break;
+                }
+                case 'pattern': {
+                    const el = document.createElement('div');
+                    el.className = 'grammar-pattern';
+                    el.textContent = block.text;
+                    parent.appendChild(el);
+                    break;
+                }
+                case 'note': {
+                    const el = document.createElement('div');
+                    el.className = 'grammar-note';
+                    el.textContent = block.text;
+                    parent.appendChild(el);
+                    break;
+                }
+                case 'quote': {
+                    const el = document.createElement('div');
+                    el.className = 'grammar-quote';
+                    if (block.label) {
+                        const labelEl = document.createElement('span');
+                        labelEl.className = 'grammar-quote-label';
+                        labelEl.textContent = block.label;
+                        el.appendChild(labelEl);
+                    }
+                    el.appendChild(document.createTextNode(block.text));
+                    parent.appendChild(el);
+                    break;
+                }
+                case 'example': {
+                    const el = document.createElement('div');
+                    el.className = 'grammar-example';
+                    (block.en || []).forEach((line, idx) => {
+                        const lineEl = document.createElement('div');
+                        lineEl.className = idx === 0 ? 'grammar-example-en' : 'grammar-example-en grammar-example-alt';
+                        lineEl.textContent = line;
+                        lineEl.onclick = () => playPronunciation(line.replace(/^=\s*/, ''));
+                        el.appendChild(lineEl);
+                    });
+                    if (block.zh) {
+                        const zhEl = document.createElement('div');
+                        zhEl.className = 'grammar-example-zh';
+                        zhEl.textContent = `（${block.zh}）`;
+                        el.appendChild(zhEl);
+                    }
+                    if (block.note) {
+                        const noteEl = document.createElement('div');
+                        noteEl.className = 'grammar-example-note';
+                        noteEl.textContent = `📝 ${block.note}`;
+                        el.appendChild(noteEl);
+                    }
+                    parent.appendChild(el);
+                    break;
+                }
+                case 'table': {
+                    const table = document.createElement('table');
+                    table.className = 'grammar-table';
+                    if (block.headers && block.headers.length > 0) {
+                        const thead = document.createElement('thead');
+                        const headRow = document.createElement('tr');
+                        block.headers.forEach(h => {
+                            const th = document.createElement('th');
+                            th.textContent = h;
+                            headRow.appendChild(th);
+                        });
+                        thead.appendChild(headRow);
+                        table.appendChild(thead);
+                    }
+                    const tbody = document.createElement('tbody');
+                    (block.rows || []).forEach(row => {
+                        const tr = document.createElement('tr');
+                        row.forEach(cell => {
+                            const td = document.createElement('td');
+                            td.textContent = cell;
+                            tr.appendChild(td);
+                        });
+                        tbody.appendChild(tr);
+                    });
+                    table.appendChild(tbody);
+                    parent.appendChild(table);
+                    break;
+                }
+            }
+        }
+
+        function getGrammarUnitTag(unit) {
+            return unit.tag || unit.title;
+        }
+
+        async function initGrammarPanel() {
+            const units = await loadGrammar();
+            renderGrammarTagFilter(units);
+            renderGrammar();
+        }
+
+        function renderGrammarTagFilter(units) {
+            const container = document.getElementById('grammarTagGroupsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            units.forEach(unit => {
+                const tag = getGrammarUnitTag(unit);
+                const item = document.createElement('div');
+                item.className = 'tag-checkbox-item';
+                item.style.paddingLeft = '12px';
+                item.textContent = tag;
+                item.onclick = () => scrollToGrammarUnit(tag);
+                container.appendChild(item);
+            });
+        }
+
+        function toggleGrammarDropdown() {
+            const menu = document.getElementById('grammarTagDropdownMenu');
+            menu.classList.toggle('active');
+        }
+
+        function scrollToGrammarUnit(tag) {
+            const menu = document.getElementById('grammarTagDropdownMenu');
+            if (menu) menu.classList.remove('active');
+            const el = grammarUnitElements[tag];
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        async function renderGrammar() {
+            const container = document.getElementById('grammarContainer');
+            container.innerHTML = '';
+            grammarUnitElements = {};
+
+            const units = await loadGrammar();
+
+            units.forEach(unit => {
+                const unitTitle = document.createElement('div');
+                unitTitle.className = 'phonetics-group-title';
+                unitTitle.innerHTML = `<span class="phonetics-group-arrow">▼</span> ${unit.title}`;
+                container.appendChild(unitTitle);
+                grammarUnitElements[getGrammarUnitTag(unit)] = unitTitle;
+
+                const unitBody = document.createElement('div');
+
+                unitTitle.onclick = () => {
+                    const collapsed = unitBody.style.display === 'none';
+                    unitBody.style.display = collapsed ? 'block' : 'none';
+                    unitTitle.querySelector('.phonetics-group-arrow').textContent = collapsed ? '▼' : '▶';
+                };
+
+                if (unit.source) {
+                    const sourceEl = document.createElement('div');
+                    sourceEl.className = 'grammar-source';
+                    sourceEl.textContent = unit.source;
+                    unitBody.appendChild(sourceEl);
+                }
+
+                (unit.sections || []).forEach(section => {
+                    const sectionTitle = document.createElement('div');
+                    sectionTitle.className = 'grammar-subheading';
+                    sectionTitle.style.fontSize = '1.3em';
+                    sectionTitle.style.color = '#ffa500';
+                    sectionTitle.textContent = section.heading;
+                    unitBody.appendChild(sectionTitle);
+
+                    (section.blocks || []).forEach(block => renderGrammarBlock(block, unitBody));
+                });
+
+                container.appendChild(unitBody);
             });
         }
 
@@ -6589,7 +6865,7 @@
                     oldCustomSubmenu.remove();
                 }
 
-                // 確保 UI 中有「自訂」sheet 項目
+                // 確保 UI 中有「自訂」sheet 項目（不使用 checkbox，點擊 tag 直接跳轉，與其他 sheet 一致）
                 let sheetHeader = document.querySelector('.sheet-item-header[data-sheet-name="自訂"]');
                 if (!sheetHeader) {
                     // 如果不存在，創建「自訂」sheet 項目
@@ -6602,22 +6878,10 @@
                         sheetHeader.className = 'sheet-item-header';
                         sheetHeader.dataset.sheetName = '自訂';
 
-                        const toggleSpan = document.createElement('span');
-                        toggleSpan.className = 'sheet-toggle';
-                        toggleSpan.textContent = '▶';
-
-                        const sheetCheckbox = document.createElement('input');
-                        sheetCheckbox.type = 'checkbox';
-                        sheetCheckbox.checked = true;
-                        sheetCheckbox.dataset.sheetName = '自訂';
-                        sheetCheckbox.className = 'normal-sheet-checkbox';
-                        sheetCheckbox.onchange = updateFilter;
-
                         const nameSpan = document.createElement('span');
                         nameSpan.className = 'sheet-name';
                         nameSpan.textContent = '自訂';
 
-                        sheetHeader.appendChild(sheetCheckbox);
                         sheetHeader.appendChild(nameSpan);
 
                         sheetItem.appendChild(sheetHeader);
@@ -6631,71 +6895,73 @@
                 sheetSubmenu.dataset.sheetName = '自訂';
                 document.body.appendChild(sheetSubmenu);
 
-                const buttonsRow = document.createElement('div');
-                buttonsRow.className = 'sheet-group-header';
-
-                const selectBtn = document.createElement('button');
-                selectBtn.textContent = '全選';
-                selectBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    selectAllInSheet(e, '自訂');
-                };
-
-                const clearBtn = document.createElement('button');
-                clearBtn.textContent = '清除';
-                clearBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    clearAllInSheet(e, '自訂');
-                };
-
-                buttonsRow.appendChild(selectBtn);
-                buttonsRow.appendChild(clearBtn);
-                sheetSubmenu.appendChild(buttonsRow);
-
                 customTags.forEach(tag => {
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.value = tag;
-                    checkbox.checked = true;
-                    checkbox.dataset.sheet = '自訂';
-                    checkbox.className = 'normal-tag-checkbox';
-                    checkbox.onchange = updateFilter;
-
-                    const label = document.createElement('div');
-                    label.className = 'tag-checkbox-item';
-                    label.appendChild(checkbox);
-                    const span = document.createElement('span');
-                    span.textContent = tag;
-                    label.appendChild(span);
-
-                    label.onclick = (e) => {
+                    const tagItem = document.createElement('div');
+                    tagItem.className = 'tag-checkbox-item';
+                    tagItem.textContent = tag;
+                    tagItem.onclick = (e) => {
                         e.stopPropagation();
-                        checkbox.checked = !checkbox.checked;
-                        updateFilter();
+                        scrollToTag('自訂', tag);
+                        sheetSubmenu.classList.remove('expanded');
                     };
 
-                    sheetSubmenu.appendChild(label);
+                    sheetSubmenu.appendChild(tagItem);
                 });
 
-                sheetHeader.onclick = (e) => {
-                    if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
-                        e.stopPropagation();
+                let customHideTimeout;
 
-                        document.querySelectorAll('.sheet-submenu.expanded').forEach(submenu => {
-                            if (submenu !== sheetSubmenu) {
-                                submenu.classList.remove('expanded');
-                            }
-                        });
-
-                        sheetSubmenu.classList.toggle('expanded');
-
-                        if (sheetSubmenu.classList.contains('expanded')) {
-                            const rect = sheetHeader.getBoundingClientRect();
-                            sheetSubmenu.style.top = rect.top + 'px';
-                            sheetSubmenu.style.left = (rect.right + 5) + 'px';
+                const showCustomSubmenu = () => {
+                    clearTimeout(customHideTimeout);
+                    document.querySelectorAll('.sheet-submenu.expanded').forEach(submenu => {
+                        if (submenu !== sheetSubmenu) {
+                            submenu.classList.remove('expanded');
                         }
-                    }
+                    });
+                    sheetSubmenu.classList.add('expanded');
+                    const rect = sheetHeader.getBoundingClientRect();
+                    sheetSubmenu.style.top = rect.top + 'px';
+                    sheetSubmenu.style.left = (rect.right + 5) + 'px';
+                };
+
+                const hideCustomSubmenu = () => {
+                    customHideTimeout = setTimeout(() => {
+                        sheetSubmenu.classList.remove('expanded');
+                    }, 200);
+                };
+
+                sheetHeader.onmouseover = showCustomSubmenu;
+                sheetHeader.onmouseout = hideCustomSubmenu;
+                sheetSubmenu.onmouseover = showCustomSubmenu;
+                sheetSubmenu.onmouseout = hideCustomSubmenu;
+
+                // 更新隱藏 checkbox（供一般模式的過濾邏輯使用，永遠勾選）
+                let hiddenCheckboxContainer = document.getElementById('hiddenCheckboxContainer');
+                if (!hiddenCheckboxContainer) {
+                    hiddenCheckboxContainer = document.createElement('div');
+                    hiddenCheckboxContainer.style.display = 'none';
+                    hiddenCheckboxContainer.id = 'hiddenCheckboxContainer';
+                    document.body.appendChild(hiddenCheckboxContainer);
                 }
+                hiddenCheckboxContainer.querySelectorAll('[data-sheet-name="自訂"], [data-sheet="自訂"]').forEach(el => el.remove());
+
+                const hiddenSheetCheckbox = document.createElement('input');
+                hiddenSheetCheckbox.type = 'checkbox';
+                hiddenSheetCheckbox.checked = true;
+                hiddenSheetCheckbox.dataset.sheetName = '自訂';
+                hiddenSheetCheckbox.className = 'normal-sheet-checkbox';
+                hiddenSheetCheckbox.onchange = updateFilter;
+                hiddenCheckboxContainer.appendChild(hiddenSheetCheckbox);
+
+                customTags.forEach(tag => {
+                    const hiddenTagCheckbox = document.createElement('input');
+                    hiddenTagCheckbox.type = 'checkbox';
+                    hiddenTagCheckbox.value = tag;
+                    hiddenTagCheckbox.checked = true;
+                    hiddenTagCheckbox.dataset.sheet = '自訂';
+                    hiddenTagCheckbox.className = 'normal-tag-checkbox';
+                    hiddenTagCheckbox.onchange = updateFilter;
+                    hiddenCheckboxContainer.appendChild(hiddenTagCheckbox);
+                });
             } else {
                 // 如果沒有自訂單字，移除該 sheet
                 delete sheetData['自訂'];
@@ -6711,6 +6977,12 @@
                 const customSubmenu = document.querySelector('[data-sheet-name="自訂"].sheet-submenu');
                 if (customSubmenu) {
                     customSubmenu.remove();
+                }
+
+                // 移除隱藏 checkbox
+                const hiddenCheckboxContainer = document.getElementById('hiddenCheckboxContainer');
+                if (hiddenCheckboxContainer) {
+                    hiddenCheckboxContainer.querySelectorAll('[data-sheet-name="自訂"], [data-sheet="自訂"]').forEach(el => el.remove());
                 }
             }
         }

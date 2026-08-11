@@ -1,0 +1,123 @@
+[
+  {
+    "sheet": "grammar",
+    "tag": "不定詞與動名詞",
+    "title": "不定詞（to V）與動名詞（V-ing）用法與範例",
+    "source": "整理自 data/不定詞與動名詞_用法總整理.md",
+    "sections": [
+      {
+        "heading": "基本觀念",
+        "blocks": [
+          { "type": "text", "text": "不定詞（to + 原形動詞）：就是將動詞轉換為名詞、形容詞、副詞、補語來使用的動狀詞。" },
+          { "type": "text", "text": "動名詞（V-ing）：是動詞的 -ing 形式，可以用於主詞、受詞，也可以放在介係詞後面當受詞用。" },
+          { "type": "text", "text": "依照「能不能互換、意思會不會變」，可以分成四種情況：不定詞與動名詞都可使用且意義相同、只能使用不定詞、只能使用動名詞、不定詞與動名詞都可使用但意義不同。" }
+        ]
+      },
+      {
+        "heading": "一、不定詞與動名詞都可使用，且意義相同",
+        "blocks": [
+          { "type": "subheading", "text": "1. 在句首當主詞使用" },
+          { "type": "text", "text": "不定詞片語和動名詞片語都可以放在句首當主詞，意思不變；此時也可以用虛主詞 It 代替，把不定詞片語移到句尾。" },
+          { "type": "table", "headers": ["不定詞當主詞", "動名詞當主詞", "中譯"], "rows": [
+            ["To exercise every day is good to your health.", "Exercising every day is good to your health.", "每天運動對你的健康有益處。"],
+            ["To see is to believe.", "Seeing is believing.", "百聞不如一見。"],
+            ["To go to school by bus is fast and convenient.", "Going to school by bus is fast and convenient.", "搭公車上學既快又方便。"]
+          ] },
+          { "type": "note", "text": "句型：動名詞 (V.-ing) + is（單數動詞）... ＝ 不定詞 (To V.) + is（單數動詞）... ＝ It is + ... + to V（虛主詞句型）。例如：Going to school by bus is fast and convenient. ＝ To go to school by bus is fast and convenient. ＝ It is fast and convenient to go to school by bus.（搭公車上學既快又方便。）" },
+          { "type": "subheading", "text": "2. 當動詞的受詞使用" },
+          { "type": "text", "text": "這組動詞後面接 to V 或 V-ing 都可以，句子的意思幾乎不變。" },
+          { "type": "table", "headers": ["動詞", "to V 例句", "V-ing 例句"], "rows": [
+            ["like（喜歡）", "I like to read before bed.（我喜歡睡前閱讀。）", "I like reading before bed.（我喜歡睡前閱讀。）"],
+            ["love（喜愛）", "I love to swim in summer.（我喜歡在夏天游泳。）", "I love swimming in summer.（我喜歡在夏天游泳。）"],
+            ["hate（討厭）", "I hate to wait in line.（我討厭排隊等待。）", "I hate waiting in line.（我討厭排隊等待。）"],
+            ["start（開始）", "It started to rain.（開始下雨了。）", "It started raining.（開始下雨了。）"],
+            ["begin（開始）", "The baby began to cry.（嬰兒開始哭了。）", "The baby began crying.（嬰兒開始哭了。）"],
+            ["continue（繼續）", "She continued to work after dinner.（她晚餐後繼續工作。）", "She continued working after dinner.（她晚餐後繼續工作。）"],
+            ["prefer（偏好）", "I prefer to walk to school.（我比較喜歡走路上學。）", "I prefer walking to school.（我比較喜歡走路上學。）"]
+          ] },
+          { "type": "note", "text": "小提醒：這組動詞在文法題中即使不換意思，考試也常考「兩種寫法互換」的觀念題，例如 My boyfriend likes to roller-skate on the weekend. ＝ My boyfriend likes roller-skating on the weekend.（我男朋友喜歡週末時去溜冰。）" },
+          { "type": "note", "text": "小提醒：不定詞或動名詞當主詞時，是第三人稱單數，有兩個不定詞或兩個動名詞時，是複數，例如 To play video games and to exercise in the gym are my hobbies.（打電動和在體育館健身是我的嗜好。）" }
+        ]
+      },
+      {
+        "heading": "二、只能使用不定詞",
+        "blocks": [
+          { "type": "subheading", "text": "1. need、plan、want、hope、decide 的受詞" },
+          { "type": "text", "text": "表示這個動作「還沒發生」、是「打算、希望、決定」要做的事，這些動詞後面只能接 to V，不能接 V-ing。" },
+          { "type": "table", "headers": ["動詞", "例句"], "rows": [
+            ["need（需要）", "I need to clean my room.（我需要打掃我的房間。）"],
+            ["plan（計畫）", "They plan to travel to Japan next month.（他們計畫下個月去日本旅行。）"],
+            ["want（想要）", "He wants to buy a new phone.（他想買一支新手機。）"],
+            ["hope（希望）", "We hope to see you again soon.（我們希望很快能再見到你。）"],
+            ["decide（決定）", "She decided to quit her job.（她決定辭職。）"]
+          ] },
+          { "type": "subheading", "text": "2. 在不完全動詞後面當補語" },
+          { "type": "text", "text": "不完全動詞（如 be 動詞）語意不完整，需要補語才能表達完整意思；此時補語若是動狀詞，只能用不定詞。" },
+          { "type": "example", "en": ["My hobby is to collect stamps."], "zh": "我的嗜好是集郵。" },
+          { "type": "example", "en": ["Her dream is to become a doctor."], "zh": "她的夢想是成為一名醫生。" },
+          { "type": "example", "en": ["To see is to believe."], "zh": "百聞不如一見。", "note": "後面的 to believe 就是補語" },
+          { "type": "subheading", "text": "3. 在受詞後面當受詞補語" },
+          { "type": "text", "text": "補充說明前面受詞的動作，只能用不定詞。" },
+          { "type": "pattern", "text": "主詞 + { want・tell・need・help・teach・ask・treat・get・order } + 受詞 + to V..." },
+          { "type": "table", "headers": ["動詞", "例句"], "rows": [
+            ["ask（要求）", "My parents asked me to go to church every Sunday.（我的父母要求我每個禮拜天上教堂。）"],
+            ["tell（告訴）", "Tell him not to come again.（告訴他不要再來這裡了。）"],
+            ["want（希望）", "Her students want her to go back to school to teach math.（她的學生希望她回學校教數學。）"],
+            ["help（幫助）", "He helped me to carry the boxes.（他幫我搬箱子。）"],
+            ["order（命令）", "The general ordered the soldiers to retreat.（將軍命令士兵撤退。）"]
+          ] },
+          { "type": "note", "text": "筆記提醒：動詞變化以句子的主要動詞（第一個 V）為主，例如 My parents asked me to go to church.，時態只反映在 asked 上，to go 永遠是原形。" },
+          { "type": "subheading", "text": "4. 在名詞後面當形容詞使用" },
+          { "type": "text", "text": "放在名詞（或代名詞）後面，修飾前面的名詞，說明「要做的事」，只能用不定詞。" },
+          { "type": "pattern", "text": "主詞 + 動詞 + 名詞（或代名詞）+ to V..." },
+          { "type": "example", "en": ["She has a lot of housework to do."], "zh": "她有許多家事要做。" },
+          { "type": "example", "en": ["I need a laptop to do my homework."], "zh": "我需要一台手提電腦來做功課。" },
+          { "type": "example", "en": ["I need a pen to write with."], "zh": "我需要一隻筆寫字。", "note": "介詞 with 留在句尾，不可漏" }
+        ]
+      },
+      {
+        "heading": "三、只能使用動名詞",
+        "blocks": [
+          { "type": "subheading", "text": "1. enjoy、mind、give up、finish、practice、avoid、quit 的受詞" },
+          { "type": "text", "text": "表示這個動作「已經在做、正在做，或是一般性、習慣性」的活動，這些動詞後面只能接 V-ing，不能接 to V。" },
+          { "type": "table", "headers": ["動詞", "例句"], "rows": [
+            ["enjoy（享受）", "I enjoy listening to music.（我喜歡聽音樂。）"],
+            ["mind（介意）", "Would you mind opening the window?（你介意開窗嗎？）"],
+            ["give up（放棄）", "He gave up smoking last year.（他去年戒菸了。）"],
+            ["finish（完成）", "He finished writing his essay.（他寫完了他的文章。）"],
+            ["practice（練習）", "She practices playing the piano every day.（她每天練習彈鋼琴。）"],
+            ["avoid（避免）", "You should avoid eating too much sugar.（你應該避免吃太多糖。）"],
+            ["quit（戒除）", "She quit drinking coffee.（她戒掉喝咖啡了。）"]
+          ] },
+          { "type": "subheading", "text": "2. 在介係詞後面當受詞使用" },
+          { "type": "text", "text": "介係詞後面若接動狀詞，只能用動名詞，不能用不定詞。" },
+          { "type": "example", "en": ["Leonardo is tired of eating the same food every day."], "zh": "李奧納多對於每天吃相同的食物感到厭倦。", "note": "tired of＝厭倦於" },
+          { "type": "example", "en": ["You can't take the dictionary without asking me first."], "zh": "你不能沒有先問我就把字典拿走。", "note": "without＝沒有…就" },
+          { "type": "example", "en": ["He left without saying goodbye."], "zh": "他沒說再見就離開了。" }
+        ]
+      },
+      {
+        "heading": "四、不定詞與動名詞都可使用，但意義不同",
+        "blocks": [
+          { "type": "text", "text": "這組動詞是最容易考錯的地方：接 to V 表示「動作尚未發生」，接 V-ing 表示「動作已發生、是過去的經驗」。" },
+          { "type": "subheading", "text": "remember、forget、stop 的受詞" },
+          { "type": "table", "headers": ["動詞", "+ to V（尚未發生／未來）", "+ V-ing（已發生／過去經驗）"], "rows": [
+            ["remember（記得）", "Remember to lock the door.（記得去鎖門——還沒鎖）", "I remember locking the door.（我記得有鎖過門——已經鎖了）"],
+            ["forget（忘記）", "Don't forget to call her.（別忘了要打給她——還沒打）", "I forgot calling her.（我忘了自己打過電話這件事）"],
+            ["stop（停止）", "He stopped to smoke.（他停下來去抽菸——抽菸是接下來的動作）", "He stopped smoking.（他戒菸了——停止抽菸這件事）"]
+          ] }
+        ]
+      },
+      {
+        "heading": "一句話記憶法",
+        "blocks": [
+          { "type": "note", "text": "to V ＝ 面向未來（打算、目的、還沒做的事）／V-ing ＝ 面向過去或當下的事實（已做過、正在做、習慣性的活動）" },
+          { "type": "text", "text": "分類一（皆可、意義相同）：這組動詞本身語意「中性」，不特別強調時間，所以換了也沒差。" },
+          { "type": "text", "text": "分類二（只能 to V）：動詞本身就帶有「朝向未來」的意味（want、hope、decide、plan...），所以只能搭配「面向未來」的 to V。" },
+          { "type": "text", "text": "分類三（只能 V-ing）：動詞本身帶有「持續、已進行、一般性」的意味（enjoy、practice、avoid、quit...），所以只能搭配「面向當下/過去經驗」的 V-ing。" },
+          { "type": "text", "text": "分類四（皆可、意義不同）：動詞本身語意中性可以雙向使用，這時「to V／V-ing」就負責標示這個動作到底是「未來要做」還是「過去做過」，意思因此改變。" }
+        ]
+      }
+    ]
+  }
+]
