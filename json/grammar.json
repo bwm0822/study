@@ -118,6 +118,28 @@
           { "type": "text", "text": "分類四（皆可、意義不同）：動詞本身語意中性可以雙向使用，這時「to V／V-ing」就負責標示這個動作到底是「未來要做」還是「過去做過」，意思因此改變。" }
         ]
       }
+    ],
+    "quiz": [
+      { "question": "______ every day is good to your health.", "options": ["Exercise", "Exercised", "To exercise", "Exercises"], "answer": 2, "explanation": "不定詞片語當句首主詞。" },
+      { "question": "Going to school by bus is fast and convenient. = ______ is fast and convenient to go to school by bus.", "options": ["This", "It", "That", "There"], "answer": 1, "explanation": "虛主詞句型：It is + 形容詞 + to V。" },
+      { "question": "My boyfriend likes ______ on the weekend.", "options": ["roller-skate", "roller-skating", "roller-skated", "to roller-skated"], "answer": 1, "explanation": "like 屬於分類一，to V／V-ing 皆可，此處考「互換」概念。" },
+      { "question": "It started ______ suddenly during the picnic.", "options": ["rain", "rains", "to rain", "rained"], "answer": 2, "explanation": "start 後面接不定詞或動名詞皆可，但此處只有 to rain 是合乎文法的非限定動詞形式。" },
+      { "question": "I ______ to clean my room before my mom comes home.", "options": ["need", "needed to", "needing", "needs"], "answer": 0, "explanation": "主詞是 I，動詞用原形 need，後面才接 to V。" },
+      { "question": "They plan ______ to Japan next month.", "options": ["travel", "traveling", "to travel", "traveled"], "answer": 2, "explanation": "plan 只能接不定詞。" },
+      { "question": "My hobby ______ stamps.", "options": ["is collect", "is collecting", "is to collect", "collects"], "answer": 2, "explanation": "不完全動詞 be 後面當主詞補語，只能用不定詞。" },
+      { "question": "My parents asked me ______ to church every Sunday.", "options": ["go", "going", "to go", "went"], "answer": 2, "explanation": "ask + 受詞 + to V，受詞補語句型。" },
+      { "question": "The strict teacher asked the students ______ English one hour a day.", "options": ["practice", "practicing", "to practice", "practiced"], "answer": 2, "explanation": "ask + 受詞 + to V 句型，動詞是 ask，不是 practice，所以用不定詞。" },
+      { "question": "She has a lot of housework ______.", "options": ["do", "doing", "to do", "did"], "answer": 2, "explanation": "不定詞當形容詞，修飾前面的名詞 housework。" },
+      { "question": "I need a pen ______ with.", "options": ["write", "writing", "to write", "wrote"], "answer": 2, "explanation": "不定詞當形容詞，修飾 pen；介詞 with 留在句尾。" },
+      { "question": "He gave up ______ last year.", "options": ["smoke", "smoking", "to smoke", "smoked"], "answer": 1, "explanation": "give up 只能接動名詞。" },
+      { "question": "Would you mind ______ the window for me?", "options": ["open", "opening", "to open", "opened"], "answer": 1, "explanation": "mind 只能接動名詞。" },
+      { "question": "Jenny practices ______ and writing English every day.", "options": ["read", "reads", "reading", "to read"], "answer": 2, "explanation": "practice 只能接動名詞，且需與後面的 writing 詞性一致。" },
+      { "question": "Leonardo is tired of ______ the same food every day.", "options": ["eat", "eating", "to eat", "ate"], "answer": 1, "explanation": "介係詞 of 後面只能接動名詞。" },
+      { "question": "You can't take the dictionary without ______ me first.", "options": ["ask", "asking", "to ask", "asked"], "answer": 1, "explanation": "介係詞 without 後面只能接動名詞。" },
+      { "question": "Remember ______ the door before you leave — it's not locked yet!", "options": ["lock", "locking", "to lock", "locked"], "answer": 2, "explanation": "remember + to V：提醒「還沒做、要去做」的事。" },
+      { "question": "I clearly remember ______ this movie with you last year.", "options": ["watch", "watching", "to watch", "watched"], "answer": 1, "explanation": "remember + V-ing：回想「已經做過」的事。" },
+      { "question": "He stopped ______ a cigarette on his way to the meeting.", "options": ["smoke", "smoking", "to smoke", "smoked"], "answer": 2, "explanation": "stop + to V：停下手邊動作，「去做」抽菸這件事。" },
+      { "question": "She stopped ______ three years ago and has never touched a cigarette since.", "options": ["smoke", "smoking", "to smoke", "smoked"], "answer": 1, "explanation": "stop + V-ing：停止「抽菸」這個習慣，即戒菸。" }
     ]
   }
 ]

@@ -1278,6 +1278,85 @@
             background: #2a2a52;
         }
 
+        .grammar-quiz-item {
+            background: #2a2a52;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin: 0 0 14px;
+        }
+
+        .grammar-quiz-question {
+            font-size: 1.15em;
+            color: #e8e8e8;
+            margin-bottom: 10px;
+        }
+
+        .grammar-quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .grammar-quiz-option {
+            background: #33335c;
+            border: 1px solid #4a4a60;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            color: #d8d8d8;
+            font-size: 1.05em;
+            text-align: left;
+        }
+
+        .grammar-quiz-option:hover {
+            background: #3d3d6b;
+        }
+
+        .grammar-quiz-option.correct {
+            background: #2d5a3d;
+            border-color: #4CAF50;
+            color: #fff;
+        }
+
+        .grammar-quiz-option.wrong {
+            background: #5a2d2d;
+            border-color: #f44336;
+            color: #fff;
+        }
+
+        .grammar-quiz-option.disabled {
+            cursor: default;
+        }
+
+        .grammar-quiz-explanation {
+            margin-top: 10px;
+            padding: 10px 12px;
+            background: #33335c;
+            border-radius: 6px;
+            font-size: 1.05em;
+            color: #b8b8b8;
+            display: none;
+        }
+
+        .grammar-quiz-explanation.show {
+            display: block;
+        }
+
+        .grammar-quiz-reset-btn {
+            background: #667eea;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 20px;
+            font-size: 1.05em;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+
+        .grammar-quiz-reset-btn:hover {
+            background: #5568d3;
+        }
+
         .word-row {
             display: flex;
             border-bottom: 1px solid #4a4a60;
@@ -3969,8 +4048,77 @@
                     (section.blocks || []).forEach(block => renderGrammarBlock(block, unitBody));
                 });
 
+                if (unit.quiz && unit.quiz.length > 0) {
+                    const quizTitle = document.createElement('div');
+                    quizTitle.className = 'grammar-subheading';
+                    quizTitle.style.fontSize = '1.3em';
+                    quizTitle.style.color = '#ffa500';
+                    quizTitle.textContent = '小測驗';
+                    unitBody.appendChild(quizTitle);
+
+                    const quizContainer = document.createElement('div');
+                    unitBody.appendChild(quizContainer);
+                    renderGrammarQuiz(unit.quiz, quizContainer);
+                }
+
                 container.appendChild(unitBody);
             });
+        }
+
+        function renderGrammarQuiz(questions, container) {
+            container.innerHTML = '';
+
+            questions.forEach((q, qIndex) => {
+                const item = document.createElement('div');
+                item.className = 'grammar-quiz-item';
+
+                const questionEl = document.createElement('div');
+                questionEl.className = 'grammar-quiz-question';
+                questionEl.textContent = `${qIndex + 1}. ${q.question}`;
+                item.appendChild(questionEl);
+
+                const optionsEl = document.createElement('div');
+                optionsEl.className = 'grammar-quiz-options';
+
+                const explanationEl = document.createElement('div');
+                explanationEl.className = 'grammar-quiz-explanation';
+                explanationEl.textContent = q.explanation || '';
+
+                let answered = false;
+
+                q.options.forEach((optionText, optIndex) => {
+                    const optionBtn = document.createElement('button');
+                    optionBtn.className = 'grammar-quiz-option';
+                    optionBtn.textContent = `${String.fromCharCode(9312 + optIndex)} ${optionText}`;
+                    optionBtn.onclick = () => {
+                        if (answered) return;
+                        answered = true;
+
+                        const allOptionBtns = optionsEl.querySelectorAll('.grammar-quiz-option');
+                        allOptionBtns.forEach(btn => btn.classList.add('disabled'));
+
+                        if (optIndex === q.answer) {
+                            optionBtn.classList.add('correct');
+                        } else {
+                            optionBtn.classList.add('wrong');
+                            allOptionBtns[q.answer].classList.add('correct');
+                        }
+
+                        explanationEl.classList.add('show');
+                    };
+                    optionsEl.appendChild(optionBtn);
+                });
+
+                item.appendChild(optionsEl);
+                item.appendChild(explanationEl);
+                container.appendChild(item);
+            });
+
+            const resetBtn = document.createElement('button');
+            resetBtn.className = 'grammar-quiz-reset-btn';
+            resetBtn.textContent = '重新測驗';
+            resetBtn.onclick = () => renderGrammarQuiz(questions, container);
+            container.appendChild(resetBtn);
         }
 
         function renderWords() {
