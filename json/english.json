@@ -15067,6 +15067,1496 @@
       "中文": "魚",
       "例句": "The fish is swimming in the tank.",
       "翻譯": "魚正在水缸裡游泳。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "school",
+      "音標": "[skul]",
+      "詞性": "n.",
+      "中文": "學校",
+      "例句": "There is a big playground in the school.",
+      "翻譯": "學校裡有一個很大的操場。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "hospital",
+      "音標": "[ˈhɑspɪtl]",
+      "詞性": "n.",
+      "中文": "醫院",
+      "例句": "My mother works in a hospital.",
+      "翻譯": "我媽媽在醫院工作。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "library",
+      "音標": "[ˈlaɪˌbrɛri]",
+      "詞性": "n.",
+      "中文": "圖書館",
+      "例句": "I often study in the library after school.",
+      "翻譯": "我放學後常常在圖書館讀書。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "bank",
+      "音標": "[bæŋk]",
+      "詞性": "n.",
+      "中文": "銀行",
+      "例句": "He went to the bank to open an account.",
+      "翻譯": "他去銀行開戶。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "post office",
+      "音標": "[post ˈɔfɪs]",
+      "詞性": "n.",
+      "中文": "郵局",
+      "例句": "She sent the letter at the post office.",
+      "翻譯": "她在郵局寄了這封信。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "church",
+      "音標": "[tʃɝtʃ]",
+      "詞性": "n.",
+      "中文": "教堂",
+      "例句": "They got married in a church.",
+      "翻譯": "他們在教堂結婚。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "museum",
+      "音標": "[mjuˈziəm]",
+      "詞性": "n.",
+      "中文": "博物館",
+      "例句": "We visited an art museum last weekend.",
+      "翻譯": "我們上週末參觀了一間美術博物館。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "factory",
+      "音標": "[ˈfæktri]",
+      "詞性": "n.",
+      "中文": "工廠",
+      "例句": "My father works in a shoe factory.",
+      "翻譯": "我爸爸在一家製鞋工廠工作。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "hotel",
+      "音標": "[hoˈtɛl]",
+      "詞性": "n.",
+      "中文": "旅館",
+      "例句": "We stayed in a nice hotel during our trip.",
+      "翻譯": "我們旅行時住在一間不錯的旅館。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "supermarket",
+      "音標": "[ˈsupɚˌmɑrkɪt]",
+      "詞性": "n.",
+      "中文": "超級市場",
+      "例句": "My mom buys vegetables at the supermarket.",
+      "翻譯": "我媽媽在超級市場買蔬菜。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "restaurant",
+      "音標": "[ˈrɛstərənt]",
+      "詞性": "n.",
+      "中文": "餐廳",
+      "例句": "We had dinner at a Japanese restaurant.",
+      "翻譯": "我們在一間日本餐廳吃晚餐。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "police station",
+      "音標": "[pəˈlis ˈsteʃən]",
+      "詞性": "n.",
+      "中文": "警察局",
+      "例句": "The lost dog was taken to the police station.",
+      "翻譯": "走失的狗被送到警察局。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "fire station",
+      "音標": "[faɪr ˈsteʃən]",
+      "詞性": "n.",
+      "中文": "消防局",
+      "例句": "The fire station is next to my school.",
+      "翻譯": "消防局就在我學校旁邊。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "temple",
+      "音標": "[ˈtɛmpl]",
+      "詞性": "n.",
+      "中文": "廟；寺廟",
+      "例句": "Many people visit the temple during Chinese New Year.",
+      "翻譯": "很多人在農曆新年去廟裡拜拜。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "建築物",
+      "單字": "bridge",
+      "音標": "[brɪdʒ]",
+      "詞性": "n.",
+      "中文": "橋",
+      "例句": "The bridge connects the two sides of the river.",
+      "翻譯": "這座橋連接河的兩岸。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "顏色",
+      "單字": "red",
+      "音標": "[rɛd]",
+      "詞性": "adj.",
+      "中文": "紅色的",
+      "例句": "The apple is red.",
+      "翻譯": "這顆蘋果是紅色的。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "顏色",
+      "單字": "orange",
+      "音標": "[ˈɔrɪndʒ]",
+      "詞性": "adj.",
+      "中文": "橘色的",
+      "例句": "She is wearing an orange shirt.",
+      "翻譯": "她穿著一件橘色的襯衫。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "顏色",
+      "單字": "yellow",
+      "音標": "[ˈjɛlo]",
+      "詞性": "adj.",
+      "中文": "黃色的",
+      "例句": "The sun looks yellow in the sky.",
+      "翻譯": "太陽在天空中看起來是黃色的。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "顏色",
+      "單字": "green",
+      "音標": "[grin]",
+      "詞性": "adj.",
+      "中文": "綠色的",
+      "例句": "The grass is green in spring.",
+      "翻譯": "春天的草是綠色的。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "顏色",
+      "單字": "blue",
+      "音標": "[blu]",
+      "詞性": "adj.",
+      "中文": "藍色的",
+      "例句": "The sky is blue today.",
+      "翻譯": "今天的天空是藍色的。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "顏色",
+      "單字": "purple",
+      "音標": "[ˈpɝpl]",
+      "詞性": "adj.",
+      "中文": "紫色的",
+      "例句": "She likes purple flowers.",
+      "翻譯": "她喜歡紫色的花。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "顏色",
+      "單字": "pink",
+      "音標": "[pɪŋk]",
+      "詞性": "adj.",
+      "中文": "粉紅色的",
+      "例句": "My sister's room is pink.",
+      "翻譯": "我妹妹的房間是粉紅色的。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "顏色",
+      "單字": "brown",
+      "音標": "[braʊn]",
+      "詞性": "adj.",
+      "中文": "棕色的",
+      "例句": "The dog has brown fur.",
+      "翻譯": "這隻狗有棕色的毛。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "顏色",
+      "單字": "black",
+      "音標": "[blæk]",
+      "詞性": "adj.",
+      "中文": "黑色的",
+      "例句": "He is wearing black shoes.",
+      "翻譯": "他穿著黑色的鞋子。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "顏色",
+      "單字": "white",
+      "音標": "[waɪt]",
+      "詞性": "adj.",
+      "中文": "白色的",
+      "例句": "The snow is white.",
+      "翻譯": "雪是白色的。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "顏色",
+      "單字": "gray",
+      "音標": "[gre]",
+      "詞性": "adj.",
+      "中文": "灰色的",
+      "例句": "The sky turned gray before the storm.",
+      "翻譯": "暴風雨前天空變成了灰色。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "顏色",
+      "單字": "gold",
+      "音標": "[gold]",
+      "詞性": "adj.",
+      "中文": "金色的",
+      "例句": "She wore a gold necklace.",
+      "翻譯": "她戴著一條金色的項鍊。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "身體部位",
+      "單字": "head",
+      "音標": "[hɛd]",
+      "詞性": "n.",
+      "中文": "頭",
+      "例句": "He hit his head on the door.",
+      "翻譯": "他的頭撞到了門。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "身體部位",
+      "單字": "hair",
+      "音標": "[hɛr]",
+      "詞性": "n.",
+      "中文": "頭髮",
+      "例句": "She has long black hair.",
+      "翻譯": "她有一頭烏黑的長髮。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "身體部位",
+      "單字": "eye",
+      "音標": "[aɪ]",
+      "詞性": "n.",
+      "中文": "眼睛",
+      "例句": "Close your eyes and make a wish.",
+      "翻譯": "閉上眼睛許個願望。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "身體部位",
+      "單字": "nose",
+      "音標": "[noz]",
+      "詞性": "n.",
+      "中文": "鼻子",
+      "例句": "The dog has a wet nose.",
+      "翻譯": "這隻狗的鼻子濕濕的。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "身體部位",
+      "單字": "mouth",
+      "音標": "[maʊθ]",
+      "詞性": "n.",
+      "中文": "嘴巴",
+      "例句": "Please open your mouth so I can check your throat.",
+      "翻譯": "請張開嘴巴讓我檢查你的喉嚨。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "身體部位",
+      "單字": "ear",
+      "音標": "[ɪr]",
+      "詞性": "n.",
+      "中文": "耳朵",
+      "例句": "Rabbits have long ears.",
+      "翻譯": "兔子有長長的耳朵。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "身體部位",
+      "單字": "hand",
+      "音標": "[hænd]",
+      "詞性": "n.",
+      "中文": "手",
+      "例句": "Wash your hands before eating.",
+      "翻譯": "吃飯前先洗手。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "身體部位",
+      "單字": "arm",
+      "音標": "[ɑrm]",
+      "詞性": "n.",
+      "中文": "手臂",
+      "例句": "She broke her arm last week.",
+      "翻譯": "她上週摔斷了手臂。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "身體部位",
+      "單字": "leg",
+      "音標": "[lɛg]",
+      "詞性": "n.",
+      "中文": "腿",
+      "例句": "The chair has four legs.",
+      "翻譯": "這張椅子有四隻腳。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "身體部位",
+      "單字": "foot",
+      "音標": "[fʊt]",
+      "詞性": "n.",
+      "中文": "腳",
+      "例句": "He hurt his foot while running.",
+      "翻譯": "他跑步時傷到了腳。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "身體部位",
+      "單字": "shoulder",
+      "音標": "[ˈʃoldɚ]",
+      "詞性": "n.",
+      "中文": "肩膀",
+      "例句": "She carried the bag on her shoulder.",
+      "翻譯": "她把袋子背在肩上。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "身體部位",
+      "單字": "stomach",
+      "音標": "[ˈstʌmək]",
+      "詞性": "n.",
+      "中文": "肚子；胃",
+      "例句": "My stomach hurts after eating too much.",
+      "翻譯": "吃太多後我的肚子很痛。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "teacher",
+      "音標": "[ˈtitʃɚ]",
+      "詞性": "n.",
+      "中文": "老師",
+      "例句": "My teacher is very kind.",
+      "翻譯": "我的老師很親切。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "doctor",
+      "音標": "[ˈdɑktɚ]",
+      "詞性": "n.",
+      "中文": "醫生",
+      "例句": "The doctor checked my throat.",
+      "翻譯": "醫生檢查了我的喉嚨。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "nurse",
+      "音標": "[nɝs]",
+      "詞性": "n.",
+      "中文": "護士",
+      "例句": "The nurse took care of the patient.",
+      "翻譯": "護士照顧病人。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "farmer",
+      "音標": "[ˈfɑrmɚ]",
+      "詞性": "n.",
+      "中文": "農夫",
+      "例句": "The farmer grows rice in the field.",
+      "翻譯": "農夫在田裡種稻米。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "police officer",
+      "音標": "[pəˈlis ˈɔfəsɚ]",
+      "詞性": "n.",
+      "中文": "警察",
+      "例句": "The police officer helped the old man.",
+      "翻譯": "警察幫助了那位老先生。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "firefighter",
+      "音標": "[ˈfaɪrˌfaɪtɚ]",
+      "詞性": "n.",
+      "中文": "消防員",
+      "例句": "The firefighter saved the cat from the tree.",
+      "翻譯": "消防員把貓從樹上救下來。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "driver",
+      "音標": "[ˈdraɪvɚ]",
+      "詞性": "n.",
+      "中文": "司機",
+      "例句": "The bus driver drives carefully.",
+      "翻譯": "公車司機開車很小心。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "cook",
+      "音標": "[kʊk]",
+      "詞性": "n.",
+      "中文": "廚師",
+      "例句": "The cook made a delicious soup.",
+      "翻譯": "廚師煮了一道美味的湯。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "singer",
+      "音標": "[ˈsɪŋɚ]",
+      "詞性": "n.",
+      "中文": "歌手",
+      "例句": "My favorite singer released a new song.",
+      "翻譯": "我最喜歡的歌手發行了新歌。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "artist",
+      "音標": "[ˈɑrtɪst]",
+      "詞性": "n.",
+      "中文": "藝術家",
+      "例句": "The artist painted a beautiful picture.",
+      "翻譯": "這位藝術家畫了一幅美麗的畫。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "engineer",
+      "音標": "[ˌɛndʒəˈnɪr]",
+      "詞性": "n.",
+      "中文": "工程師",
+      "例句": "My father is an engineer.",
+      "翻譯": "我爸爸是一位工程師。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "pilot",
+      "音標": "[ˈpaɪlət]",
+      "詞性": "n.",
+      "中文": "飛行員",
+      "例句": "The pilot flew the plane smoothly.",
+      "翻譯": "飛行員平穩地駕駛飛機。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "writer",
+      "音標": "[ˈraɪtɚ]",
+      "詞性": "n.",
+      "中文": "作家",
+      "例句": "She wants to be a writer someday.",
+      "翻譯": "她希望有一天能成為作家。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "職業",
+      "單字": "clerk",
+      "音標": "[klɝk]",
+      "詞性": "n.",
+      "中文": "店員",
+      "例句": "The clerk helped me find the shoes.",
+      "翻譯": "店員幫我找到了那雙鞋。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "交通工具",
+      "單字": "car",
+      "音標": "[kɑr]",
+      "詞性": "n.",
+      "中文": "汽車",
+      "例句": "We drove to the beach in a car.",
+      "翻譯": "我們開車去海邊。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "交通工具",
+      "單字": "bus",
+      "音標": "[bʌs]",
+      "詞性": "n.",
+      "中文": "公車",
+      "例句": "I take the bus to school every day.",
+      "翻譯": "我每天搭公車上學。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "交通工具",
+      "單字": "train",
+      "音標": "[tren]",
+      "詞性": "n.",
+      "中文": "火車",
+      "例句": "The train arrived on time.",
+      "翻譯": "火車準時抵達。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "交通工具",
+      "單字": "bike",
+      "音標": "[baɪk]",
+      "詞性": "n.",
+      "中文": "腳踏車",
+      "例句": "He rides his bike to work.",
+      "翻譯": "他騎腳踏車上班。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "交通工具",
+      "單字": "motorcycle",
+      "音標": "[ˈmotɚˌsaɪkl]",
+      "詞性": "n.",
+      "中文": "摩托車",
+      "例句": "She has a red motorcycle.",
+      "翻譯": "她有一台紅色的摩托車。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "交通工具",
+      "單字": "airplane",
+      "音標": "[ˈɛrˌplen]",
+      "詞性": "n.",
+      "中文": "飛機",
+      "例句": "The airplane took off at nine o'clock.",
+      "翻譯": "飛機在九點起飛。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "交通工具",
+      "單字": "boat",
+      "音標": "[bot]",
+      "詞性": "n.",
+      "中文": "船",
+      "例句": "We took a boat across the lake.",
+      "翻譯": "我們搭船穿越湖泊。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "交通工具",
+      "單字": "ship",
+      "音標": "[ʃɪp]",
+      "詞性": "n.",
+      "中文": "大船",
+      "例句": "The ship sailed to another country.",
+      "翻譯": "這艘船航向另一個國家。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "交通工具",
+      "單字": "subway",
+      "音標": "[ˈsʌbˌwe]",
+      "詞性": "n.",
+      "中文": "地鐵",
+      "例句": "The subway is fast and convenient.",
+      "翻譯": "地鐵既快速又方便。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "交通工具",
+      "單字": "taxi",
+      "音標": "[ˈtæksi]",
+      "詞性": "n.",
+      "中文": "計程車",
+      "例句": "We took a taxi to the airport.",
+      "翻譯": "我們搭計程車去機場。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "交通工具",
+      "單字": "truck",
+      "音標": "[trʌk]",
+      "詞性": "n.",
+      "中文": "卡車",
+      "例句": "The truck carried a lot of boxes.",
+      "翻譯": "這輛卡車載了很多箱子。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "交通工具",
+      "單字": "scooter",
+      "音標": "[ˈskutɚ]",
+      "詞性": "n.",
+      "中文": "機車",
+      "例句": "Many people in Taiwan ride scooters.",
+      "翻譯": "許多台灣人騎機車。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "rice",
+      "音標": "[raɪs]",
+      "詞性": "n.",
+      "中文": "米飯",
+      "例句": "We eat rice almost every day.",
+      "翻譯": "我們幾乎每天都吃米飯。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "noodle",
+      "音標": "[ˈnudl]",
+      "詞性": "n.",
+      "中文": "麵條",
+      "例句": "I like beef noodles very much.",
+      "翻譯": "我很喜歡牛肉麵。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "bread",
+      "音標": "[brɛd]",
+      "詞性": "n.",
+      "中文": "麵包",
+      "例句": "She bought fresh bread from the bakery.",
+      "翻譯": "她從麵包店買了新鮮的麵包。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "egg",
+      "音標": "[ɛg]",
+      "詞性": "n.",
+      "中文": "蛋",
+      "例句": "He fried an egg for breakfast.",
+      "翻譯": "他煎了一顆蛋當早餐。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "milk",
+      "音標": "[mɪlk]",
+      "詞性": "n.",
+      "中文": "牛奶",
+      "例句": "Drinking milk is good for your bones.",
+      "翻譯": "喝牛奶對骨頭有益。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "fruit",
+      "音標": "[frut]",
+      "詞性": "n.",
+      "中文": "水果",
+      "例句": "Eating fruit every day keeps you healthy.",
+      "翻譯": "每天吃水果讓你保持健康。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "vegetable",
+      "音標": "[ˈvɛdʒtəbl]",
+      "詞性": "n.",
+      "中文": "蔬菜",
+      "例句": "Children should eat more vegetables.",
+      "翻譯": "小孩應該多吃蔬菜。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "meat",
+      "音標": "[mit]",
+      "詞性": "n.",
+      "中文": "肉",
+      "例句": "He does not eat meat on Fridays.",
+      "翻譯": "他星期五不吃肉。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "soup",
+      "音標": "[sup]",
+      "詞性": "n.",
+      "中文": "湯",
+      "例句": "My mom cooks soup every night.",
+      "翻譯": "我媽媽每晚都煮湯。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "cake",
+      "音標": "[kek]",
+      "詞性": "n.",
+      "中文": "蛋糕",
+      "例句": "We had chocolate cake for the party.",
+      "翻譯": "我們的派對有巧克力蛋糕。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "candy",
+      "音標": "[ˈkændi]",
+      "詞性": "n.",
+      "中文": "糖果",
+      "例句": "Too much candy is bad for your teeth.",
+      "翻譯": "太多糖果對牙齒不好。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "juice",
+      "音標": "[dʒus]",
+      "詞性": "n.",
+      "中文": "果汁",
+      "例句": "She drank a glass of orange juice.",
+      "翻譯": "她喝了一杯柳橙汁。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "cheese",
+      "音標": "[tʃiz]",
+      "詞性": "n.",
+      "中文": "起司",
+      "例句": "I put some cheese on my sandwich.",
+      "翻譯": "我在三明治上放了一些起司。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "食物",
+      "單字": "cookie",
+      "音標": "[ˈkʊki]",
+      "詞性": "n.",
+      "中文": "餅乾",
+      "例句": "The children baked cookies with their mom.",
+      "翻譯": "孩子們和媽媽一起烤餅乾。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "天氣",
+      "單字": "sunny",
+      "音標": "[ˈsʌni]",
+      "詞性": "adj.",
+      "中文": "晴朗的",
+      "例句": "It's sunny today, so let's go outside.",
+      "翻譯": "今天天氣晴朗，我們出去走走吧。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "天氣",
+      "單字": "rainy",
+      "音標": "[ˈreni]",
+      "詞性": "adj.",
+      "中文": "下雨的",
+      "例句": "I stayed home because it was rainy.",
+      "翻譯": "因為下雨我就待在家裡。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "天氣",
+      "單字": "cloudy",
+      "音標": "[ˈklaʊdi]",
+      "詞性": "adj.",
+      "中文": "多雲的",
+      "例句": "The sky is cloudy this afternoon.",
+      "翻譯": "今天下午天空多雲。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "天氣",
+      "單字": "windy",
+      "音標": "[ˈwɪndi]",
+      "詞性": "adj.",
+      "中文": "有風的",
+      "例句": "It's too windy to fly a kite.",
+      "翻譯": "風太大不適合放風箏。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "天氣",
+      "單字": "snowy",
+      "音標": "[ˈsnoi]",
+      "詞性": "adj.",
+      "中文": "下雪的",
+      "例句": "The mountain is snowy in winter.",
+      "翻譯": "這座山在冬天會下雪。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "天氣",
+      "單字": "hot",
+      "音標": "[hɑt]",
+      "詞性": "adj.",
+      "中文": "炎熱的",
+      "例句": "It's very hot in summer in Taiwan.",
+      "翻譯": "台灣的夏天非常炎熱。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "天氣",
+      "單字": "cold",
+      "音標": "[kold]",
+      "詞性": "adj.",
+      "中文": "寒冷的",
+      "例句": "Wear a coat because it's cold outside.",
+      "翻譯": "外面很冷，穿件外套吧。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "天氣",
+      "單字": "warm",
+      "音標": "[wɔrm]",
+      "詞性": "adj.",
+      "中文": "溫暖的",
+      "例句": "The weather is warm in spring.",
+      "翻譯": "春天的天氣很溫暖。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "天氣",
+      "單字": "cool",
+      "音標": "[kul]",
+      "詞性": "adj.",
+      "中文": "涼爽的",
+      "例句": "The breeze feels cool in the evening.",
+      "翻譯": "傍晚的微風感覺很涼爽。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "天氣",
+      "單字": "foggy",
+      "音標": "[ˈfɔgi]",
+      "詞性": "adj.",
+      "中文": "有霧的",
+      "例句": "Drive carefully; it's foggy this morning.",
+      "翻譯": "今天早上有霧，開車要小心。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "情緒",
+      "單字": "happy",
+      "音標": "[ˈhæpi]",
+      "詞性": "adj.",
+      "中文": "開心的",
+      "例句": "She felt happy on her birthday.",
+      "翻譯": "她生日那天感到很開心。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "情緒",
+      "單字": "sad",
+      "音標": "[sæd]",
+      "詞性": "adj.",
+      "中文": "難過的",
+      "例句": "He was sad when his dog ran away.",
+      "翻譯": "他的狗跑走時他很難過。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "情緒",
+      "單字": "angry",
+      "音標": "[ˈæŋgri]",
+      "詞性": "adj.",
+      "中文": "生氣的",
+      "例句": "The teacher got angry when we were late.",
+      "翻譯": "我們遲到時老師生氣了。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "情緒",
+      "單字": "excited",
+      "音標": "[ɪkˈsaɪtɪd]",
+      "詞性": "adj.",
+      "中文": "興奮的",
+      "例句": "The kids were excited about the trip.",
+      "翻譯": "孩子們對這趟旅行感到興奮。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "情緒",
+      "單字": "scared",
+      "音標": "[skɛrd]",
+      "詞性": "adj.",
+      "中文": "害怕的",
+      "例句": "She was scared of the dark.",
+      "翻譯": "她怕黑。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "情緒",
+      "單字": "tired",
+      "音標": "[taɪrd]",
+      "詞性": "adj.",
+      "中文": "疲累的",
+      "例句": "I feel tired after a long day at school.",
+      "翻譯": "在學校待了一整天後我覺得很累。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "情緒",
+      "單字": "surprised",
+      "音標": "[sɚˈpraɪzd]",
+      "詞性": "adj.",
+      "中文": "驚訝的",
+      "例句": "We were surprised by the good news.",
+      "翻譯": "我們對這個好消息感到驚訝。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "情緒",
+      "單字": "worried",
+      "音標": "[ˈwɝid]",
+      "詞性": "adj.",
+      "中文": "擔心的",
+      "例句": "My mom was worried about my grades.",
+      "翻譯": "我媽媽擔心我的成績。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "情緒",
+      "單字": "nervous",
+      "音標": "[ˈnɝvəs]",
+      "詞性": "adj.",
+      "中文": "緊張的",
+      "例句": "He felt nervous before the test.",
+      "翻譯": "他考試前感到很緊張。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "情緒",
+      "單字": "bored",
+      "音標": "[bɔrd]",
+      "詞性": "adj.",
+      "中文": "無聊的",
+      "例句": "The students felt bored during the long lecture.",
+      "翻譯": "學生們在冗長的課堂上感到無聊。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "情緒",
+      "單字": "proud",
+      "音標": "[praʊd]",
+      "詞性": "adj.",
+      "中文": "驕傲的；自豪的",
+      "例句": "Her parents are proud of her.",
+      "翻譯": "她的父母以她為榮。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "情緒",
+      "單字": "lonely",
+      "音標": "[ˈlonli]",
+      "詞性": "adj.",
+      "中文": "孤單的",
+      "例句": "He felt lonely when his friends moved away.",
+      "翻譯": "朋友們搬走後他感到孤單。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "家庭成員",
+      "單字": "father",
+      "音標": "[ˈfɑðɚ]",
+      "詞性": "n.",
+      "中文": "父親",
+      "例句": "My father works at a bank.",
+      "翻譯": "我爸爸在銀行工作。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "家庭成員",
+      "單字": "mother",
+      "音標": "[ˈmʌðɚ]",
+      "詞性": "n.",
+      "中文": "母親",
+      "例句": "My mother cooks dinner every night.",
+      "翻譯": "我媽媽每晚都煮晚餐。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "家庭成員",
+      "單字": "parents",
+      "音標": "[ˈpɛrənts]",
+      "詞性": "n.",
+      "中文": "父母",
+      "例句": "My parents love me very much.",
+      "翻譯": "我父母非常愛我。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "家庭成員",
+      "單字": "brother",
+      "音標": "[ˈbrʌðɚ]",
+      "詞性": "n.",
+      "中文": "兄弟",
+      "例句": "I have an older brother.",
+      "翻譯": "我有一個哥哥。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "家庭成員",
+      "單字": "sister",
+      "音標": "[ˈsɪstɚ]",
+      "詞性": "n.",
+      "中文": "姊妹",
+      "例句": "My sister is younger than me.",
+      "翻譯": "我妹妹比我小。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "家庭成員",
+      "單字": "grandfather",
+      "音標": "[ˈgrænfɑðɚ]",
+      "詞性": "n.",
+      "中文": "祖父；爺爺",
+      "例句": "My grandfather tells great stories.",
+      "翻譯": "我爺爺會說很棒的故事。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "家庭成員",
+      "單字": "grandmother",
+      "音標": "[ˈgrænmʌðɚ]",
+      "詞性": "n.",
+      "中文": "祖母；奶奶",
+      "例句": "My grandmother makes delicious dumplings.",
+      "翻譯": "我奶奶做的水餃很好吃。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "家庭成員",
+      "單字": "uncle",
+      "音標": "[ˈʌŋkl]",
+      "詞性": "n.",
+      "中文": "叔叔；舅舅",
+      "例句": "My uncle lives in the countryside.",
+      "翻譯": "我叔叔住在鄉下。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "家庭成員",
+      "單字": "aunt",
+      "音標": "[ænt]",
+      "詞性": "n.",
+      "中文": "阿姨；姑姑",
+      "例句": "My aunt gave me a birthday gift.",
+      "翻譯": "我阿姨給了我一份生日禮物。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "家庭成員",
+      "單字": "cousin",
+      "音標": "[ˈkʌzn]",
+      "詞性": "n.",
+      "中文": "表(堂)兄弟姊妹",
+      "例句": "My cousin and I are the same age.",
+      "翻譯": "我表哥跟我同年齡。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "家庭成員",
+      "單字": "son",
+      "音標": "[sʌn]",
+      "詞性": "n.",
+      "中文": "兒子",
+      "例句": "They have a son and a daughter.",
+      "翻譯": "他們有一個兒子和一個女兒。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "家庭成員",
+      "單字": "daughter",
+      "音標": "[ˈdɔtɚ]",
+      "詞性": "n.",
+      "中文": "女兒",
+      "例句": "Their daughter just started middle school.",
+      "翻譯": "他們的女兒剛上國中。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "服飾",
+      "單字": "shirt",
+      "音標": "[ʃɝt]",
+      "詞性": "n.",
+      "中文": "襯衫",
+      "例句": "He is wearing a blue shirt.",
+      "翻譯": "他穿著一件藍色的襯衫。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "服飾",
+      "單字": "T-shirt",
+      "音標": "[ˈtiˌʃɝt]",
+      "詞性": "n.",
+      "中文": "T恤",
+      "例句": "She bought a new T-shirt.",
+      "翻譯": "她買了一件新的T恤。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "服飾",
+      "單字": "pants",
+      "音標": "[pænts]",
+      "詞性": "n.",
+      "中文": "長褲",
+      "例句": "These pants are too tight for me.",
+      "翻譯": "這條長褲對我來說太緊了。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "服飾",
+      "單字": "skirt",
+      "音標": "[skɝt]",
+      "詞性": "n.",
+      "中文": "裙子",
+      "例句": "She wore a pretty skirt to the party.",
+      "翻譯": "她穿了一件漂亮的裙子去參加派對。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "服飾",
+      "單字": "dress",
+      "音標": "[drɛs]",
+      "詞性": "n.",
+      "中文": "洋裝",
+      "例句": "The dress fits her perfectly.",
+      "翻譯": "這件洋裝很合她的身。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "服飾",
+      "單字": "jacket",
+      "音標": "[ˈdʒækɪt]",
+      "詞性": "n.",
+      "中文": "夾克",
+      "例句": "Put on a jacket; it's cold outside.",
+      "翻譯": "穿上夾克，外面很冷。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "服飾",
+      "單字": "shoes",
+      "音標": "[ʃuz]",
+      "詞性": "n.",
+      "中文": "鞋子",
+      "例句": "I need to buy new shoes for school.",
+      "翻譯": "我需要買新鞋子上學穿。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "服飾",
+      "單字": "socks",
+      "音標": "[sɑks]",
+      "詞性": "n.",
+      "中文": "襪子",
+      "例句": "He wore two different socks by mistake.",
+      "翻譯": "他不小心穿了兩隻不一樣的襪子。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "服飾",
+      "單字": "hat",
+      "音標": "[hæt]",
+      "詞性": "n.",
+      "中文": "帽子",
+      "例句": "She wore a hat to block the sun.",
+      "翻譯": "她戴帽子遮陽。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "服飾",
+      "單字": "glasses",
+      "音標": "[ˈglæsɪz]",
+      "詞性": "n.",
+      "中文": "眼鏡",
+      "例句": "He needs glasses to read.",
+      "翻譯": "他需要戴眼鏡才能閱讀。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "服飾",
+      "單字": "belt",
+      "音標": "[bɛlt]",
+      "詞性": "n.",
+      "中文": "皮帶",
+      "例句": "His belt matches his shoes.",
+      "翻譯": "他的皮帶跟鞋子很搭。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "服飾",
+      "單字": "scarf",
+      "音標": "[skɑrf]",
+      "詞性": "n.",
+      "中文": "圍巾",
+      "例句": "She wrapped a warm scarf around her neck.",
+      "翻譯": "她圍上一條溫暖的圍巾。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "Monday",
+      "音標": "[ˈmʌnde]",
+      "詞性": "n.",
+      "中文": "星期一",
+      "例句": "We have a math test on Monday.",
+      "翻譯": "我們星期一有數學考試。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "Tuesday",
+      "音標": "[ˈtjuzde]",
+      "詞性": "n.",
+      "中文": "星期二",
+      "例句": "She goes to the gym every Tuesday.",
+      "翻譯": "她每個星期二都去健身房。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "Wednesday",
+      "音標": "[ˈwɛnzde]",
+      "詞性": "n.",
+      "中文": "星期三",
+      "例句": "The library is closed on Wednesday.",
+      "翻譯": "圖書館星期三休館。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "Thursday",
+      "音標": "[ˈθɝzde]",
+      "詞性": "n.",
+      "中文": "星期四",
+      "例句": "We will have a meeting this Thursday.",
+      "翻譯": "我們這個星期四要開會。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "Friday",
+      "音標": "[ˈfraɪde]",
+      "詞性": "n.",
+      "中文": "星期五",
+      "例句": "I love Fridays because the weekend is coming.",
+      "翻譯": "我喜歡星期五，因為週末要到了。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "Saturday",
+      "音標": "[ˈsætɚde]",
+      "詞性": "n.",
+      "中文": "星期六",
+      "例句": "We usually clean the house on Saturday.",
+      "翻譯": "我們通常星期六打掃房子。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "Sunday",
+      "音標": "[ˈsʌnde]",
+      "詞性": "n.",
+      "中文": "星期日",
+      "例句": "My family goes to the park on Sunday.",
+      "翻譯": "我們家星期日會去公園。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "January",
+      "音標": "[ˈdʒænjuˌɛri]",
+      "詞性": "n.",
+      "中文": "一月",
+      "例句": "The new year begins in January.",
+      "翻譯": "新的一年從一月開始。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "February",
+      "音標": "[ˈfɛbjuˌɛri]",
+      "詞性": "n.",
+      "中文": "二月",
+      "例句": "February is the shortest month.",
+      "翻譯": "二月是最短的月份。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "March",
+      "音標": "[mɑrtʃ]",
+      "詞性": "n.",
+      "中文": "三月",
+      "例句": "Spring starts in March.",
+      "翻譯": "春天從三月開始。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "April",
+      "音標": "[ˈeprəl]",
+      "詞性": "n.",
+      "中文": "四月",
+      "例句": "It often rains in April.",
+      "翻譯": "四月常常下雨。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "May",
+      "音標": "[me]",
+      "詞性": "n.",
+      "中文": "五月",
+      "例句": "We celebrate Mother's Day in May.",
+      "翻譯": "我們在五月慶祝母親節。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "June",
+      "音標": "[dʒun]",
+      "詞性": "n.",
+      "中文": "六月",
+      "例句": "School ends in June.",
+      "翻譯": "學校在六月結束。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "July",
+      "音標": "[dʒuˈlaɪ]",
+      "詞性": "n.",
+      "中文": "七月",
+      "例句": "It is very hot in July.",
+      "翻譯": "七月非常炎熱。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "August",
+      "音標": "[ˈɔgəst]",
+      "詞性": "n.",
+      "中文": "八月",
+      "例句": "We often go swimming in August.",
+      "翻譯": "我們常在八月去游泳。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "September",
+      "音標": "[sɛpˈtɛmbɚ]",
+      "詞性": "n.",
+      "中文": "九月",
+      "例句": "The new school year starts in September.",
+      "翻譯": "新學年在九月開始。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "October",
+      "音標": "[ɑkˈtobɚ]",
+      "詞性": "n.",
+      "中文": "十月",
+      "例句": "The weather gets cooler in October.",
+      "翻譯": "十月的天氣變得比較涼爽。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "November",
+      "音標": "[noˈvɛmbɚ]",
+      "詞性": "n.",
+      "中文": "十一月",
+      "例句": "Thanksgiving is celebrated in November.",
+      "翻譯": "感恩節在十一月慶祝。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "December",
+      "音標": "[dɪˈsɛmbɚ]",
+      "詞性": "n.",
+      "中文": "十二月",
+      "例句": "Christmas is in December.",
+      "翻譯": "聖誕節在十二月。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "spring",
+      "音標": "[sprɪŋ]",
+      "詞性": "n.",
+      "中文": "春天",
+      "例句": "Flowers bloom in spring.",
+      "翻譯": "花在春天綻放。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "summer",
+      "音標": "[ˈsʌmɚ]",
+      "詞性": "n.",
+      "中文": "夏天",
+      "例句": "We go to the beach in summer.",
+      "翻譯": "我們夏天會去海邊。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "fall",
+      "音標": "[fɔl]",
+      "詞性": "n.",
+      "中文": "秋天",
+      "例句": "The leaves turn yellow in fall.",
+      "翻譯": "樹葉在秋天變黃。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "autumn",
+      "音標": "[ˈɔtəm]",
+      "詞性": "n.",
+      "中文": "秋天",
+      "例句": "Autumn is my favorite season.",
+      "翻譯": "秋天是我最喜歡的季節。"
+    },
+    {
+      "sheet": "補充",
+      "tag": "日期",
+      "單字": "winter",
+      "音標": "[ˈwɪntɚ]",
+      "詞性": "n.",
+      "中文": "冬天",
+      "例句": "It snows a lot in winter.",
+      "翻譯": "冬天常常下雪。"
     }
   ]
 }
