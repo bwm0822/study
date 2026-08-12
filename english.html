@@ -4251,10 +4251,12 @@
                     quizTitle.style.fontSize = '1.3em';
                     quizTitle.style.color = '#ffa500';
                     quizTitle.textContent = '小測驗';
+                    quizTitle.onclick = (e) => e.stopPropagation();
                     unitBody.appendChild(quizTitle);
                     grammarQuizElements[tag] = quizTitle;
 
                     const quizContainer = document.createElement('div');
+                    quizContainer.onclick = (e) => e.stopPropagation();
                     unitBody.appendChild(quizContainer);
                     renderGrammarQuiz(unit.quiz, quizContainer);
                 }
@@ -4339,7 +4341,10 @@
                 const questionEl = document.createElement('div');
                 questionEl.className = 'grammar-quiz-question';
                 questionEl.textContent = `${qIndex + 1}. ${q.question}`;
-                questionEl.onclick = () => playPronunciation(q.question);
+                questionEl.onclick = (e) => {
+                    e.stopPropagation();
+                    playPronunciation(q.question);
+                };
                 item.appendChild(questionEl);
 
                 const optionsEl = document.createElement('div');
@@ -4349,7 +4354,10 @@
                 explanationEl.className = 'grammar-quiz-explanation grammar-speakable-zh';
                 explanationEl.textContent = q.explanation || '';
                 if (q.explanation) {
-                    explanationEl.onclick = () => playPronunciationZh(q.explanation);
+                    explanationEl.onclick = (e) => {
+                        e.stopPropagation();
+                        playPronunciationZh(q.explanation);
+                    };
                 }
 
                 let answered = false;
@@ -4358,7 +4366,8 @@
                     const optionBtn = document.createElement('button');
                     optionBtn.className = 'grammar-quiz-option';
                     optionBtn.textContent = `${String.fromCharCode(9312 + optIndex)} ${optionText}`;
-                    optionBtn.onclick = () => {
+                    optionBtn.onclick = (e) => {
+                        e.stopPropagation();
                         if (answered) return;
                         answered = true;
 
@@ -4385,7 +4394,10 @@
             const resetBtn = document.createElement('button');
             resetBtn.className = 'grammar-quiz-reset-btn';
             resetBtn.textContent = '重新測驗';
-            resetBtn.onclick = () => renderGrammarQuiz(questions, container);
+            resetBtn.onclick = (e) => {
+                e.stopPropagation();
+                renderGrammarQuiz(questions, container);
+            };
             container.appendChild(resetBtn);
         }
 
