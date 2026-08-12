@@ -1323,6 +1323,23 @@
             background: rgba(128, 128, 128, 0.4) !important;
         }
 
+        .grammar-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            padding: 18px 36px;
+            border-radius: 12px;
+            font-size: 1.8em;
+            font-weight: bold;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+
         .grammar-quiz-item {
             background: #2a2a52;
             border-radius: 8px;
@@ -4190,11 +4207,13 @@
                 unitBody.onclick = (e) => {
                     if (grammarReadingUnit === tag) {
                         stopGrammarReading();
+                        showGrammarToast('停止');
                         return;
                     }
                     const target = e.target.closest('[data-grammar-queue-index]');
                     const idx = target ? parseInt(target.dataset.grammarQueueIndex, 10) : 0;
                     playGrammarUnitFrom(tag, idx);
+                    showGrammarToast('朗讀');
                 };
 
                 const queue = [];
@@ -4242,6 +4261,30 @@
 
                 container.appendChild(unitBody);
             });
+        }
+
+        let grammarToastTimer = null;
+
+        function showGrammarToast(text) {
+            let toast = document.getElementById('grammarToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'grammarToast';
+                toast.className = 'grammar-toast';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = text;
+
+            // 立即顯示（不用轉場），之後才用 CSS 的 opacity transition 淡出
+            toast.style.transition = 'none';
+            toast.style.opacity = '1';
+            void toast.offsetWidth; // 強制重排，確保「立即顯示」先套用，之後淡出才會有轉場效果
+            toast.style.transition = '';
+
+            if (grammarToastTimer) clearTimeout(grammarToastTimer);
+            grammarToastTimer = setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 400);
         }
 
         function clearGrammarReadHighlights(tag) {
