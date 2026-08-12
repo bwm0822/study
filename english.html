@@ -1240,6 +1240,7 @@
         .grammar-example-en {
             font-size: 1.2em;
             color: #e8e8e8;
+            cursor: pointer;
         }
 
         .grammar-example-en.grammar-example-alt {
@@ -1305,6 +1306,23 @@
             background: #2a2a52;
         }
 
+        .grammar-table-speakable {
+            cursor: pointer;
+        }
+
+        .grammar-table-speakable-zh {
+            cursor: pointer;
+            color: #999;
+        }
+
+        .grammar-speakable-zh {
+            cursor: pointer;
+        }
+
+        .grammar-read-done {
+            background: rgba(128, 128, 128, 0.4) !important;
+        }
+
         .grammar-quiz-item {
             background: #2a2a52;
             border-radius: 8px;
@@ -1316,6 +1334,7 @@
             font-size: 1.15em;
             color: #e8e8e8;
             margin-bottom: 10px;
+            cursor: pointer;
         }
 
         .grammar-quiz-options {
@@ -2370,6 +2389,8 @@
         let grammarUnitElements = {}; // {tag: 該單元標題的 DOM 元素}，供下拉選單跳轉
         let grammarQuizElements = {}; // {tag: 該單元「小測驗」標題的 DOM 元素}，供下拉選單跳轉
         let grammarUnitBodies = {}; // {tag: 該單元內容區 DOM 元素}，跳轉前需確保未收合
+        let grammarReadingQueues = {}; // {tag: [{element, text, lang}]}，供「朗讀」依序播放
+        let grammarReadingUnit = null; // 目前正在朗讀的單元 tag
         let normalModeSheetNames = new Set(); // 記錄一般/複習模式的 sheet 名稱
         let normalModeCheckStates = {}; // 保存 normal 模式 sheet 的狀態 {sheetName: checked}
         let normalModeTagStates = {}; // 保存 normal 模式 tag 的狀態 {sheetName: {tagName: checked}}
@@ -2956,6 +2977,7 @@
 
             if (mode === 'phonetics') {
                 stopStoryPlayback();
+                stopGrammarReading();
                 wordsContainer.style.display = 'none';
                 quizContainer.style.display = 'none';
                 tagFilterContainer.style.display = 'none';
@@ -2972,6 +2994,7 @@
                 renderPhonetics();
             } else if (mode === 'rules') {
                 stopStoryPlayback();
+                stopGrammarReading();
                 wordsContainer.style.display = 'none';
                 quizContainer.style.display = 'none';
                 tagFilterContainer.style.display = 'none';
@@ -2988,6 +3011,7 @@
                 renderRules();
             } else if (mode === 'grammar') {
                 stopStoryPlayback();
+                stopGrammarReading();
                 wordsContainer.style.display = 'none';
                 quizContainer.style.display = 'none';
                 tagFilterContainer.style.display = 'none';
@@ -3004,6 +3028,7 @@
                 initGrammarPanel();
             } else if (mode === 'review') {
                 stopStoryPlayback();
+                stopGrammarReading();
                 wordsContainer.style.display = 'block';
                 quizContainer.style.display = 'none';
                 tagFilterContainer.style.display = 'none';
@@ -3022,6 +3047,7 @@
                 renderWords();
             } else if (mode === 'quiz') {
                 stopStoryPlayback();
+                stopGrammarReading();
                 wordsContainer.style.display = 'none';
                 quizContainer.style.display = 'flex';
                 tagFilterContainer.style.display = 'none';
@@ -3041,6 +3067,7 @@
                 initQuizPanel();
             } else if (mode === 'statistics') {
                 stopStoryPlayback();
+                stopGrammarReading();
                 wordsContainer.style.display = 'block';
                 quizContainer.style.display = 'none';
                 tagFilterContainer.style.display = 'none';
@@ -3072,6 +3099,7 @@
                 showChineseIdioms();
             } else if (mode === 'add') {
                 stopStoryPlayback();
+                stopGrammarReading();
                 wordsContainer.style.display = 'block';
                 quizContainer.style.display = 'none';
                 document.getElementById('chineseContainer').style.display = 'none';
@@ -3088,6 +3116,7 @@
                 renderCustomWords();
             } else {
                 stopStoryPlayback();
+                stopGrammarReading();
                 wordsContainer.style.display = 'block';
                 quizContainer.style.display = 'none';
                 document.getElementById('chineseContainer').style.display = 'none';
@@ -3721,6 +3750,22 @@
             speechSynthesis.speak(utterance);
         }
 
+        function playPronunciationZh(text) {
+            const SpeechSynthesisUtterance = window.SpeechSynthesisUtterance || window.webkitSpeechSynthesisUtterance;
+            const speechSynthesis = window.speechSynthesis || window.webkitSpeechSynthesis;
+
+            if (!SpeechSynthesisUtterance || !speechSynthesis) {
+                console.log('Web Speech API not supported');
+                return;
+            }
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-TW';
+            utterance.rate = pronunciationRate;
+            speechSynthesis.cancel();
+            speechSynthesis.speak(utterance);
+        }
+
         function playKKAudio(audioPath, fallbackWord) {
             const audio = new Audio(audioPath);
             let handled = false;
@@ -3900,20 +3945,28 @@
             return grammarData;
         }
 
-        function renderGrammarBlock(block, parent) {
+        function pushGrammarQueue(queue, element, text, lang) {
+            if (!queue) return;
+            element.dataset.grammarQueueIndex = String(queue.length);
+            queue.push({ element, text, lang });
+        }
+
+        function renderGrammarBlock(block, parent, queue) {
             switch (block.type) {
                 case 'text': {
                     const el = document.createElement('div');
-                    el.className = 'grammar-text';
+                    el.className = 'grammar-text grammar-speakable-zh';
                     el.textContent = block.text;
                     parent.appendChild(el);
+                    pushGrammarQueue(queue, el, block.text, 'zh');
                     break;
                 }
                 case 'subheading': {
                     const el = document.createElement('div');
-                    el.className = 'grammar-subheading';
+                    el.className = 'grammar-subheading grammar-speakable-zh';
                     el.textContent = block.text;
                     parent.appendChild(el);
+                    pushGrammarQueue(queue, el, block.text, 'zh');
                     break;
                 }
                 case 'pattern': {
@@ -3925,14 +3978,15 @@
                 }
                 case 'note': {
                     const el = document.createElement('div');
-                    el.className = 'grammar-note';
+                    el.className = 'grammar-note grammar-speakable-zh';
                     el.textContent = block.text;
                     parent.appendChild(el);
+                    pushGrammarQueue(queue, el, block.text, 'zh');
                     break;
                 }
                 case 'quote': {
                     const el = document.createElement('div');
-                    el.className = 'grammar-quote';
+                    el.className = 'grammar-quote grammar-speakable-zh';
                     if (block.label) {
                         const labelEl = document.createElement('span');
                         labelEl.className = 'grammar-quote-label';
@@ -3941,6 +3995,7 @@
                     }
                     el.appendChild(document.createTextNode(block.text));
                     parent.appendChild(el);
+                    pushGrammarQueue(queue, el, block.text, 'zh');
                     break;
                 }
                 case 'example': {
@@ -3950,14 +4005,16 @@
                         const lineEl = document.createElement('div');
                         lineEl.className = idx === 0 ? 'grammar-example-en' : 'grammar-example-en grammar-example-alt';
                         lineEl.textContent = line;
-                        lineEl.onclick = () => playPronunciation(line.replace(/^=\s*/, ''));
+                        const cleanLine = line.replace(/^=\s*/, '');
                         el.appendChild(lineEl);
+                        pushGrammarQueue(queue, lineEl, cleanLine, 'en');
                     });
                     if (block.zh) {
                         const zhEl = document.createElement('div');
-                        zhEl.className = 'grammar-example-zh';
+                        zhEl.className = 'grammar-example-zh grammar-speakable-zh';
                         zhEl.textContent = `（${block.zh}）`;
                         el.appendChild(zhEl);
+                        pushGrammarQueue(queue, zhEl, block.zh, 'zh');
                     }
                     if (block.note) {
                         const noteEl = document.createElement('div');
@@ -3987,7 +4044,40 @@
                         const tr = document.createElement('tr');
                         row.forEach(cell => {
                             const td = document.createElement('td');
-                            td.textContent = cell;
+                            const cellStr = String(cell);
+                            const parenIndex = cellStr.indexOf('（');
+
+                            if (parenIndex !== -1) {
+                                const enPart = cellStr.slice(0, parenIndex).trim();
+                                const zhPart = cellStr.slice(parenIndex).replace(/^（|）$/g, '').trim();
+                                if (/[A-Za-z]/.test(enPart)) {
+                                    const enSpan = document.createElement('span');
+                                    enSpan.className = 'grammar-table-speakable';
+                                    enSpan.textContent = enPart;
+                                    td.appendChild(enSpan);
+                                    pushGrammarQueue(queue, enSpan, enPart, 'en');
+                                } else if (enPart) {
+                                    td.appendChild(document.createTextNode(enPart));
+                                }
+                                if (zhPart) {
+                                    const zhSpan = document.createElement('span');
+                                    zhSpan.className = 'grammar-table-speakable-zh';
+                                    zhSpan.textContent = `（${zhPart}）`;
+                                    td.appendChild(zhSpan);
+                                    pushGrammarQueue(queue, zhSpan, zhPart, 'zh');
+                                }
+                            } else if (/[A-Za-z]/.test(cellStr)) {
+                                td.textContent = cellStr;
+                                td.classList.add('grammar-table-speakable');
+                                pushGrammarQueue(queue, td, cellStr, 'en');
+                            } else if (/[一-鿿]/.test(cellStr)) {
+                                td.textContent = cellStr;
+                                td.classList.add('grammar-table-speakable-zh');
+                                pushGrammarQueue(queue, td, cellStr, 'zh');
+                            } else {
+                                td.textContent = cellStr;
+                            }
+
                             tr.appendChild(td);
                         });
                         tbody.appendChild(tr);
@@ -4071,11 +4161,13 @@
         }
 
         async function renderGrammar() {
+            stopGrammarReading();
             const container = document.getElementById('grammarContainer');
             container.innerHTML = '';
             grammarUnitElements = {};
             grammarQuizElements = {};
             grammarUnitBodies = {};
+            grammarReadingQueues = {};
 
             const units = await loadGrammar();
 
@@ -4083,17 +4175,36 @@
                 const tag = getGrammarUnitTag(unit);
                 const unitTitle = document.createElement('div');
                 unitTitle.className = 'phonetics-group-title';
-                unitTitle.innerHTML = `<span class="phonetics-group-arrow">▼</span> ${unit.title}`;
+
+                const arrowSpan = document.createElement('span');
+                arrowSpan.className = 'phonetics-group-arrow';
+                arrowSpan.textContent = '▼';
+                unitTitle.appendChild(arrowSpan);
+                unitTitle.appendChild(document.createTextNode(' ' + unit.title));
+
                 container.appendChild(unitTitle);
                 grammarUnitElements[tag] = unitTitle;
 
                 const unitBody = document.createElement('div');
                 grammarUnitBodies[tag] = unitBody;
+                unitBody.onclick = (e) => {
+                    if (grammarReadingUnit === tag) {
+                        stopGrammarReading();
+                        return;
+                    }
+                    const target = e.target.closest('[data-grammar-queue-index]');
+                    const idx = target ? parseInt(target.dataset.grammarQueueIndex, 10) : 0;
+                    playGrammarUnitFrom(tag, idx);
+                };
+
+                const queue = [];
+                grammarReadingQueues[tag] = queue;
+                pushGrammarQueue(queue, unitTitle, unit.title, 'zh');
 
                 unitTitle.onclick = () => {
                     const collapsed = unitBody.style.display === 'none';
                     unitBody.style.display = collapsed ? 'block' : 'none';
-                    unitTitle.querySelector('.phonetics-group-arrow').textContent = collapsed ? '▼' : '▶';
+                    arrowSpan.textContent = collapsed ? '▼' : '▶';
                 };
 
                 if (unit.source) {
@@ -4105,13 +4216,14 @@
 
                 (unit.sections || []).forEach(section => {
                     const sectionTitle = document.createElement('div');
-                    sectionTitle.className = 'grammar-subheading';
+                    sectionTitle.className = 'grammar-subheading grammar-speakable-zh';
                     sectionTitle.style.fontSize = '1.3em';
                     sectionTitle.style.color = '#ffa500';
                     sectionTitle.textContent = section.heading;
                     unitBody.appendChild(sectionTitle);
+                    pushGrammarQueue(queue, sectionTitle, section.heading, 'zh');
 
-                    (section.blocks || []).forEach(block => renderGrammarBlock(block, unitBody));
+                    (section.blocks || []).forEach(block => renderGrammarBlock(block, unitBody, queue));
                 });
 
                 if (unit.quiz && unit.quiz.length > 0) {
@@ -4132,6 +4244,48 @@
             });
         }
 
+        function clearGrammarReadHighlights(tag) {
+            const queue = grammarReadingQueues[tag] || [];
+            queue.forEach(item => item.element.classList.remove('grammar-read-done'));
+        }
+
+        function stopGrammarReading() {
+            speechSynthesis.cancel();
+            if (grammarReadingUnit) {
+                clearGrammarReadHighlights(grammarReadingUnit);
+                grammarReadingUnit = null;
+            }
+        }
+
+        function playGrammarUnitFrom(tag, startIndex) {
+            speechSynthesis.cancel();
+            if (grammarReadingUnit) clearGrammarReadHighlights(grammarReadingUnit);
+            expandGrammarUnitBody(tag);
+            grammarReadingUnit = tag;
+            speakGrammarQueueItem(tag, startIndex);
+        }
+
+        function speakGrammarQueueItem(tag, index) {
+            if (grammarReadingUnit !== tag) return;
+            const queue = grammarReadingQueues[tag] || [];
+
+            if (index >= queue.length) {
+                clearGrammarReadHighlights(tag);
+                grammarReadingUnit = null;
+                return;
+            }
+
+            const item = queue[index];
+            item.element.classList.add('grammar-read-done');
+            item.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            const utterance = new SpeechSynthesisUtterance(item.text);
+            utterance.lang = item.lang === 'en' ? pronunciationLang : 'zh-TW';
+            utterance.rate = pronunciationRate;
+            utterance.onend = () => speakGrammarQueueItem(tag, index + 1);
+            speechSynthesis.speak(utterance);
+        }
+
         function renderGrammarQuiz(questions, container) {
             container.innerHTML = '';
 
@@ -4142,14 +4296,18 @@
                 const questionEl = document.createElement('div');
                 questionEl.className = 'grammar-quiz-question';
                 questionEl.textContent = `${qIndex + 1}. ${q.question}`;
+                questionEl.onclick = () => playPronunciation(q.question);
                 item.appendChild(questionEl);
 
                 const optionsEl = document.createElement('div');
                 optionsEl.className = 'grammar-quiz-options';
 
                 const explanationEl = document.createElement('div');
-                explanationEl.className = 'grammar-quiz-explanation';
+                explanationEl.className = 'grammar-quiz-explanation grammar-speakable-zh';
                 explanationEl.textContent = q.explanation || '';
+                if (q.explanation) {
+                    explanationEl.onclick = () => playPronunciationZh(q.explanation);
+                }
 
                 let answered = false;
 
