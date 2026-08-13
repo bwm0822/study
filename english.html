@@ -1405,18 +1405,23 @@
             display: block;
         }
 
-        .grammar-quiz-reset-btn {
+        .grammar-quiz-title-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .grammar-quiz-order-btn {
             background: #667eea;
             color: #fff;
             border: none;
-            border-radius: 6px;
-            padding: 8px 20px;
-            font-size: 1.05em;
+            border-radius: 4px;
+            padding: 4px 14px;
+            font-size: 0.7em;
             cursor: pointer;
-            margin-top: 4px;
+            margin-left: 8px;
         }
 
-        .grammar-quiz-reset-btn:hover {
+        .grammar-quiz-order-btn:hover {
             background: #5568d3;
         }
 
@@ -4247,11 +4252,37 @@
 
                 if (unit.quiz && unit.quiz.length > 0) {
                     const quizTitle = document.createElement('div');
-                    quizTitle.className = 'grammar-subheading';
+                    quizTitle.className = 'grammar-subheading grammar-quiz-title-row';
                     quizTitle.style.fontSize = '1.3em';
                     quizTitle.style.color = '#ffa500';
-                    quizTitle.textContent = '小測驗';
                     quizTitle.onclick = (e) => e.stopPropagation();
+
+                    const quizTitleText = document.createElement('span');
+                    quizTitleText.textContent = '小測驗';
+                    quizTitle.appendChild(quizTitleText);
+
+                    const quizOrderBtns = document.createElement('span');
+                    quizOrderBtns.style.marginLeft = '12px';
+
+                    const seqBtn = document.createElement('button');
+                    seqBtn.className = 'grammar-quiz-order-btn';
+                    seqBtn.textContent = '依序';
+                    seqBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        renderGrammarQuiz(unit.quiz, quizContainer);
+                    };
+                    quizOrderBtns.appendChild(seqBtn);
+
+                    const randBtn = document.createElement('button');
+                    randBtn.className = 'grammar-quiz-order-btn';
+                    randBtn.textContent = '隨機';
+                    randBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        renderGrammarQuiz(shuffleArray(unit.quiz.slice()), quizContainer);
+                    };
+                    quizOrderBtns.appendChild(randBtn);
+
+                    quizTitle.appendChild(quizOrderBtns);
                     unitBody.appendChild(quizTitle);
                     grammarQuizElements[tag] = quizTitle;
 
@@ -4390,15 +4421,14 @@
                 item.appendChild(explanationEl);
                 container.appendChild(item);
             });
+        }
 
-            const resetBtn = document.createElement('button');
-            resetBtn.className = 'grammar-quiz-reset-btn';
-            resetBtn.textContent = '重新測驗';
-            resetBtn.onclick = (e) => {
-                e.stopPropagation();
-                renderGrammarQuiz(questions, container);
-            };
-            container.appendChild(resetBtn);
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
         }
 
         function renderWords() {
