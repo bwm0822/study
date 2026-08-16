@@ -6,8 +6,10 @@ const staticAssets = [
   '/index.html',
   '/english.html',
   '/chinese.html',
+  '/math.html',
   '/json/english.json',
-  '/json/chinese.json'
+  '/json/chinese.json',
+  '/json/math.json'
 ];
 
 // 安裝事件 - 快取靜態資源

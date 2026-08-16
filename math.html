@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>數學學習系統</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d2d45 0%, #25254f 100%);
+            padding: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: calc(100vh - 20px);
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #2d2d45 0%, #25254f 100%);
+            border-radius: 8px;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .home-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 1.1em;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .home-btn:hover {
+            background: #45a049;
+        }
+
+        .page-title {
+            color: #ffcc66;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .math-container {
+            flex: 1;
+            overflow-y: auto;
+            background: #3a3a52;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            color: #b8b8b8;
+            padding: 20px;
+        }
+
+        .math-unit-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #000;
+            background: #ffa500;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 0 0 6px;
+        }
+
+        .math-unit-meta {
+            font-size: 1em;
+            color: #888;
+            margin: 0 0 20px;
+        }
+
+        .math-question-card {
+            background: #2a2a52;
+            border-radius: 8px;
+            padding: 16px 18px;
+            margin: 0 0 16px;
+        }
+
+        .math-question-number {
+            color: #ffa500;
+            font-weight: bold;
+        }
+
+        .math-question-text {
+            font-size: 1.15em;
+            color: #e8e8e8;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .math-reveal-btn {
+            background: #667eea;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 16px;
+            font-size: 0.95em;
+            cursor: pointer;
+        }
+
+        .math-reveal-btn:hover {
+            background: #5568d3;
+        }
+
+        .math-solution {
+            display: none;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px dashed #4a4a60;
+        }
+
+        .math-solution.show {
+            display: block;
+        }
+
+        .math-solution-label {
+            color: #ffcc66;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .math-solution-steps {
+            list-style: decimal;
+            padding-left: 22px;
+            margin: 0 0 12px;
+            color: #d8d8d8;
+            line-height: 1.8;
+        }
+
+        .math-solution-steps li {
+            margin-bottom: 4px;
+        }
+
+        .math-answer {
+            background: #33335c;
+            border-radius: 6px;
+            padding: 10px 14px;
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 1.05em;
+        }
+
+        .math-loading {
+            color: #888;
+            font-size: 1.1em;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <button class="home-btn" onclick="window.location.href='./index.html'">首頁</button>
+            <span class="page-title">📐 數學</span>
+        </div>
+
+        <div class="math-container" id="mathContainer">
+            <div class="math-loading">載入中...</div>
+        </div>
+    </div>
+
+    <script>
+        async function loadMath() {
+            const container = document.getElementById('mathContainer');
+            try {
+                const response = await fetch('./json/math.json');
+                const units = await response.json();
+                renderMath(units, container);
+            } catch (err) {
+                container.innerHTML = '<div class="math-loading">❌ 無法讀取 math.json</div>';
+                console.error(err);
+            }
+        }
+
+        function renderMath(units, container) {
+            container.innerHTML = '';
+
+            units.forEach(unit => {
+                const titleEl = document.createElement('div');
+                titleEl.className = 'math-unit-title';
+                titleEl.textContent = unit.title;
+                container.appendChild(titleEl);
+
+                if (unit.meta) {
+                    const metaEl = document.createElement('div');
+                    metaEl.className = 'math-unit-meta';
+                    metaEl.textContent = unit.meta;
+                    container.appendChild(metaEl);
+                }
+
+                (unit.questions || []).forEach(q => {
+                    const card = document.createElement('div');
+                    card.className = 'math-question-card';
+
+                    const questionEl = document.createElement('div');
+                    questionEl.className = 'math-question-text';
+                    const numberSpan = document.createElement('span');
+                    numberSpan.className = 'math-question-number';
+                    numberSpan.textContent = `${q.number}. `;
+                    questionEl.appendChild(numberSpan);
+                    questionEl.appendChild(document.createTextNode(q.question));
+                    card.appendChild(questionEl);
+
+                    const revealBtn = document.createElement('button');
+                    revealBtn.className = 'math-reveal-btn';
+                    revealBtn.textContent = '顯示詳解';
+
+                    const solutionEl = document.createElement('div');
+                    solutionEl.className = 'math-solution';
+
+                    const solutionLabel = document.createElement('div');
+                    solutionLabel.className = 'math-solution-label';
+                    solutionLabel.textContent = '詳解';
+                    solutionEl.appendChild(solutionLabel);
+
+                    const stepsList = document.createElement('ol');
+                    stepsList.className = 'math-solution-steps';
+                    (q.solution || []).forEach(step => {
+                        const li = document.createElement('li');
+                        li.textContent = step;
+                        stepsList.appendChild(li);
+                    });
+                    solutionEl.appendChild(stepsList);
+
+                    const answerEl = document.createElement('div');
+                    answerEl.className = 'math-answer';
+                    answerEl.textContent = `答：${q.answer}`;
+                    solutionEl.appendChild(answerEl);
+
+                    revealBtn.onclick = () => {
+                        const showing = solutionEl.classList.toggle('show');
+                        revealBtn.textContent = showing ? '隱藏詳解' : '顯示詳解';
+                    };
+
+                    card.appendChild(revealBtn);
+                    card.appendChild(solutionEl);
+                    container.appendChild(card);
+                });
+            });
+        }
+
+        loadMath();
+    </script>
+</body>
+</html>

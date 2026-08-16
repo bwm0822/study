@@ -267,6 +267,15 @@
             box-shadow: 0 12px 30px rgba(33, 150, 243, 0.6);
         }
 
+        .math-btn {
+            background: linear-gradient(135deg, #43A047 0%, #A0D468 100%);
+        }
+
+        .math-btn:hover {
+            background: linear-gradient(135deg, #A0D468 0%, #43A047 100%);
+            box-shadow: 0 12px 30px rgba(67, 160, 71, 0.6);
+        }
+
         #deleteCurrentBtn:disabled {
             background: #666 !important;
             color: #000 !important;
@@ -336,6 +345,10 @@
 
             <button class="mode-btn chinese-btn" onclick="goChinese()">
                 <div class="mode-btn-text">中文</div>
+            </button>
+
+            <button class="mode-btn math-btn" onclick="goToMath()">
+                <div class="mode-btn-text">數學</div>
             </button>
         </div>
     </div>
@@ -640,8 +653,10 @@
                     '/index.html',
                     '/english.html',
                     '/chinese.html',
+                    '/math.html',
                     '/json/english.json',
-                    '/json/chinese.json'
+                    '/json/chinese.json',
+                    '/json/math.json'
                   ];
 
                   caches.open(currentCacheVersion).then((cache) => {
@@ -963,6 +978,10 @@
             window.location.href = './chinese.html';
         }
 
+        function goToMath() {
+            window.location.href = './math.html';
+        }
+
         function toggleSettingsMenu() {
             const dropdown = document.getElementById('settingsDropdown');
             dropdown.classList.toggle('active');
@@ -981,7 +1000,7 @@
         }
 
         function showAbout() {
-            alert('學習系統\n版本：2026.08.12.e\n\n功能：\n• 英文學習\n• 中文成語與改錯');
+            alert('學習系統\n版本：2026.08.12.e\n\n功能：\n• 英文學習\n• 中文成語與改錯\n• 數學練習');
         }
 
         function showPronunciationSettings() {
