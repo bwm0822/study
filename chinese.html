@@ -3144,7 +3144,7 @@
                 wordLeft.innerHTML = `
                     ${word.sheet || word.tag ? `<span class="word-tag"><div class="word-tag-sheet">${word.sheet || ''}</div><div class="word-tag-tag">${word.tag || ''}</div></span>` : ''}
                     <span class="word-accuracy">${accuracyDisplay}</span>
-                    <span class="word-word">${word.單字}</span>
+                    <span class="word-word">${(showSyllable && word.音節) || word.單字}</span>
                     <span class="word-phonetic">${formatPhonetic(word.音標)}</span>
                     <span class="word-pos">${word.詞性}</span>
                     <span class="word-chinese">${word.中文}</span>
@@ -4147,6 +4147,7 @@
         let pronunciationRate = settings.pronunciationRate || 1.0;
         let randomQuiz = settings.randomQuiz !== false; // 預設為 true
         let allowRetest = settings.allowRetest || false;
+        let showSyllable = settings.showSyllable !== false; // 預設為 true
 
         // 獲取歷史記錄，支援舊格式（boolean陣列）和新格式（數值）
         function getQuizHistory(historyKey) {
@@ -4324,7 +4325,7 @@
 
             // 更新內容
             const modalWordEl = document.getElementById('modalWord');
-            modalWordEl.textContent = word.單字;
+            modalWordEl.textContent = (showSyllable && word.音節) || word.單字;
             modalWordEl.style.cursor = 'pointer';
             modalWordEl.onclick = () => playPronunciation(word.單字);
 
@@ -5029,7 +5030,7 @@
                 wordLeft.innerHTML = `
                     <span class="word-tag"><div class="word-tag-sheet">自訂</div><div class="word-tag-tag">${word.tag || ''}</div></span>
                     <span class="word-accuracy">${accuracyDisplay}</span>
-                    <span class="word-word">${word.單字}</span>
+                    <span class="word-word">${(showSyllable && word.音節) || word.單字}</span>
                     <span class="word-phonetic">${formatPhonetic2(word.音標)}</span>
                     <span class="word-pos">${word.詞性 || '--'}</span>
                     <span class="word-chinese">${word.中文 || '--'}</span>
