@@ -1520,11 +1520,25 @@
         }
 
         .word-word {
-            font-weight: bold;
-            color: #b8b8b8;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             min-width: 100px;
             flex-shrink: 0;
+        }
+
+        .word-word-main {
+            font-weight: bold;
+            color: #b8b8b8;
             font-size: 1.5em;
+            line-height: 1.2;
+        }
+
+        .word-syllable {
+            font-weight: normal;
+            color: #888;
+            font-size: 1.2em;
+            line-height: 1.2;
         }
 
         .word-phonetic {
@@ -1743,9 +1757,22 @@
         }
 
         .modal-word {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-word-main {
             font-size: 3em;
             font-weight: bold;
             color: white;
+            line-height: 1.2;
+        }
+
+        .modal-word-syllable {
+            font-size: 1.2em;
+            font-weight: normal;
+            color: #888;
+            line-height: 1.2;
         }
 
         .modal-phonetic {
@@ -4713,7 +4740,7 @@
                 wordLeft.innerHTML = `
                     ${word.sheet || word.tag ? `<span class="word-tag"><div class="word-tag-sheet">${word.sheet || ''}</div><div class="word-tag-tag">${word.tag || ''}</div></span>` : ''}
                     <span class="word-accuracy">${accuracyDisplay}</span>
-                    <span class="word-word">${(showSyllable && word.音節) || word.單字}</span>
+                    <span class="word-word">${renderWordSyllableHTML(word, 'word-word-main', 'word-syllable')}</span>
                     <span class="word-phonetic">${formatPhonetic(word.音標)}</span>
                     <span class="word-pos">${word.詞性}</span>
                     <span class="word-chinese">${word.中文}</span>
@@ -5911,6 +5938,15 @@
         let randomQuiz = settings.randomQuiz !== false; // 預設為 true
         let showSyllable = settings.showSyllable !== false; // 預設為 true
 
+        // 單字上方主字、下方音節（僅在已手動標註、與單字不同時顯示）
+        function renderWordSyllableHTML(word, mainClass, syllableClass) {
+            const hasSyllable = showSyllable && word.音節 && word.音節 !== word.單字;
+            if (hasSyllable) {
+                return `<span class="${mainClass}">${word.單字}</span><span class="${syllableClass}">${word.音節}</span>`;
+            }
+            return `<span class="${mainClass}">${word.單字}</span>`;
+        }
+
         // 獲取歷史記錄，支援舊格式（boolean陣列）和新格式（數值）
         function getQuizHistory(historyKey) {
             const data = getQuizHistoryFromStorage(historyKey);
@@ -6093,7 +6129,7 @@
 
             // 更新內容
             const modalWordEl = document.getElementById('modalWord');
-            modalWordEl.textContent = (showSyllable && word.音節) || word.單字;
+            modalWordEl.innerHTML = renderWordSyllableHTML(word, 'modal-word-main', 'modal-word-syllable');
             modalWordEl.style.cursor = 'pointer';
             modalWordEl.onclick = () => playPronunciation(word.單字);
 
@@ -6255,7 +6291,7 @@
                 wordLeft.innerHTML = `
                     ${word.sheet || word.tag ? `<span class="word-tag"><div class="word-tag-sheet">${word.sheet || ''}</div><div class="word-tag-tag">${word.tag || ''}</div></span>` : ''}
                     <span class="word-accuracy">${accuracyDisplay}</span>
-                    <span class="word-word">${(showSyllable && word.音節) || word.單字}</span>
+                    <span class="word-word">${renderWordSyllableHTML(word, 'word-word-main', 'word-syllable')}</span>
                     <span class="word-phonetic">${formatPhonetic(word.音標)}</span>
                     <span class="word-pos">${word.詞性}</span>
                     <span class="word-chinese">${word.中文}</span>
@@ -7148,7 +7184,7 @@
                 wordLeft.innerHTML = `
                     <span class="word-tag"><div class="word-tag-sheet">自訂</div><div class="word-tag-tag">${word.tag || ''}</div></span>
                     <span class="word-accuracy">${accuracyDisplay}</span>
-                    <span class="word-word">${(showSyllable && word.音節) || word.單字}</span>
+                    <span class="word-word">${renderWordSyllableHTML(word, 'word-word-main', 'word-syllable')}</span>
                     <span class="word-phonetic">${formatPhonetic2(word.音標)}</span>
                     <span class="word-pos">${word.詞性 || '--'}</span>
                     <span class="word-chinese">${word.中文 || '--'}</span>
