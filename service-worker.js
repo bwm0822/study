@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'app-v1.0.35';
+const CACHE_VERSION = 'app-v1.0.36';
 const CACHE_STATIC = `${CACHE_VERSION}-static`;
 
 const staticAssets = [
