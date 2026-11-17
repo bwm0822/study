@@ -108,6 +108,27 @@
             margin: 0 0 20px;
         }
 
+        .math-key-points {
+            background: #2a2a52;
+            border-left: 4px solid #ffcc66;
+            border-radius: 8px;
+            padding: 16px 18px;
+            margin: 0 0 20px;
+        }
+
+        .math-key-points-summary {
+            font-size: 1.1em;
+            color: #e8e8e8;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .math-key-points-example {
+            color: #e8e8e8;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+
         .math-question-card {
             background: #2a2a52;
             border-radius: 8px;
@@ -238,6 +259,53 @@
             }
         }
 
+        function renderKeyPoints(keyPoints) {
+            const box = document.createElement('div');
+            box.className = 'math-key-points';
+
+            const label = document.createElement('div');
+            label.className = 'math-solution-label';
+            label.textContent = '重點';
+            box.appendChild(label);
+
+            if (keyPoints.summary) {
+                const summaryEl = document.createElement('div');
+                summaryEl.className = 'math-key-points-summary';
+                summaryEl.textContent = keyPoints.summary;
+                box.appendChild(summaryEl);
+            }
+
+            const example = keyPoints.example;
+            if (example) {
+                const questionEl = document.createElement('div');
+                questionEl.className = 'math-key-points-example';
+                const tag = document.createElement('span');
+                tag.className = 'math-question-number';
+                tag.textContent = '例：';
+                questionEl.appendChild(tag);
+                questionEl.appendChild(document.createTextNode(example.question));
+                box.appendChild(questionEl);
+
+                const stepsList = document.createElement('ol');
+                stepsList.className = 'math-solution-steps';
+                (example.solution || []).forEach(step => {
+                    const li = document.createElement('li');
+                    li.textContent = step;
+                    stepsList.appendChild(li);
+                });
+                box.appendChild(stepsList);
+
+                if (example.answer) {
+                    const answerEl = document.createElement('div');
+                    answerEl.className = 'math-answer';
+                    answerEl.textContent = `答：${example.answer}`;
+                    box.appendChild(answerEl);
+                }
+            }
+
+            return box;
+        }
+
         function renderMath(units, container) {
             container.innerHTML = '';
 
@@ -252,6 +320,10 @@
                     metaEl.className = 'math-unit-meta';
                     metaEl.textContent = unit.meta;
                     container.appendChild(metaEl);
+                }
+
+                if (unit.keyPoints) {
+                    container.appendChild(renderKeyPoints(unit.keyPoints));
                 }
 
                 (unit.questions || []).forEach(q => {
