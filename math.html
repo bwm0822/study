@@ -129,6 +129,10 @@
             margin-bottom: 8px;
         }
 
+        .math-key-points .math-answer + .math-key-points-example {
+            margin-top: 16px;
+        }
+
         .math-question-card {
             background: #2a2a52;
             border-radius: 8px;
@@ -200,6 +204,11 @@
             font-size: 1.05em;
         }
 
+        .math-hl {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
         .math-loading {
             color: #888;
             font-size: 1.1em;
@@ -259,6 +268,23 @@
             }
         }
 
+        // Append text to el, rendering <r>...</r> segments as red highlights (no innerHTML).
+        function appendRich(el, text) {
+            String(text ?? '').split(/(<r>[\s\S]*?<\/r>)/).forEach(part => {
+                if (!part) return;
+                const m = part.match(/^<r>([\s\S]*)<\/r>$/);
+                if (m) {
+                    const span = document.createElement('span');
+                    span.className = 'math-hl';
+                    span.textContent = m[1];
+                    el.appendChild(span);
+                } else {
+                    el.appendChild(document.createTextNode(part));
+                }
+            });
+            return el;
+        }
+
         function renderKeyPoints(keyPoints) {
             const box = document.createElement('div');
             box.className = 'math-key-points';
@@ -275,22 +301,22 @@
                 box.appendChild(summaryEl);
             }
 
-            const example = keyPoints.example;
-            if (example) {
+            const examples = keyPoints.examples || (keyPoints.example ? [keyPoints.example] : []);
+            examples.forEach((example, i) => {
                 const questionEl = document.createElement('div');
                 questionEl.className = 'math-key-points-example';
                 const tag = document.createElement('span');
                 tag.className = 'math-question-number';
-                tag.textContent = '例：';
+                tag.textContent = examples.length > 1 ? `例${i + 1}：` : '例：';
                 questionEl.appendChild(tag);
-                questionEl.appendChild(document.createTextNode(example.question));
+                appendRich(questionEl, example.question);
                 box.appendChild(questionEl);
 
                 const stepsList = document.createElement('ol');
                 stepsList.className = 'math-solution-steps';
                 (example.solution || []).forEach(step => {
                     const li = document.createElement('li');
-                    li.textContent = step;
+                    appendRich(li, step);
                     stepsList.appendChild(li);
                 });
                 box.appendChild(stepsList);
@@ -298,10 +324,10 @@
                 if (example.answer) {
                     const answerEl = document.createElement('div');
                     answerEl.className = 'math-answer';
-                    answerEl.textContent = `答：${example.answer}`;
+                    appendRich(answerEl, `答：${example.answer}`);
                     box.appendChild(answerEl);
                 }
-            }
+            });
 
             return box;
         }
@@ -336,7 +362,7 @@
                     numberSpan.className = 'math-question-number';
                     numberSpan.textContent = `${q.number}. `;
                     questionEl.appendChild(numberSpan);
-                    questionEl.appendChild(document.createTextNode(q.question));
+                    appendRich(questionEl, q.question);
                     card.appendChild(questionEl);
 
                     const revealBtn = document.createElement('button');
@@ -355,14 +381,14 @@
                     stepsList.className = 'math-solution-steps';
                     (q.solution || []).forEach(step => {
                         const li = document.createElement('li');
-                        li.textContent = step;
+                        appendRich(li, step);
                         stepsList.appendChild(li);
                     });
                     solutionEl.appendChild(stepsList);
 
                     const answerEl = document.createElement('div');
                     answerEl.className = 'math-answer';
-                    answerEl.textContent = `答：${q.answer}`;
+                    appendRich(answerEl, `答：${q.answer}`);
                     solutionEl.appendChild(answerEl);
 
                     revealBtn.onclick = () => {
