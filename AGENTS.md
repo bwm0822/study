@@ -35,6 +35,16 @@ node script/encrypt-token-simple.js  # interactive encrypt/decrypt for the GitHu
 There is no test suite and no linter configured. `npm run convert` in `package.json` is stale (points
 at a nonexistent `convert.js` at the repo root) — use `node script/run.js` instead.
 
+## 數學題庫匯入
+
+使用者在專案對話中單獨輸入「匯入」時，直接執行下列流程：
+
+1. 掃描 `math/` 下的 Markdown 檔，目的檔為 `math/小六數學題庫.md`。依檔名順序處理其餘檔案，保留來源檔。
+2. 寫入前先驗證所有來源檔。沿用主題庫格式，確認每題有題號、標題、`分類：主分類 - 次分類`、難度、題目、答案、解法及標籤，分類欄與所屬標題一致，難度為基礎、進階或挑戰。若格式不符，回報檔名及題號或行號，整批暫停。
+3. 依題目文字去重。比對時忽略空白及全形、半形標點差異。優先保留主題庫已有版本，同批重複題只收第一次出現者。僅改數字或情境的類題仍可收錄。
+4. 新題加到對應次分類末尾，缺少的主分類或次分類依出現順序建在該層末尾。有新題時，依題庫顯示順序從 R001 連續重編，並驗證分類與編號後再寫入。沒有新題時保持目的檔原樣。
+5. 回報新增與跳過數量。
+
 ## Architecture
 
 ### Data pipeline

@@ -149,7 +149,50 @@
             font-size: 1.15em;
             color: #e8e8e8;
             line-height: 1.8;
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .math-question-heading {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            align-items: start;
+            gap: 8px;
             margin-bottom: 12px;
+        }
+
+        .math-star {
+            width: 36px;
+            height: 36px;
+            background: transparent;
+            border: 0;
+            color: #ffcc66;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        .math-difficulty {
+            display: inline-block;
+            margin-right: 8px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: #414174;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .math-difficulty[data-level="進階"] {
+            background: #bbf7d0;
+            color: #14532d;
+        }
+
+        .math-difficulty[data-level="挑戰"] {
+            background: #fecaca;
+            color: #7f1d1d;
+        }
+
+        #reviewButton[aria-pressed="true"] {
+            background: #414174;
         }
 
         .math-reveal-btn {
@@ -227,6 +270,7 @@
                     <option>載入中...</option>
                 </select>
             </label>
+            <button type="button" id="reviewButton" class="math-reveal-btn" aria-pressed="false" disabled>複習</button>
         </div>
 
         <div class="math-container" id="mathContainer">
@@ -238,10 +282,28 @@
         async function loadMath() {
             const container = document.getElementById('mathContainer');
             const unitSelect = document.getElementById('unitSelect');
+            const reviewButton = document.getElementById('reviewButton');
             try {
                 const response = await fetch('./json/math.json');
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const units = await response.json();
+                const storageKey = 'mathStarredQuestions';
+                const starred = new Set();
+                try {
+                    const saved = JSON.parse(localStorage.getItem(storageKey));
+                    if (Array.isArray(saved)) saved.forEach(id => starred.add(id));
+                } catch (err) {
+                    console.warn('無法讀取數學星號', err);
+                }
+                const toggleStar = id => {
+                    if (starred.has(id)) starred.delete(id);
+                    else starred.add(id);
+                    try {
+                        localStorage.setItem(storageKey, JSON.stringify([...starred]));
+                    } catch (err) {
+                        console.warn('無法儲存數學星號', err);
+                    }
+                };
                 unitSelect.innerHTML = '';
                 if (!units.length) {
                     unitSelect.add(new Option('尚無單元', ''));
@@ -251,14 +313,19 @@
                 units.forEach((unit, index) => {
                     unitSelect.add(new Option(unit.tag || unit.title || `單元 ${index + 1}`, String(index)));
                 });
-                const showSelectedUnit = () => {
-                    renderMath([units[Number(unitSelect.value)]], container);
+                const show = reviewing => {
+                    reviewButton.setAttribute('aria-pressed', String(reviewing));
+                    reviewButton.textContent = reviewing ? '返回單元' : '複習';
+                    const shownUnits = reviewing ? units : [units[Number(unitSelect.value)]];
+                    renderMath(shownUnits, container, starred, toggleStar, reviewing);
                     container.scrollTop = 0;
                 };
-                unitSelect.onchange = showSelectedUnit;
+                unitSelect.onchange = () => show(false);
+                reviewButton.onclick = () => show(reviewButton.getAttribute('aria-pressed') !== 'true');
                 unitSelect.disabled = false;
+                reviewButton.disabled = false;
                 unitSelect.value = '0';
-                showSelectedUnit();
+                show(false);
             } catch (err) {
                 unitSelect.innerHTML = '';
                 unitSelect.add(new Option('載入失敗', ''));
@@ -332,27 +399,35 @@
             return box;
         }
 
-        function renderMath(units, container) {
+        function questionKey(unit, question) {
+            return JSON.stringify([unit.id, question.number]);
+        }
+
+        function renderMath(units, container, starred, toggleStar, reviewing) {
             container.innerHTML = '';
 
             units.forEach(unit => {
+                const questions = (unit.questions || []).filter(q =>
+                    !reviewing || starred.has(questionKey(unit, q))
+                );
+                if (reviewing && !questions.length) return;
                 const titleEl = document.createElement('div');
                 titleEl.className = 'math-unit-title';
                 titleEl.textContent = unit.title;
                 container.appendChild(titleEl);
 
-                if (unit.meta) {
+                if (!reviewing && unit.meta) {
                     const metaEl = document.createElement('div');
                     metaEl.className = 'math-unit-meta';
                     metaEl.textContent = unit.meta;
                     container.appendChild(metaEl);
                 }
 
-                if (unit.keyPoints) {
+                if (!reviewing && unit.keyPoints) {
                     container.appendChild(renderKeyPoints(unit.keyPoints));
                 }
 
-                (unit.questions || []).forEach(q => {
+                questions.forEach(q => {
                     const card = document.createElement('div');
                     card.className = 'math-question-card';
 
@@ -361,9 +436,33 @@
                     const numberSpan = document.createElement('span');
                     numberSpan.className = 'math-question-number';
                     numberSpan.textContent = `${q.number}. `;
-                    questionEl.appendChild(numberSpan);
+                    const star = document.createElement('button');
+                    star.type = 'button';
+                    star.className = 'math-star';
+                    star.setAttribute('aria-label', `標記第 ${q.number} 題以供複習`);
+                    const key = questionKey(unit, q);
+                    const refreshStar = () => {
+                        const active = starred.has(key);
+                        star.textContent = active ? '★' : '☆';
+                        star.setAttribute('aria-pressed', String(active));
+                    };
+                    star.onclick = () => {
+                        toggleStar(key);
+                        refreshStar();
+                    };
+                    refreshStar();
+
+                    const difficulty = document.createElement('span');
+                    difficulty.className = 'math-difficulty';
+                    difficulty.textContent = q.difficulty;
+                    difficulty.dataset.level = q.difficulty;
+                    questionEl.append(difficulty, numberSpan);
                     appendRich(questionEl, q.question);
-                    card.appendChild(questionEl);
+
+                    const heading = document.createElement('div');
+                    heading.className = 'math-question-heading';
+                    heading.append(star, questionEl);
+                    card.appendChild(heading);
 
                     const revealBtn = document.createElement('button');
                     revealBtn.className = 'math-reveal-btn';
@@ -401,6 +500,9 @@
                     container.appendChild(card);
                 });
             });
+            if (reviewing && !container.firstChild) {
+                container.innerHTML = '<div class="math-loading">目前沒有加星號的題目</div>';
+            }
         }
 
         loadMath();
