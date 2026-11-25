@@ -204,7 +204,8 @@ self.addEventListener('fetch', (event) => {
       return fetch(request)
         .then((response) => {
           if (response && response.status === 200) {
-            cache.put(request, response.clone());
+            const copy = response.clone();
+            caches.open(CACHE_STATIC).then((cache) => cache.put(request, copy));
           }
           return response;
         })
