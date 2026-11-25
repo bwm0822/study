@@ -252,6 +252,27 @@
             font-weight: bold;
         }
 
+        .math-pdf-viewer {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            height: 100%;
+            min-height: 70vh;
+        }
+
+        .math-pdf-viewer a {
+            color: #ffcc66;
+        }
+
+        .math-pdf-viewer iframe {
+            flex: 1;
+            width: 100%;
+            min-height: 70vh;
+            border: 0;
+            border-radius: 6px;
+            background: #fff;
+        }
+
         .math-loading {
             color: #888;
             font-size: 1.1em;
@@ -271,6 +292,10 @@
                 </select>
             </label>
             <button type="button" id="reviewButton" class="math-reveal-btn" aria-pressed="false" disabled>複習</button>
+            <label class="unit-picker" for="answerSelect">
+                <span>解答</span>
+                <select id="answerSelect" disabled></select>
+            </label>
         </div>
 
         <div class="math-container" id="mathContainer">
@@ -279,6 +304,34 @@
     </div>
 
     <script>
+        // 解答 PDF 清單：新增解答時把檔案放進 math/answers/ 並在此加一筆
+        const ANSWER_PDFS = [
+            { title: '第二回', file: './math/answers/第二回.pdf' }
+        ];
+
+        function renderAnswerPdf(pdf, container) {
+            container.innerHTML = '';
+            const viewer = document.createElement('div');
+            viewer.className = 'math-pdf-viewer';
+
+            const titleEl = document.createElement('div');
+            titleEl.className = 'math-unit-title';
+            titleEl.textContent = `${pdf.title} 解答`;
+
+            const link = document.createElement('a');
+            link.href = pdf.file;
+            link.target = '_blank';
+            link.rel = 'noopener';
+            link.textContent = '📄 在新分頁開啟 PDF（手機看不到時請點這裡）';
+
+            const frame = document.createElement('iframe');
+            frame.src = pdf.file;
+            frame.title = `${pdf.title} 解答`;
+
+            viewer.append(titleEl, link, frame);
+            container.appendChild(viewer);
+        }
+
         async function loadMath() {
             const container = document.getElementById('mathContainer');
             const unitSelect = document.getElementById('unitSelect');
@@ -313,7 +366,19 @@
                 units.forEach((unit, index) => {
                     unitSelect.add(new Option(unit.tag || unit.title || `單元 ${index + 1}`, String(index)));
                 });
+                const answerSelect = document.getElementById('answerSelect');
+                ANSWER_PDFS.forEach((pdf, index) => answerSelect.add(new Option(pdf.title, String(index))));
+                answerSelect.onchange = () => {
+                    const pdf = ANSWER_PDFS[Number(answerSelect.value)];
+                    if (!pdf) return show(false);
+                    reviewButton.setAttribute('aria-pressed', 'false');
+                    reviewButton.textContent = '複習';
+                    renderAnswerPdf(pdf, container);
+                    container.scrollTop = 0;
+                };
+                answerSelect.disabled = false;
                 const show = reviewing => {
+                    answerSelect.selectedIndex = -1;
                     reviewButton.setAttribute('aria-pressed', String(reviewing));
                     reviewButton.textContent = reviewing ? '返回單元' : '複習';
                     const shownUnits = reviewing ? units : [units[Number(unitSelect.value)]];
