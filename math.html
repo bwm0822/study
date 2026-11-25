@@ -256,19 +256,12 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            height: 100%;
-            min-height: 70vh;
         }
 
-        .math-pdf-viewer a {
-            color: #ffcc66;
-        }
-
-        .math-pdf-viewer iframe {
-            flex: 1;
+        .math-pdf-viewer canvas {
+            display: block;
             width: 100%;
-            min-height: 70vh;
-            border: 0;
+            height: auto;
             border-radius: 6px;
             background: #fff;
         }
@@ -309,7 +302,20 @@
             { title: '第二回', file: './math/answers/第二回.pdf' }
         ];
 
-        function renderAnswerPdf(pdf, container) {
+        // 用 pdf.js 把每一頁畫成 canvas，讓 iPad／手機能像一般內容一樣捲動（iframe 內嵌 PDF 在 iOS 無法捲動）
+        let pdfjsLib = null;
+        let pdfRenderToken = 0;
+
+        async function loadPdfjs() {
+            if (!pdfjsLib) {
+                pdfjsLib = await import('./lib/pdfjs/pdf.min.mjs');
+                pdfjsLib.GlobalWorkerOptions.workerSrc = './lib/pdfjs/pdf.worker.min.mjs';
+            }
+            return pdfjsLib;
+        }
+
+        async function renderAnswerPdf(pdf, container) {
+            const token = ++pdfRenderToken;
             container.innerHTML = '';
             const viewer = document.createElement('div');
             viewer.className = 'math-pdf-viewer';
@@ -318,18 +324,36 @@
             titleEl.className = 'math-unit-title';
             titleEl.textContent = `${pdf.title} 解答`;
 
-            const link = document.createElement('a');
-            link.href = pdf.file;
-            link.target = '_blank';
-            link.rel = 'noopener';
-            link.textContent = '📄 在新分頁開啟 PDF（手機看不到時請點這裡）';
+            const status = document.createElement('div');
+            status.className = 'math-loading';
+            status.textContent = '載入中...';
 
-            const frame = document.createElement('iframe');
-            frame.src = pdf.file;
-            frame.title = `${pdf.title} 解答`;
-
-            viewer.append(titleEl, link, frame);
+            viewer.append(titleEl, status);
             container.appendChild(viewer);
+
+            try {
+                const lib = await loadPdfjs();
+                const doc = await lib.getDocument({ url: pdf.file }).promise;
+                if (token !== pdfRenderToken) return doc.destroy();
+                status.remove();
+                const cssWidth = viewer.clientWidth;
+                const dpr = Math.min(window.devicePixelRatio || 1, 3);
+                for (let i = 1; i <= doc.numPages; i++) {
+                    const page = await doc.getPage(i);
+                    if (token !== pdfRenderToken) return doc.destroy();
+                    const base = page.getViewport({ scale: 1 });
+                    const viewport = page.getViewport({ scale: (cssWidth / base.width) * dpr });
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.floor(viewport.width);
+                    canvas.height = Math.floor(viewport.height);
+                    canvas.setAttribute('aria-label', `${pdf.title} 解答 第 ${i} 頁`);
+                    viewer.appendChild(canvas);
+                    await page.render({ canvas, canvasContext: canvas.getContext('2d'), viewport }).promise;
+                }
+            } catch (err) {
+                console.error(err);
+                if (token === pdfRenderToken) status.textContent = '❌ 無法顯示解答 PDF';
+            }
         }
 
         async function loadMath() {
@@ -379,6 +403,7 @@
                 answerSelect.disabled = false;
                 const show = reviewing => {
                     answerSelect.selectedIndex = -1;
+                    pdfRenderToken++;
                     reviewButton.setAttribute('aria-pressed', String(reviewing));
                     reviewButton.textContent = reviewing ? '返回單元' : '複習';
                     const shownUnits = reviewing ? units : [units[Number(unitSelect.value)]];
