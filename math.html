@@ -238,6 +238,20 @@
             margin-bottom: 4px;
         }
 
+        .math-solution-steps.plain {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .math-solution-steps li.math-solution-idea {
+            background: rgba(255, 204, 102, 0.15);
+            border-left: 3px solid #ffcc66;
+            border-radius: 4px;
+            padding: 6px 10px;
+            margin-bottom: 8px;
+            color: #ffe2a8;
+        }
+
         .math-answer {
             background: #33335c;
             border-radius: 6px;
@@ -444,6 +458,21 @@
             return el;
         }
 
+        // 詳解以「想法：」開頭時，想法加底色，步驟不編號（第七回解答格式）
+        function renderSolutionSteps(steps) {
+            steps = steps || [];
+            const hasIdea = steps.length > 0 && String(steps[0]).startsWith('想法：');
+            const stepsList = document.createElement('ol');
+            stepsList.className = hasIdea ? 'math-solution-steps plain' : 'math-solution-steps';
+            steps.forEach((step, i) => {
+                const li = document.createElement('li');
+                if (hasIdea && i === 0) li.className = 'math-solution-idea';
+                appendRich(li, step);
+                stepsList.appendChild(li);
+            });
+            return stepsList;
+        }
+
         function renderKeyPoints(keyPoints) {
             const box = document.createElement('div');
             box.className = 'math-key-points';
@@ -471,14 +500,7 @@
                 appendRich(questionEl, example.question);
                 box.appendChild(questionEl);
 
-                const stepsList = document.createElement('ol');
-                stepsList.className = 'math-solution-steps';
-                (example.solution || []).forEach(step => {
-                    const li = document.createElement('li');
-                    appendRich(li, step);
-                    stepsList.appendChild(li);
-                });
-                box.appendChild(stepsList);
+                box.appendChild(renderSolutionSteps(example.solution));
 
                 if (example.answer) {
                     const answerEl = document.createElement('div');
@@ -568,14 +590,7 @@
                     solutionLabel.textContent = '詳解';
                     solutionEl.appendChild(solutionLabel);
 
-                    const stepsList = document.createElement('ol');
-                    stepsList.className = 'math-solution-steps';
-                    (q.solution || []).forEach(step => {
-                        const li = document.createElement('li');
-                        appendRich(li, step);
-                        stepsList.appendChild(li);
-                    });
-                    solutionEl.appendChild(stepsList);
+                    solutionEl.appendChild(renderSolutionSteps(q.solution));
 
                     const answerEl = document.createElement('div');
                     answerEl.className = 'math-answer';
